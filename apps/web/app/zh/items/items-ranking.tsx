@@ -7,6 +7,7 @@ import { RankingFilters } from "@/components/ranking-filters"
 import { RankingTable, type RankingEntry } from "@/components/ranking-table"
 import { DATA_CONTEXT } from "@/lib/context"
 import { useTranslation } from "@/components/locale-provider"
+import { Spinner } from "@summoner-atlas/ui/spinner"
 
 export function ItemsRanking() {
   const translate = useTranslation()
@@ -69,7 +70,11 @@ export function ItemsRanking() {
       </div>
       <section aria-busy={pending} className="pb-28">
         <RankingTable entries={filtered} type="item" detailHref={(id) => `/zh/items/${id}`} />
-        {pending && <p className="py-8 text-muted-foreground">{translate("loadingRanking")}</p>}
+        {pending && (
+          <div className="flex items-center gap-3 py-8 text-muted-foreground">
+            <Spinner /> {translate("loadingRanking")}
+          </div>
+        )}
         {!pending && error && <p className="py-8 text-negative">{translate("rankingError")}</p>}
         {!pending && !error && filtered.length === 0 && (
           <p className="py-8 text-muted-foreground">{translate("rankingEmpty")}</p>

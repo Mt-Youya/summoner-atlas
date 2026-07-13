@@ -3,7 +3,7 @@ import { ContextBar } from "@/components/context-bar"
 import { PageFrame, PageTitle } from "@/components/page-frame"
 import { DATA_CONTEXT, getChampions, number, percent } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
-import { t, type MessageKey } from "@summoner-atlas/i18n"
+import { t, translateChampionName } from "@summoner-atlas/i18n"
 import { canonical } from "@/lib/site"
 
 export default async function CombinationsPage() {
@@ -25,7 +25,7 @@ export default async function CombinationsPage() {
             key={champion.id}
           >
             <span className="font-mono text-xs text-primary">{t(locale, "champions")}</span>
-            <h2 className="my-3 text-3xl tracking-[-.04em]">{champion.name}</h2>
+            <h2 className="my-3 text-3xl tracking-[-.04em]">{translateChampionName(champion.name, locale)}</h2>
             <p className="text-sm leading-6 text-muted-foreground">
               {percent(champion.winRate)} {t(locale, "winRate")} · {number(champion.matches)} {t(locale, "games")}
             </p>

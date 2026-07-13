@@ -3,7 +3,7 @@ import { ContextBar } from "@/components/context-bar"
 import { PageFrame, PageTitle } from "@/components/page-frame"
 import { DATA_CONTEXT, getChampions, number, percent } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
-import { t } from "@summoner-atlas/i18n"
+import { t, translateChampionName } from "@summoner-atlas/i18n"
 import { canonical } from "@/lib/site"
 
 type ComparePageProps = { searchParams: Promise<{ left?: string; right?: string }> }
@@ -64,7 +64,9 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
           {selected.map((champion) => (
             <article className="border border-border bg-surface p-6" key={champion.id}>
               <p className="font-mono text-xs text-primary">{t(locale, "champion")}</p>
-              <h2 className="my-3 text-4xl font-black tracking-[-.06em]">{champion.name}</h2>
+              <h2 className="my-3 text-4xl font-black tracking-[-.06em]">
+                {translateChampionName(champion.name, locale)}
+              </h2>
               <p className="text-sm text-muted-foreground">{champion.alias}</p>
               <dl className="mt-8 grid grid-cols-3 gap-3 border-t border-border pt-5">
                 <div>

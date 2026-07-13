@@ -5,7 +5,7 @@ import { PageFrame } from "@/components/page-frame"
 import { DATA_CONTEXT, DATA_VERSION, getAugment, getChampions, number, percent } from "@/lib/data"
 import { canonical } from "@/lib/site"
 import { getLocale } from "@/lib/i18n-server"
-import { t } from "@summoner-atlas/i18n"
+import { t, translateChampionName } from "@summoner-atlas/i18n"
 
 function cl(locale: string, matches: number) {
   return matches >= 5000
@@ -82,7 +82,7 @@ export default async function AugmentDetail({ params }: { params: Promise<{ augm
                   href={`/zh/champions/${champion.id}`}
                   key={champion.id}
                 >
-                  <strong className="text-2xl text-primary">{champion.name}</strong>
+                  <strong className="text-2xl text-primary">{translateChampionName(champion.name, locale)}</strong>
                   <span className="text-xs text-muted-foreground">
                     {percent(champion.winRate)} · {number(champion.matches)} {t(locale, "games")}
                   </span>

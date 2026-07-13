@@ -12,9 +12,11 @@
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
+    "https-proxy-agent": "^9.1.0",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "undici": "^8.7.0"
   },
   "engines": {
     "node": ">=24.15"

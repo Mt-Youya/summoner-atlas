@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { TierMark } from "@/components/tier-mark"
 import { MetricValue } from "@/components/metric-value"
 import { SampleConfidence } from "@/components/sample-confidence"
@@ -20,73 +21,60 @@ export interface RankingEntry {
 }
 
 export function RankingTable({
-  entries,
-  type,
-  detailHref,
-}: {
-  entries: RankingEntry[]
-  type: "champion" | "augment" | "item" | "rune"
-  detailHref: (id: number) => string
-}) {
+  entries, type, detailHref,
+}: { entries: RankingEntry[]; type: "champion" | "augment" | "item" | "rune"; detailHref: (id: number) => string }) {
   const translate = useTranslation()
   return (
     <div className="border-t-2 border-foreground">
-      <div className="hidden min-h-11 grid-cols-[2fr_.6fr_.6fr_.5fr_.6fr_.6fr] items-center gap-3 border-b border-border font-mono text-[10px] tracking-[.08em] text-muted-foreground md:grid">
-        <span>{translate("rankName")}</span>
-        <span>Tier</span>
-        <span>{translate("winRate")}</span>
-        <span>{translate("pickRate")}</span>
-        <span>{translate("matches")}</span>
-        <span>{translate("confidence")}</span>
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-12">#</TableHead>
+              <TableHead>{translate("rankName")}</TableHead>
+              <TableHead>Tier</TableHead>
+              <TableHead className="text-right">{translate("winRate")}</TableHead>
+              <TableHead className="text-right">{translate("pickRate")}</TableHead>
+              <TableHead className="text-right">{translate("matches")}</TableHead>
+              <TableHead>{translate("confidence")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {entries.map((entry, index) => (
+              <TableRow key={entry.id}>
+                <TableCell className="font-mono text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</TableCell>
+                <TableCell>
+                  <Link href={detailHref(entry.id)} className="block">
+                    {type === "champion" ? <ChampionIdentity name={entry.name} alias={entry.alias} /> : <strong>{entry.name}</strong>}
+                    {(entry.description || entry.quality) && <small className="block truncate text-xs text-muted-foreground">{entry.description ?? entry.quality}</small>}
+                  </Link>
+                </TableCell>
+                <TableCell><TierMark tier={entry.tier ?? classifyTier(entry.winRate, entry.pickRate)} size="sm" /></TableCell>
+                <TableCell className="text-right"><MetricValue value={entry.winRate} type="percent" className="text-positive" />{entry.previousPatchDelta !== undefined && <RankChange delta={entry.previousPatchDelta} className="ml-1" />}</TableCell>
+                <TableCell className="text-right"><MetricValue value={entry.pickRate} type="percent" className="text-muted-foreground" /></TableCell>
+                <TableCell className="text-right"><MetricValue value={entry.matches} type="number" /></TableCell>
+                <TableCell><SampleConfidence matches={entry.matches} /></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
-      {entries.map((entry, index) => (
-        <Link
-          href={detailHref(entry.id)}
-          className="grid min-h-[76px] grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 border-b border-border py-4 transition-colors hover:bg-surface md:grid-cols-[2fr_.6fr_.6fr_.5fr_.6fr_.6fr] md:gap-3 md:py-0 md:hover:px-3"
-          key={entry.id}
-        >
-          <span className="row-span-2 grid grid-cols-[28px_1fr] items-center gap-x-3 md:row-auto">
-            <b className="row-span-2 self-center font-mono text-[11px] text-muted-foreground">
-              {String(index + 1).padStart(2, "0")}
-            </b>
-            {type === "champion" ? (
-              <ChampionIdentity name={entry.name} alias={entry.alias} />
-            ) : (
-              <span className="grid">
-                <strong className="truncate text-sm">{entry.name}</strong>
-                {(entry.description || entry.quality) && (
-                  <small className="truncate text-[11px] text-muted-foreground">
-                    {entry.description ?? entry.quality}
-                  </small>
-                )}
-              </span>
-            )}
-          </span>
-          <span className="hidden md:inline-flex">
-            <TierMark tier={entry.tier ?? classifyTier(entry.winRate, entry.pickRate)} size="sm" />
-          </span>
-          <span>
-            <MetricValue value={entry.winRate} type="percent" className="text-positive" />
-            {entry.previousPatchDelta !== undefined && (
-              <RankChange delta={entry.previousPatchDelta} className="ml-1 hidden md:inline-flex" />
-            )}
-          </span>
-          <MetricValue
-            value={entry.pickRate}
-            type="percent"
-            className="hidden text-xs text-muted-foreground md:inline"
-          />
-          <span className="text-xs text-muted-foreground md:text-sm md:text-foreground">
-            <MetricValue value={entry.matches} type="number" />
-          </span>
-          <SampleConfidence matches={entry.matches} className="hidden md:inline-flex" />
-        </Link>
-      ))}
+      <div className="md:hidden">
+        {entries.map((entry, index) => (
+          <Link href={detailHref(entry.id)} key={entry.id} className="flex items-center gap-3 border-b border-border py-3">
+            <b className="font-mono text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</b>
+            <span className="min-w-0 flex-1">{type === "champion" ? <ChampionIdentity name={entry.name} alias={entry.alias} size={32} /> : <strong className="truncate text-sm">{entry.name}</strong>}</span>
+            <span className="text-right"><MetricValue value={entry.winRate} type="percent" className="font-bold text-positive" /><br /><MetricValue value={entry.matches} type="number" className="text-xs text-muted-foreground" /></span>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
 
-function classifyTier(winRate: number, pickRate: number): string {
+const tiers = ["S", "A", "B", "C", "D"] as const
+type Tier = (typeof tiers)[number]
+function classifyTier(winRate: number, pickRate: number): Tier {
   const score = winRate * 0.7 + pickRate * 0.3
   if (score >= 0.55) return "S"
   if (score >= 0.52) return "A"

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { Separator } from "@summoner-atlas/ui/separator"
 import { getLocale } from "@/lib/i18n-server"
 import { localizePath, t, translateCopy } from "@summoner-atlas/i18n"
 
@@ -43,7 +44,8 @@ export async function PageFrame({ children }: Readonly<{ children: React.ReactNo
         </div>
       </header>
       {children}
-      <footer className="flex min-h-28 flex-col justify-center gap-2 border-t border-border py-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <Separator />
+      <footer className="flex min-h-28 flex-col justify-center gap-2 py-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <span>
           {t(locale, "footerVersion")} 16.13 · {t(locale, "footerSnapshot")}
         </span>

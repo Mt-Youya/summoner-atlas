@@ -6,16 +6,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { number, percent, type AugmentRank, type ChampionRank } from "@/lib/data"
 import { Button } from "@summoner-atlas/ui/button"
 import { Input } from "@summoner-atlas/ui/input"
+import { Spinner } from "@summoner-atlas/ui/spinner"
+import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
 import { ContextBar } from "@/components/context-bar"
 import { DATA_CONTEXT } from "@/lib/data"
+import { translateChampionName, translateAugmentName } from "@summoner-atlas/i18n"
 import { filterRankings } from "@/lib/ranking"
-import { useTranslation } from "@/components/locale-provider"
+import { useTranslation, useLocale } from "@/components/locale-provider"
 
 type Entry = ChampionRank | AugmentRank
 type Props = { type: "champion" | "augment" }
 
 export function RankingExplorer({ type }: Props) {
   const translate = useTranslation()
+  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -63,25 +67,15 @@ export function RankingExplorer({ type }: Props) {
           placeholder={type === "champion" ? translate("rankingSearchChampion") : translate("rankingSearchAugment")}
           aria-label={translate("rankingSearch")}
         />
-        <select
-          className="min-h-11 border border-border bg-surface px-3 text-sm"
-          value={sort}
-          onChange={(event) => update("sort", event.target.value)}
-          aria-label={translate("sort")}
-        >
-          <option value="winRate">{translate("sortWinRate")}</option>
-          <option value="matches">{translate("sortMatches")}</option>
-        </select>
-        <select
-          className="min-h-11 border border-border bg-surface px-3 text-sm"
-          value={minimumMatches}
-          onChange={(event) => update("minMatches", event.target.value === "0" ? "" : event.target.value)}
-          aria-label={translate("sample")}
-        >
-          <option value="0">{translate("allSamples")}</option>
-          <option value="1000">{translate("atLeast1000")}</option>
-          <option value="5000">{translate("atLeast5000")}</option>
-        </select>
+        <NativeSelect value={sort} onChange={(event) => update("sort", event.target.value)} aria-label={translate("sort")} className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm">
+          <NativeSelectOption value="winRate">{translate("sortWinRate")}</NativeSelectOption>
+          <NativeSelectOption value="matches">{translate("sortMatches")}</NativeSelectOption>
+        </NativeSelect>
+        <NativeSelect value={minimumMatches} onChange={(event) => update("minMatches", event.target.value === "0" ? "" : event.target.value)} aria-label={translate("sample")} className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm">
+          <NativeSelectOption value="0">{translate("allSamples")}</NativeSelectOption>
+          <NativeSelectOption value="1000">{translate("atLeast1000")}</NativeSelectOption>
+          <NativeSelectOption value="5000">{translate("atLeast5000")}</NativeSelectOption>
+        </NativeSelect>
         {(query || sort !== "winRate" || minimumMatches > 0) && (
           <Button
             className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised"
@@ -110,7 +104,7 @@ export function RankingExplorer({ type }: Props) {
               <b className="row-span-2 self-center font-mono text-[11px] text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </b>
-              <strong>{entry.name}</strong>
+              <strong>{type === "champion" ? translateChampionName(entry.name, locale) : translateAugmentName(entry.name, locale)}</strong>
               <small className="truncate text-[11px] text-muted-foreground">
                 {"description" in entry ? entry.description : entry.alias}
               </small>
@@ -128,7 +122,11 @@ export function RankingExplorer({ type }: Props) {
             </span>
           </Link>
         ))}
-        {pending && <p className="py-8 text-muted-foreground">{translate("loadingRanking")}</p>}
+        {pending && (
+          <div className="flex items-center gap-3 py-8 text-muted-foreground">
+            <Spinner /> {translate("loadingRanking")}
+          </div>
+        )}
         {!pending && error && <p className="py-8 text-negative">{translate("rankingError")}</p>}
         {!pending && !error && filtered.length === 0 && (
           <p className="py-8 text-muted-foreground">{translate("rankingEmpty")}</p>

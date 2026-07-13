@@ -17,7 +17,7 @@ import {
 } from "@/lib/data"
 import { canonical } from "@/lib/site"
 import { getLocale } from "@/lib/i18n-server"
-import { t, type MessageKey } from "@summoner-atlas/i18n"
+import { t, translateChampionName, translateAugmentName, type MessageKey } from "@summoner-atlas/i18n"
 
 function confidenceLabel(locale: string, matches: number): string {
   return matches >= 5000
@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: { params: Promise<{ championI
   if (!champion) return { title: "Champion not found" }
   const path = `/zh/champions/${champion.id}`
   return {
-    title: `${champion.name} ARAM data`,
-    description: `${champion.name} win rate, matches, confidence, and combos on patch ${DATA_VERSION}.`,
+    title: `${translateChampionName(champion.name, "en")} ARAM data`,
+    description: `${translateChampionName(champion.name, "en")} win rate, matches, confidence, and combos on patch ${DATA_VERSION}.`,
     alternates: { canonical: path },
     openGraph: {
-      title: `${champion.name} | ARAM data`,
+      title: `${translateChampionName(champion.name, "en")} | ARAM data`,
       description: `${percent(champion.winRate)} WR · ${number(champion.matches)} games`,
       url: canonical(path),
     },
@@ -61,7 +61,7 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
   const bestSynergy = synergy
     .filter((combo) => combo.total_matches >= 1000)
     .toSorted((a, b) => b.win_rate - a.win_rate)[0]
-  const augmentNames = new Map(augments.map((augment) => [augment.id, augment.name]))
+  const augmentNames = new Map(augments.map((augment) => [augment.id, translateAugmentName(augment.name, locale)]))
   const bestSynergyName = bestSynergy?.combo_key
     ?.match(/\d+/g)
     ?.map((augmentId) => augmentNames.get(Number(augmentId)) ?? `Augment #${augmentId}`)
@@ -76,7 +76,7 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
           <Image
             className="border border-primary"
             src={championIcon(champion.id)}
-            alt={champion.name}
+            alt={translateChampionName(champion.name, locale)}
             width={120}
             height={120}
             priority
@@ -85,7 +85,9 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
             <span className="font-mono text-[11px] tracking-[0.1em] text-primary">
               {t(locale, "championSummary")} / {DATA_VERSION}
             </span>
-            <h1 className="my-2 text-[clamp(3rem,7vw,5.5rem)] font-black tracking-[-0.1em]">{champion.name}</h1>
+            <h1 className="my-2 text-[clamp(3rem,7vw,5.5rem)] font-black tracking-[-0.1em]">
+              {translateChampionName(champion.name, locale)}
+            </h1>
             <p className="text-muted-foreground">
               {champion.alias} · {t(locale, "publicSnapshot")}
             </p>

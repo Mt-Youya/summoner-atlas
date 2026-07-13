@@ -7,7 +7,7 @@ import { MetricValue } from "@/components/metric-value"
 import { RankChange } from "@/components/rank-change"
 import { AVAILABLE_PATCHES, DATA_CONTEXT, getAugments, getChampions, number, percent } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
-import { localizePath, t } from "@summoner-atlas/i18n"
+import { localizePath, t, translateChampionName } from "@summoner-atlas/i18n"
 import { MetricValue as MetricDisplay } from "@/components/metric-value"
 
 export async function generateMetadata() {
@@ -163,7 +163,7 @@ export default async function ChineseHomePage() {
             >
               <span className="font-mono text-xs text-muted-foreground">#{String(index + 1).padStart(2, "0")}</span>
               <TierMark tier={index < 2 ? "S" : index < 4 ? "A" : "B"} size="sm" />
-              <h3 className="m-0 text-xl md:mt-3">{champion.name}</h3>
+              <h3 className="m-0 text-xl md:mt-3">{translateChampionName(champion.name, locale)}</h3>
               <strong className="font-mono text-2xl text-positive md:col-auto">{percent(champion.winRate)}</strong>
               <p className="col-span-2 m-0 font-mono text-xs text-muted-foreground md:col-auto">
                 {number(champion.matches)} · {t(locale, "highSample")}
@@ -202,7 +202,7 @@ export default async function ChineseHomePage() {
               <span className="flex items-center gap-4">
                 <b className="font-mono text-xs text-muted-foreground">#{String(index + 1).padStart(2, "0")}</b>
                 <span className="grid">
-                  <strong>{champion.name}</strong>
+                  <strong>{translateChampionName(champion.name, locale)}</strong>
                   <small className="text-xs text-muted-foreground">{champion.alias}</small>
                 </span>
               </span>

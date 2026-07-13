@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm \"D:/Codes/github/summoner-atlas/apps/web/components/ranking-mobile-row.tsx\" \"D:/Codes/github/summoner-atlas/scripts/translate-augments.mjs\" \"D:/Codes/github/summoner-atlas/scripts/translate-augments.cjs\" \"D:/aug_tmp.json\")",
+      "Bash(npx kill-port *)",
+      "Bash(pnpm --filter @summoner-atlas/web dev)"
+    ]
+  }
+}

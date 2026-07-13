@@ -2,21 +2,13 @@
 
 import { type GameMode, GAME_MODES, modeLabels } from "@/lib/context"
 import { useTranslation } from "@/components/locale-provider"
+import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
 
 export function ModeSelector({ value, onChange }: { value: GameMode; onChange: (mode: GameMode) => void }) {
   const translate = useTranslation()
   return (
-    <select
-      className="min-h-10 rounded-md border border-border bg-surface px-3 font-mono text-sm tabular-nums"
-      value={value}
-      onChange={(e) => onChange(e.target.value as GameMode)}
-      aria-label={translate("selectMode")}
-    >
-      {GAME_MODES.map((m) => (
-        <option key={m} value={m}>
-          {modeLabels[m]}
-        </option>
-      ))}
-    </select>
+    <NativeSelect value={value} onChange={(e) => onChange(e.target.value as GameMode)} aria-label={translate("selectMode")} className="[&>select]:min-h-10 [&>select]:border-border [&>select]:bg-surface [&>select]:font-mono [&>select]:text-sm">
+      {GAME_MODES.map((m) => (<NativeSelectOption key={m} value={m}>{modeLabels[m]}</NativeSelectOption>))}
+    </NativeSelect>
   )
 }

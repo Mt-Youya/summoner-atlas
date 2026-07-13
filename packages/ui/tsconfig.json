@@ -1,17 +1,12 @@
 {
+  "extends": "@summoner-atlas/tsconfig/shadcn",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "types": ["react"],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["./src/*"]
+    },
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
