@@ -7,7 +7,17 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "raw.communitydragon.org",
-        pathname: "/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/**",
+        pathname: "/latest/plugins/rcp-be-lol-game-data/global/default/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ddragon.leagueoflegends.com",
+        pathname: "/cdn/**",
+      },
+      {
+        protocol: "https",
+        hostname: "resg.top",
+        pathname: "/assets/**",
       },
     ],
   },

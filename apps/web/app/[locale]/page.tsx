@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ContextBar } from "@/components/layout/context-bar"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { GlobalGameSearch } from "@/components/global-game-search"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { TierMark } from "@/components/display/tier-mark"
@@ -91,7 +91,7 @@ export default async function ChineseHomePage() {
       </section>
 
       {/* 数据上下文 */}
-      <ContextBar context={DATA_CONTEXT} />
+      <ContextSelector readonly context={DATA_CONTEXT} />
 
       {/* 模式入口 */}
       <section className="grid gap-4 border-b border-border py-16 md:grid-cols-3" aria-labelledby="mode-entries">

@@ -1,6 +1,6 @@
 import { PageFrame } from "@/components/layout/page-frame"
 import { PageTitle } from "@/components/layout/page-title"
-import { ContextBar } from "@/components/layout/context-bar"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { getChampions, DATA_CONTEXT } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
 import { t, localizePath } from "@summoner-atlas/i18n"
@@ -17,7 +17,7 @@ export default async function ComparePage() {
         title={t(locale, "compareTitle")}
         description={t(locale, "compareDesc")}
       />
-      <ContextBar context={DATA_CONTEXT} />
+      <ContextSelector readonly context={DATA_CONTEXT} />
       <CompareView champions={champions} />
     </PageFrame>
   )

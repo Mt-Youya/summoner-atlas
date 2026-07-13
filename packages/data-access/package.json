@@ -4,15 +4,20 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./supabase": "./src/supabase.ts",
+    "./sync": "./src/sync/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync": "tsx src/cli.ts"
   },
   "dependencies": {
-    "@summoner-atlas/domain": "workspace:*"
+    "@summoner-atlas/domain": "workspace:*",
+    "@supabase/supabase-js": "^2.110.2"
   },
   "devDependencies": {
+    "tsx": "^4.23.0",
     "typescript": "^6.0.3"
   }
 }

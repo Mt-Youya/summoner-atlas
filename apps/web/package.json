@@ -16,6 +16,7 @@
     "@base-ui/react": "^1.6.0",
     "@hugeicons/core-free-icons": "^3.3.0",
     "@hugeicons/react": "^1.1.9",
+    "@summoner-atlas/data-access": "workspace:*",
     "@summoner-atlas/i18n": "workspace:*",
     "@summoner-atlas/ui": "workspace:*",
     "@supabase/supabase-js": "^2.110.2",

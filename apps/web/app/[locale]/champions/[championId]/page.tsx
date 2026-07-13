@@ -1,7 +1,7 @@
 import Image from "next/image"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ContextBar } from "@/components/layout/context-bar"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { PageFrame } from "@/components/layout/page-frame"
 import {
   DATA_CONTEXT,
@@ -70,7 +70,7 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
     <PageFrame>
       <article className="pb-28">
         <div className="pt-8">
-          <ContextBar context={DATA_CONTEXT} />
+          <ContextSelector readonly context={DATA_CONTEXT} />
         </div>
         <section className="grid grid-cols-[80px_1fr] gap-5 border-b border-border py-16 md:grid-cols-[120px_1fr_auto] md:items-center md:gap-7 md:py-24">
           <Image

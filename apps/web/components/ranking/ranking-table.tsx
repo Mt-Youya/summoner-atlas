@@ -6,6 +6,9 @@ import { MetricValue } from "@/components/display/metric-value"
 import { SampleConfidence } from "@/components/display/sample-confidence"
 import { RankChange } from "@/components/display/rank-change"
 import { ChampionIdentity } from "@/components/identity/champion-identity"
+import { AugmentIdentity } from "@/components/identity/augment-identity"
+import { ItemIdentity } from "@/components/identity/item-identity"
+import { RuneIdentity } from "@/components/identity/rune-identity"
 import { useTranslation } from "@/components/locale-provider"
 
 export interface RankingEntry {
@@ -16,9 +19,10 @@ export interface RankingEntry {
   quality?: string
   tier?: string
   winRate: number
-  pickRate: number
+  pickRate?: number
   matches: number
   previousPatchDelta?: number
+  imageUrl?: string
 }
 
 export function RankingTable({
@@ -39,13 +43,13 @@ export function RankingTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12">#</TableHead>
+              <TableHead className="w-10">#</TableHead>
               <TableHead>{translate("rankName")}</TableHead>
-              <TableHead>Tier</TableHead>
-              <TableHead className="text-right">{translate("winRate")}</TableHead>
-              <TableHead className="text-right">{translate("pickRate")}</TableHead>
-              <TableHead className="text-right">{translate("matches")}</TableHead>
-              <TableHead>{translate("confidence")}</TableHead>
+              <TableHead className="w-16">Tier</TableHead>
+              <TableHead className="w-20">胜率</TableHead>
+              <TableHead className="w-20">登场率</TableHead>
+              <TableHead className="w-20">场次</TableHead>
+              <TableHead className="w-20">可信度</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -54,22 +58,28 @@ export function RankingTable({
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {String(index + 1).padStart(2, "0")}
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-w-80">
                   <Link href={localizePath(detailHref(entry.id), locale)} className="block">
                     {type === "champion" ? (
-                      <ChampionIdentity name={entry.name} alias={entry.alias} />
+                      <ChampionIdentity name={entry.name} alias={entry.alias} imageUrl={entry.imageUrl} />
+                    ) : type === "augment" ? (
+                      <AugmentIdentity name={entry.name} quality={entry.quality} imageUrl={entry.imageUrl} />
+                    ) : type === "item" ? (
+                      <ItemIdentity name={entry.name} imageUrl={entry.imageUrl} />
+                    ) : type === "rune" ? (
+                      <RuneIdentity name={entry.name} imageUrl={entry.imageUrl} />
                     ) : (
-                      <strong>{entry.name}</strong>
+                      <strong className="block truncate">{entry.name}</strong>
                     )}
-                    {(entry.description || entry.quality) && (
+                    {entry.description && (
                       <small className="block truncate text-xs text-muted-foreground">
-                        {entry.description ?? entry.quality}
+                        {entry.description}
                       </small>
                     )}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <TierMark tier={entry.tier ?? classifyTier(entry.winRate, entry.pickRate)} size="sm" />
+                  <TierMark tier={entry.tier ?? classifyTier(entry.winRate, entry.pickRate ?? 0)} size="sm" />
                 </TableCell>
                 <TableCell className="text-right">
                   <MetricValue value={entry.winRate} type="percent" className="text-positive" />
@@ -101,7 +111,13 @@ export function RankingTable({
             <b className="font-mono text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</b>
             <span className="min-w-0 flex-1">
               {type === "champion" ? (
-                <ChampionIdentity name={entry.name} alias={entry.alias} size={32} />
+                <ChampionIdentity name={entry.name} alias={entry.alias} imageUrl={entry.imageUrl} size={32} />
+              ) : type === "augment" ? (
+                <AugmentIdentity name={entry.name} quality={entry.quality} imageUrl={entry.imageUrl} size={28} />
+              ) : type === "item" ? (
+                <ItemIdentity name={entry.name} imageUrl={entry.imageUrl} size={28} />
+              ) : type === "rune" ? (
+                <RuneIdentity name={entry.name} imageUrl={entry.imageUrl} size={28} />
               ) : (
                 <strong className="truncate text-sm">{entry.name}</strong>
               )}

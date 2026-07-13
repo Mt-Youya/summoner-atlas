@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import { ContextBar } from "@/components/layout/context-bar"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { PageFrame } from "@/components/layout/page-frame"
 import { DATA_CONTEXT, DATA_VERSION, getAugment, getChampions, number, percent } from "@/lib/data"
 import { canonical } from "@/lib/site"
@@ -42,7 +42,7 @@ export default async function AugmentDetail({ params }: { params: Promise<{ augm
     <PageFrame>
       <article className="pb-28">
         <div className="pt-8">
-          <ContextBar context={DATA_CONTEXT} />
+          <ContextSelector readonly context={DATA_CONTEXT} />
         </div>
         <section className="grid gap-7 border-b border-border py-16 md:grid-cols-[76px_1fr_auto] md:items-center md:py-24">
           <span className="grid size-14 place-items-center border border-primary font-mono text-primary">A</span>

@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { ContextBar } from "@/components/layout/context-bar"
+import Image from "next/image"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { PageFrame } from "@/components/layout/page-frame"
 import { PageTitle } from "@/components/layout/page-title"
 import { DATA_CONTEXT, getChampions, number, percent } from "@/lib/data"
@@ -17,7 +18,7 @@ export default async function CombinationsPage() {
         title={t(locale, "combinations")}
         description={t(locale, "comboResearchDesc")}
       />
-      <ContextBar context={DATA_CONTEXT} />
+      <ContextSelector readonly context={DATA_CONTEXT} />
       <section className="grid gap-4 py-12 md:grid-cols-3 md:pb-28">
         {champions.map((champion) => (
           <Link
@@ -25,6 +26,15 @@ export default async function CombinationsPage() {
             href={localizePath(`/zh/champions/${champion.id}`, locale)}
             key={champion.id}
           >
+            {champion.imageUrl && (
+              <Image
+                src={champion.imageUrl}
+                alt={champion.name}
+                width={64}
+                height={64}
+                className="mb-4 rounded-full"
+              />
+            )}
             <span className="font-mono text-xs text-primary">{t(locale, "champions")}</span>
             <h2 className="my-3 text-3xl tracking-[-.04em]">{translateChampionName(champion.name, locale)}</h2>
             <p className="text-sm leading-6 text-muted-foreground">

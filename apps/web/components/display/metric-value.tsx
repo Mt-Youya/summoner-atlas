@@ -12,10 +12,11 @@ export function MetricValue({
   type = "percent",
   className = "",
 }: {
-  value: number
+  value: number | undefined
   type?: "percent" | "number" | "raw"
   className?: string
 }) {
+  if (value == null) return <span className={`font-mono tabular-nums ${className}`}>—</span>
   const formatted = type === "percent" ? percent(value) : type === "number" ? number(value) : String(value)
   return <span className={`font-mono tabular-nums ${className}`}>{formatted}</span>
 }

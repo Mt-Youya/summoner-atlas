@@ -1,5 +1,6 @@
 import { withResgCache } from "@/lib/resg-cache"
 import { createDataContext } from "@/lib/context"
+import { augmentResgImage } from "@/lib/augment-images"
 
 // 可用数据版本独立于 Data Dragon 的最新游戏版本
 export const DATA_VERSION = process.env.RESG_DATA_VERSION ?? "16.13"
@@ -17,6 +18,7 @@ export interface ChampionRank {
   alias: string
   matches: number
   winRate: number
+  imageUrl?: string
 }
 
 export interface AugmentRank {
@@ -25,10 +27,21 @@ export interface AugmentRank {
   description: string
   matches: number
   winRate: number
+  imageUrl?: string
+}
+
+export interface ItemRank {
+  id: number
+  name: string
+  description: string
+  matches: number
+  winRate: number
+  pickRate: number
+  imageUrl?: string
 }
 
 type ChampionStat = { champion_id: number; total_matches: string; avg_win_rate: string }
-type ChampionSummary = { id: number; name: string; alias: string }
+type ChampionSummary = { id: number; name: string; alias: string; squarePortraitPath: string }
 type AugmentStat = {
   augment_id: number
   display_name: string
@@ -58,6 +71,13 @@ const fallbackChampions: ChampionRank[] = [
 
 export const championIcon = (id: number) =>
   `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${id}.png`
+export const itemIcon = (id: number) => `https://ddragon.leagueoflegends.com/cdn/16.13.1/img/item/${id}.png`
+
+const cdnAssetBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default"
+function cdragonIcon(relativePath: string): string {
+  const stripped = relativePath.replace(/^\/lol-game-data\/assets\//, "")
+  return `${cdnAssetBase}/${stripped.toLowerCase()}`
+}
 
 async function request<T>(url: string): Promise<T> {
   const response = await fetch(url, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) })
@@ -89,6 +109,7 @@ export async function getChampions(version = DATA_VERSION): Promise<ChampionRank
               alias: champion.alias,
               matches: Number(stat.total_matches),
               winRate: Number(stat.avg_win_rate),
+              imageUrl: championIcon(champion.id),
             },
           ]
         : []
@@ -98,19 +119,22 @@ export async function getChampions(version = DATA_VERSION): Promise<ChampionRank
 
 export async function getAugments(version = DATA_VERSION): Promise<AugmentRank[]> {
   return withResgCache(`augments:global:aram:${version}`, 3600, async () => {
-    let augments: AugmentStat[]
-    try {
-      augments = await request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`)
-    } catch {
-      return []
-    }
+    const [statsResult, iconsResult] = await Promise.allSettled([
+      request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`),
+      request<{ id: number; augmentSmallIconPath: string }[]>(`${cdragonBase}/cherry-augments.json`),
+    ])
+    const augments = valueOrNull(statsResult)
+    const icons = valueOrNull(iconsResult)
+    if (!augments) return []
+    const iconMap = new Map((icons ?? []).map((a) => [a.id, cdragonIcon(a.augmentSmallIconPath)]))
 
     return augments.map((augment) => ({
       id: augment.augment_id,
       name: augment.display_name,
-      description: augment.description.replaceAll(/<[^>]+>/g, ""),
+      description: augment.description.replaceAll(/<[^>]+>/g, "").slice(0, 60),
       matches: Number(augment.total_matches),
       winRate: Number(augment.win_rate),
+      imageUrl: augmentResgImage(augment.augment_id) ?? iconMap.get(augment.augment_id),
     }))
   })
 }
@@ -237,7 +261,7 @@ const fallbackItems: ItemRank[] = [
 export async function getItems(): Promise<ItemRank[]> {
   return withResgCache("items:global:aram:latest", 3600, async () => {
     try {
-      const cDragonItems = await request<Record<string, { name: string; description: string }>>(
+      const cDragonItems = await request<Record<string, { name: string; description: string; iconPath: string }>>(
         `${cdragonDefaultBase}/items.json`
       )
       const mapped: ItemRank[] = Object.entries(cDragonItems)
@@ -250,6 +274,7 @@ export async function getItems(): Promise<ItemRank[]> {
           matches: 5000 + Math.floor(Math.random() * 15000),
           winRate: 0.48 + Math.random() * 0.1,
           pickRate: 0.03 + Math.random() * 0.15,
+          imageUrl: itemIcon(Number(k)),
         }))
       return mapped.length > 0 ? mapped : fallbackItems
     } catch {

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { ContextBar } from "@/components/layout/context-bar"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { RankingFilters } from "@/components/ranking/ranking-filters"
 import { RankingTable, type RankingEntry } from "@/components/ranking/ranking-table"
 import { DATA_CONTEXT } from "@/lib/context"
@@ -71,7 +71,7 @@ export function RankingView({ type, api }: { type: RankingType; api: string }) {
     if (minMatches > 0) list = list.filter((e) => e.matches >= minMatches)
     list = [...list].sort((a, b) => {
       if (sort === "matches") return b.matches - a.matches
-      if (sort === "pickRate") return b.pickRate - a.pickRate
+      if (sort === "pickRate") return (b.pickRate ?? 0) - (a.pickRate ?? 0)
       return b.winRate - a.winRate
     })
     return list
@@ -79,7 +79,7 @@ export function RankingView({ type, api }: { type: RankingType; api: string }) {
 
   return (
     <>
-      <ContextBar context={DATA_CONTEXT} />
+      <ContextSelector readonly context={DATA_CONTEXT} />
       <div className="mb-6 mt-6">
         <RankingFilters
           filters={filters}
