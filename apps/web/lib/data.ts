@@ -71,8 +71,6 @@ const fallbackChampions: ChampionRank[] = [
 
 export const championIcon = (id: number) =>
   `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${id}.png`
-export const itemIcon = (id: number) => `https://ddragon.leagueoflegends.com/cdn/16.13.1/img/item/${id}.png`
-
 const cdnAssetBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default"
 function cdragonIcon(relativePath: string): string {
   const stripped = relativePath.replace(/^\/lol-game-data\/assets\//, "")
@@ -274,7 +272,7 @@ export async function getItems(): Promise<ItemRank[]> {
           matches: 5000 + Math.floor(Math.random() * 15000),
           winRate: 0.48 + Math.random() * 0.1,
           pickRate: 0.03 + Math.random() * 0.15,
-          imageUrl: itemIcon(Number(k)),
+          imageUrl: cdragonIcon(v.iconPath),
         }))
       return mapped.length > 0 ? mapped : fallbackItems
     } catch {
