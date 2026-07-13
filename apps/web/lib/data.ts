@@ -90,7 +90,7 @@ export async function getChampions(version = DATA_VERSION): Promise<ChampionRank
 
 export async function getAugments(version = DATA_VERSION): Promise<AugmentRank[]> {
   const augments = await request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`).catch((_) => null)
-  if (arguments === null) {
+  if (augments === null) {
     return []
   }
 
