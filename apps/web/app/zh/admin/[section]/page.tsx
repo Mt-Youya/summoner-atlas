@@ -29,16 +29,12 @@ export default async function AdminSection({ params }: Props) {
   if (!info) notFound()
   return (
     <PageFrame>
-      <PageTitle
-        eyebrow={`后台 / ${info.title}`}
-        title={`${info.title}维护`}
-        description={info.description}
-      />
+      <PageTitle eyebrow={`后台 / ${info.title}`} title={`${info.title}维护`} description={info.description} />
       <section className="my-12 border border-border bg-surface p-6 md:mb-28">
         <h2 className="text-lg">维护服务未连接</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          需要的后端服务：身份会话、角色权限、实体读写、审计日志与失败原因回传。
-          所有写操作在接入后需通过 AlertDialog 确认。
+          需要的后端服务：身份会话、角色权限、实体读写、审计日志与失败原因回传。 所有写操作在接入后需通过 AlertDialog
+          确认。
         </p>
       </section>
     </PageFrame>

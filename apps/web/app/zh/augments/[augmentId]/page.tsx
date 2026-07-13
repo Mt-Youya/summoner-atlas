@@ -2,26 +2,37 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { ContextBar } from "@/components/context-bar"
 import { PageFrame } from "@/components/page-frame"
-import { DATA_CONTEXT, DATA_VERSION, confidence, getAugment, getChampions, number, percent } from "@/lib/data"
+import { DATA_CONTEXT, DATA_VERSION, getAugment, getChampions, number, percent } from "@/lib/data"
 import { canonical } from "@/lib/site"
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
+
+function cl(locale: string, matches: number) {
+  return matches >= 5000
+    ? t(locale as "zh" | "en" | "ko", "high")
+    : matches >= 1000
+      ? t(locale as "zh" | "en" | "ko", "medium")
+      : t(locale as "zh" | "en" | "ko", "low")
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ augmentId: string }> }): Promise<Metadata> {
   const augment = await getAugment(Number((await params).augmentId))
-  if (!augment) return { title: "海克斯不存在" }
+  if (!augment) return { title: "Augment not found" }
   const path = `/zh/augments/${augment.id}`
   return {
-    title: `${augment.name} 海克斯数据`,
-    description: `${augment.name} 在大乱斗 ${DATA_VERSION} 的胜率、场次与可信度。`,
+    title: `${augment.name} augment data`,
+    description: `${augment.name} win rate, matches, and confidence on patch ${DATA_VERSION}.`,
     alternates: { canonical: path },
     openGraph: {
-      title: `${augment.name}｜海克斯数据`,
-      description: `${percent(augment.winRate)} 胜率 · ${number(augment.matches)} 场`,
+      title: `${augment.name} | Augment data`,
+      description: `${percent(augment.winRate)} WR · ${number(augment.matches)} games`,
       url: canonical(path),
     },
   }
 }
 
 export default async function AugmentDetail({ params }: { params: Promise<{ augmentId: string }> }) {
+  const locale = await getLocale()
   const id = Number((await params).augmentId)
   const [augmentResult, championsResult] = await Promise.allSettled([getAugment(id), getChampions()])
   const augment = augmentResult.status === "fulfilled" ? augmentResult.value : null
@@ -36,31 +47,31 @@ export default async function AugmentDetail({ params }: { params: Promise<{ augm
         <section className="grid gap-7 border-b border-border py-16 md:grid-cols-[76px_1fr_auto] md:items-center md:py-24">
           <span className="grid size-14 place-items-center border border-primary font-mono text-primary">A</span>
           <div>
-            <span className="font-mono text-xs tracking-[.1em] text-primary">海克斯摘要 / 16.13</span>
+            <span className="font-mono text-xs tracking-[.1em] text-primary">
+              {t(locale, "augmentSummary")} / {DATA_VERSION}
+            </span>
             <h1 className="my-2 text-[clamp(3rem,7vw,5.5rem)] font-black tracking-[-.1em]">{augment.name}</h1>
-            <p className="text-muted-foreground">{augment.description || "该海克斯暂无公开描述。"}</p>
+            <p className="text-muted-foreground">{augment.description || t(locale, "noDescription")}</p>
           </div>
           <dl className="flex gap-7">
             <div className="grid gap-1.5">
-              <dt className="text-xs text-muted-foreground">胜率</dt>
+              <dt className="text-xs text-muted-foreground">{t(locale, "winRate")}</dt>
               <dd className="m-0 font-mono">{percent(augment.winRate)}</dd>
             </div>
             <div className="grid gap-1.5">
-              <dt className="text-xs text-muted-foreground">场次</dt>
+              <dt className="text-xs text-muted-foreground">{t(locale, "matches")}</dt>
               <dd className="m-0 font-mono">{number(augment.matches)}</dd>
             </div>
             <div className="grid gap-1.5">
-              <dt className="text-xs text-muted-foreground">可信度</dt>
-              <dd className="m-0 font-mono">{confidence(augment.matches)}</dd>
+              <dt className="text-xs text-muted-foreground">{t(locale, "confidence")}</dt>
+              <dd className="m-0 font-mono">{cl(locale, augment.matches)}</dd>
             </div>
           </dl>
         </section>
         <section className="border-b border-border py-16">
-          <span className="font-mono text-xs tracking-[.1em] text-primary">适配英雄</span>
-          <h2 className="my-3 text-4xl font-black tracking-[-.06em]">从强势英雄开始验证</h2>
-          <p className="max-w-[64ch] leading-8 text-muted-foreground">
-            当前公开接口尚未提供该海克斯的逐英雄交叉表；以下是同版本高样本英雄入口，进入详情后可查看其组合数据。
-          </p>
+          <span className="font-mono text-xs tracking-[.1em] text-primary">{t(locale, "suitableChampions")}</span>
+          <h2 className="my-3 text-4xl font-black tracking-[-.06em]">{t(locale, "verifyWithStrong")}</h2>
+          <p className="max-w-[64ch] leading-8 text-muted-foreground">{t(locale, "augmentCrosstableHint")}</p>
           <div className="mt-7 grid gap-3 md:grid-cols-2">
             {champions
               .toSorted((a, b) => b.winRate - a.winRate)
@@ -73,7 +84,7 @@ export default async function AugmentDetail({ params }: { params: Promise<{ augm
                 >
                   <strong className="text-2xl text-primary">{champion.name}</strong>
                   <span className="text-xs text-muted-foreground">
-                    {percent(champion.winRate)} · {number(champion.matches)} 场
+                    {percent(champion.winRate)} · {number(champion.matches)} {t(locale, "games")}
                   </span>
                 </a>
               ))}

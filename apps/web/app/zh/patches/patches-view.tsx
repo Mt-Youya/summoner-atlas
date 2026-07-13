@@ -43,16 +43,20 @@ export function PatchesView() {
                 <small className="text-xs text-muted-foreground">{patch.summary}</small>
               </span>
               <span className="flex gap-4 text-xs text-muted-foreground">
-                <span>英雄变更: {patch.championChanges}</span>
-                <span>装备变更: {patch.itemChanges}</span>
-                <span>符文变更: {patch.runeChanges}</span>
+                <span>
+                  {translate("championChanges")}: {patch.championChanges}
+                </span>
+                <span>
+                  {translate("itemChanges")}: {patch.itemChanges}
+                </span>
+                <span>
+                  {translate("runeChanges")}: {patch.runeChanges}
+                </span>
                 <span>{patch.releasedAt}</span>
               </span>
             </Link>
           ))}
-          {patches.length === 0 && (
-            <p className="py-8 text-muted-foreground">暂无版本数据，请稍后查看。</p>
-          )}
+          {patches.length === 0 && <p className="py-8 text-muted-foreground">{translate("noPatchesData")}</p>}
         </div>
       )}
     </>

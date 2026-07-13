@@ -28,17 +28,26 @@ export function proxy(request: NextRequest) {
     return response
   }
 
-  // Rewrite /en/* and /ko/* to /zh/* with locale header
   const match = pathname.match(/^\/(zh|en|ko)(?:\/|$)/)
-  if (!match || match[1] === "zh") return NextResponse.next()
+  if (!match || !isLocale(match[1])) return NextResponse.next()
 
-  const locale = match[1]
-  if (!isLocale(locale)) return NextResponse.next()
+  const pathLocale = match[1]
+  const cookieLocale = getUserLocale(request)
+  const locale = pathLocale === "zh" && cookieLocale !== "zh" ? cookieLocale : pathLocale
+
+  if (pathLocale === "zh" && locale === "zh") return NextResponse.next()
+
+  // Rewrite en/ko paths to zh, or set locale header for zh paths with non-zh cookie
   const rewriteUrl = request.nextUrl.clone()
-  rewriteUrl.pathname = pathname.replace(/^\/(en|ko)(?=\/|$)/, "/zh")
+  if (pathLocale !== "zh") {
+    rewriteUrl.pathname = pathname.replace(/^\/(en|ko)(?=\/|$)/, "/zh")
+  }
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set("x-summoner-atlas-locale", locale)
-  const response = NextResponse.rewrite(rewriteUrl, { request: { headers: requestHeaders } })
+  const response =
+    pathLocale !== "zh"
+      ? NextResponse.rewrite(rewriteUrl, { request: { headers: requestHeaders } })
+      : NextResponse.next({ request: { headers: requestHeaders } })
   response.cookies.set(COOKIE_NAME, locale, { path: "/", maxAge: 60 * 60 * 24 * 365 })
   return response
 }

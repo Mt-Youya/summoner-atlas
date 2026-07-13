@@ -1,21 +1,32 @@
+import { Suspense } from "react"
 import { PageFrame, PageTitle } from "@/components/page-frame"
 import { RankingExplorer } from "@/components/ranking-explorer"
 import { DATA_VERSION } from "@/lib/data"
-
-export const metadata = { title: "英雄榜 | summoner-atlas", description: "海克斯大乱斗英雄胜率、场次与可信度排行。" }
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
+import { canonical } from "@/lib/site"
 
 export default async function ChampionsPage() {
+  const locale = await getLocale()
   return (
     <PageFrame>
       <PageTitle
-        eyebrow={`英雄榜 / ${DATA_VERSION}`}
-        title="用数据选英雄"
-        description="支持名称、拼音和外号检索。排序与筛选写入 URL，可直接分享当前结果。"
+        eyebrow={`${t(locale, "championRanking")} / ${DATA_VERSION}`}
+        title={t(locale, "stablePicks")}
+        description={t(locale, "contextHelp")}
       />
-      <Suspense fallback={<p className="py-8 text-muted-foreground">正在加载榜单控件…</p>}>
+      <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loadingRanking")}</p>}>
         <RankingExplorer type="champion" />
       </Suspense>
     </PageFrame>
   )
 }
-import { Suspense } from "react"
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: `${t(locale, "championRanking")} | Summoner Atlas`,
+    description: t(locale, "contextHelp"),
+    alternates: { canonical: canonical("/zh/champions") },
+  }
+}

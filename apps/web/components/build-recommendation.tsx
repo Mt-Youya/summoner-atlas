@@ -1,7 +1,10 @@
+"use client"
+
 import { MetricValue } from "@/components/metric-value"
 import { SampleConfidence } from "@/components/sample-confidence"
 import { ItemIdentity } from "@/components/item-identity"
 import { RuneIdentity } from "@/components/rune-identity"
+import { useTranslation } from "@/components/locale-provider"
 
 export interface BuildSlot {
   id: number
@@ -21,14 +24,13 @@ export interface BuildRecommendationData {
 }
 
 export function BuildRecommendation({ build }: { build: BuildRecommendationData }) {
+  const translate = useTranslation()
   return (
     <section className="border border-border bg-surface p-5">
-      <h3 className="mb-4 font-mono text-xs tracking-[.08em] text-muted-foreground uppercase">
-        {build.label}
-      </h3>
+      <h3 className="mb-4 font-mono text-xs tracking-[.08em] text-muted-foreground uppercase">{build.label}</h3>
       {build.items.length > 0 && (
         <div className="mb-4">
-          <h4 className="mb-2 text-[11px] text-muted-foreground">核心装备</h4>
+          <h4 className="mb-2 text-[11px] text-muted-foreground">{translate("coreItems")}</h4>
           <div className="flex flex-wrap gap-2">
             {build.items.map((item) => (
               <div
@@ -47,7 +49,7 @@ export function BuildRecommendation({ build }: { build: BuildRecommendationData 
       )}
       {build.runes && build.runes.length > 0 && (
         <div className="mb-4">
-          <h4 className="mb-2 text-[11px] text-muted-foreground">推荐符文</h4>
+          <h4 className="mb-2 text-[11px] text-muted-foreground">{translate("recommendedRunes")}</h4>
           <div className="flex flex-wrap gap-2">
             {build.runes.map((rune) => (
               <div
@@ -63,10 +65,8 @@ export function BuildRecommendation({ build }: { build: BuildRecommendationData 
       )}
       {build.skillOrder && build.skillOrder.length > 0 && (
         <div>
-          <h4 className="mb-2 text-[11px] text-muted-foreground">技能加点</h4>
-          <span className="font-mono text-sm tracking-wider tabular-nums">
-            {build.skillOrder.join(" > ")}
-          </span>
+          <h4 className="mb-2 text-[11px] text-muted-foreground">{translate("skillOrder")}</h4>
+          <span className="font-mono text-sm tracking-wider tabular-nums">{build.skillOrder.join(" > ")}</span>
         </div>
       )}
       <SampleConfidence matches={build.items[0]?.matches ?? 0} className="mt-3" />

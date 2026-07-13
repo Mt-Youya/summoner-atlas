@@ -3,13 +3,7 @@
 import { type GameMode, GAME_MODES, modeLabels } from "@/lib/context"
 import { useTranslation } from "@/components/locale-provider"
 
-export function ModeSelector({
-  value,
-  onChange,
-}: {
-  value: GameMode
-  onChange: (mode: GameMode) => void
-}) {
+export function ModeSelector({ value, onChange }: { value: GameMode; onChange: (mode: GameMode) => void }) {
   const translate = useTranslation()
   return (
     <select

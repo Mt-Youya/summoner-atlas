@@ -1,22 +1,31 @@
 import { Suspense } from "react"
-import type { Metadata } from "next"
 import { PageFrame, PageTitle } from "@/components/page-frame"
 import { canonical } from "@/lib/site"
 import { PatchesView } from "./patches-view"
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
 
-export const metadata: Metadata = {
-  title: "版本记录",
-  description: "历史版本说明与数据更新时间线。",
-  alternates: { canonical: canonical("/zh/patches") },
-}
-
-export default function PatchesPage() {
+export default async function PatchesPage() {
+  const locale = await getLocale()
   return (
     <PageFrame>
-      <PageTitle eyebrow="版本" title="版本记录" description="历史版本说明、数据更新时间线与版本间变化。" />
-      <Suspense fallback={<p className="py-8 text-muted-foreground">正在加载…</p>}>
+      <PageTitle
+        eyebrow={t(locale, "eyebrowPatches")}
+        title={t(locale, "patchesTitle")}
+        description={t(locale, "patchesDesc")}
+      />
+      <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loading")}</p>}>
         <PatchesView />
       </Suspense>
     </PageFrame>
   )
+}
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: `${t(locale, "patchesTitle")} | Summoner Atlas`,
+    description: t(locale, "patchesDesc"),
+    alternates: { canonical: canonical("/zh/patches") },
+  }
 }

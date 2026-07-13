@@ -10,10 +10,13 @@ import { getLocale } from "@/lib/i18n-server"
 import { localizePath, t } from "@summoner-atlas/i18n"
 import { MetricValue as MetricDisplay } from "@/components/metric-value"
 
-export const metadata = {
-  title: "召唤师档案 — 大乱斗版本决策",
-  description: "在全球公开样本和固定版本上下文中，查询英雄、海克斯与组合结论。",
-  alternates: { canonical: "/zh" },
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: `Summoner Atlas | ${t(locale, "homeKicker")}`,
+    description: t(locale, "homeDescription"),
+    alternates: { canonical: "/zh" },
+  }
 }
 
 export default async function ChineseHomePage() {
@@ -49,12 +52,24 @@ export default async function ChineseHomePage() {
           SUMMONER <span className="text-primary">ATLAS</span>
         </Link>
         <nav className="hidden gap-6 md:flex" aria-label="主导航">
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/champions", locale)}>{t(locale, "champions")}</Link>
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/items", locale)}>{t(locale, "items")}</Link>
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/runes", locale)}>{t(locale, "runes")}</Link>
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/augments", locale)}>{t(locale, "augments")}</Link>
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/meta", locale)}>{t(locale, "meta")}</Link>
-          <Link className="text-sm hover:text-primary" href={localizePath("/zh/builds", locale)}>{t(locale, "builds")}</Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/champions", locale)}>
+            {t(locale, "champions")}
+          </Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/items", locale)}>
+            {t(locale, "items")}
+          </Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/runes", locale)}>
+            {t(locale, "runes")}
+          </Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/augments", locale)}>
+            {t(locale, "augments")}
+          </Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/meta", locale)}>
+            {t(locale, "meta")}
+          </Link>
+          <Link className="text-sm hover:text-primary" href={localizePath("/zh/builds", locale)}>
+            {t(locale, "builds")}
+          </Link>
         </nav>
         <div className="flex items-center gap-2 justify-self-end">
           <LanguageSwitcher />
@@ -81,14 +96,16 @@ export default async function ChineseHomePage() {
 
       {/* 模式入口 */}
       <section className="grid gap-4 border-b border-border py-16 md:grid-cols-3" aria-labelledby="mode-entries">
-        <h2 className="sr-only" id="mode-entries">{t(locale, "modeData")}</h2>
+        <h2 className="sr-only" id="mode-entries">
+          {t(locale, "modeData")}
+        </h2>
         <Link
           href={localizePath("/zh/champions", locale)}
           className="group rounded border border-border bg-surface p-6 transition-colors hover:bg-surface-raised"
         >
           <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "summonersRift")}</span>
-          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">召唤师峡谷</h3>
-          <p className="mt-2 text-sm text-muted-foreground">英雄、位置、符文、装备、对线与构筑。</p>
+          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">{t(locale, "summonersRift")}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{t(locale, "summonersRiftDesc")}</p>
           <b className="mt-6 block text-xs text-primary">{t(locale, "openBuilds")}</b>
         </Link>
         <Link
@@ -96,15 +113,15 @@ export default async function ChineseHomePage() {
           className="group rounded border border-border bg-surface p-6 transition-colors hover:bg-surface-raised"
         >
           <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "aram")}</span>
-          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">大乱斗</h3>
-          <p className="mt-2 text-sm text-muted-foreground">平衡调整、海克斯、装备、技能与组合。</p>
+          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">{t(locale, "aram")}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{t(locale, "aramDesc")}</p>
           <b className="mt-6 block text-xs text-primary">{t(locale, "openAugments")}</b>
         </Link>
         <div className="rounded border border-border bg-surface p-6 opacity-50">
           <span className="font-mono text-xs tracking-[.08em] text-muted-foreground">{t(locale, "arena")}</span>
-          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">竞技场</h3>
-          <p className="mt-2 text-sm text-muted-foreground">双人组合、强化、装备与搭配。即将开放。</p>
-          <b className="mt-6 block text-xs text-muted-foreground">待接入</b>
+          <h3 className="mt-4 text-2xl font-bold tracking-[-.03em]">{t(locale, "arena")}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{t(locale, "arenaDesc")}</p>
+          <b className="mt-6 block text-xs text-muted-foreground">{t(locale, "pending")}</b>
         </div>
       </section>
 
@@ -112,8 +129,13 @@ export default async function ChineseHomePage() {
       <section className="border-b border-border py-20" aria-labelledby="stable-title">
         <div className="mb-9 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
-            <p className="mb-4 font-mono text-xs font-bold tracking-[.12em] text-primary">{t(locale, "patchSummary")}</p>
-            <h2 className="text-[clamp(2.25rem,5vw,4rem)] font-black leading-[.92] tracking-[-.075em]" id="stable-title">
+            <p className="mb-4 font-mono text-xs font-bold tracking-[.12em] text-primary">
+              {t(locale, "patchSummary")}
+            </p>
+            <h2
+              className="text-[clamp(2.25rem,5vw,4rem)] font-black leading-[.92] tracking-[-.075em]"
+              id="stable-title"
+            >
               {t(locale, "stablePicks")}
             </h2>
           </div>
@@ -156,12 +178,18 @@ export default async function ChineseHomePage() {
         <div className="mb-9 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <p className="mb-4 font-mono text-xs font-bold tracking-[.12em] text-positive">{t(locale, "trendingUp")}</p>
-            <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-[.92] tracking-[-.06em]" id="trending-title">
-              胜率持续上升
+            <h2
+              className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-[.92] tracking-[-.06em]"
+              id="trending-title"
+            >
+              {t(locale, "trendingUpTitle")}
             </h2>
           </div>
-          <Link className="inline-flex min-h-11 items-center text-sm text-primary" href={localizePath("/zh/meta", locale)}>
-            查看完整 Meta →
+          <Link
+            className="inline-flex min-h-11 items-center text-sm text-primary"
+            href={localizePath("/zh/meta", locale)}
+          >
+            {t(locale, "fullMeta")}
           </Link>
         </div>
         <div className="divide-y divide-border border-t border-border">
@@ -194,7 +222,10 @@ export default async function ChineseHomePage() {
       >
         <div>
           <p className="mb-4 font-mono text-xs font-bold tracking-[.12em] text-primary">{t(locale, "modeData")}</p>
-          <h2 className="text-[clamp(2.25rem,5vw,4rem)] font-black leading-[.92] tracking-[-.075em]" id="augment-summary">
+          <h2
+            className="text-[clamp(2.25rem,5vw,4rem)] font-black leading-[.92] tracking-[-.075em]"
+            id="augment-summary"
+          >
             {t(locale, "researchAugments")}
           </h2>
           <p className="max-w-[42ch] leading-7 text-muted-foreground">{t(locale, "augmentDescription")}</p>
@@ -228,26 +259,40 @@ export default async function ChineseHomePage() {
 
       {/* 更多入口 */}
       <section className="grid gap-4 border-b border-border py-16 md:grid-cols-4" aria-labelledby="more-entries">
-        <h2 className="sr-only" id="more-entries">更多数据入口</h2>
-        <Link href={localizePath("/zh/patches", locale)} className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised">
+        <h2 className="sr-only" id="more-entries">
+          {t(locale, "moreEntries")}
+        </h2>
+        <Link
+          href={localizePath("/zh/patches", locale)}
+          className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised"
+        >
           <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "patches")}</span>
           <h3 className="mt-3 text-lg font-bold">{t(locale, "patches")}</h3>
-          <p className="mt-1 text-xs text-muted-foreground">版本说明与数据时间线</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t(locale, "patchTimeline")}</p>
         </Link>
-        <Link href={localizePath("/zh/builds", locale)} className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised">
+        <Link
+          href={localizePath("/zh/builds", locale)}
+          className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised"
+        >
           <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "builds")}</span>
           <h3 className="mt-3 text-lg font-bold">{t(locale, "builds")}</h3>
-          <p className="mt-1 text-xs text-muted-foreground">英雄构筑与出装研究</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t(locale, "championBuildResearch")}</p>
         </Link>
-        <Link href={localizePath("/zh/combinations", locale)} className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised">
+        <Link
+          href={localizePath("/zh/combinations", locale)}
+          className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised"
+        >
           <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "combinations")}</span>
           <h3 className="mt-3 text-lg font-bold">{t(locale, "combinations")}</h3>
-          <p className="mt-1 text-xs text-muted-foreground">英雄与海克斯组合探索</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t(locale, "comboExploration")}</p>
         </Link>
-        <Link href={localizePath("/zh/compare", locale)} className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised">
-          <span className="font-mono text-xs tracking-[.08em] text-primary">对比</span>
-          <h3 className="mt-3 text-lg font-bold">对比研究</h3>
-          <p className="mt-1 text-xs text-muted-foreground">多英雄数据对比</p>
+        <Link
+          href={localizePath("/zh/compare", locale)}
+          className="rounded border border-border bg-surface p-5 transition-colors hover:bg-surface-raised"
+        >
+          <span className="font-mono text-xs tracking-[.08em] text-primary">{t(locale, "compare")}</span>
+          <h3 className="mt-3 text-lg font-bold">{t(locale, "compareStudy")}</h3>
+          <p className="mt-1 text-xs text-muted-foreground">{t(locale, "multiChampCompare")}</p>
         </Link>
       </section>
 

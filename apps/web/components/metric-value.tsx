@@ -3,7 +3,6 @@ export function percent(value: number) {
 }
 
 export function number(value: number) {
-  if (value >= 10_000) return `${(value / 10_000).toFixed(1)}万`
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}k`
   return String(value)
 }
@@ -18,9 +17,5 @@ export function MetricValue({
   className?: string
 }) {
   const formatted = type === "percent" ? percent(value) : type === "number" ? number(value) : String(value)
-  return (
-    <span className={`font-mono tabular-nums ${className}`}>
-      {formatted}
-    </span>
-  )
+  return <span className={`font-mono tabular-nums ${className}`}>{formatted}</span>
 }

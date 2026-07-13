@@ -20,9 +20,7 @@ export function RankingMobileRow({
       href={detailHref(entry.id)}
       className="grid min-h-[72px] grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border py-3 transition-colors hover:bg-surface"
     >
-      <b className="font-mono text-[11px] text-muted-foreground">
-        {String(index + 1).padStart(2, "0")}
-      </b>
+      <b className="font-mono text-[11px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</b>
       <span className="grid gap-0.5">
         {type === "champion" ? (
           <ChampionIdentity name={entry.name} alias={entry.alias} size={32} />

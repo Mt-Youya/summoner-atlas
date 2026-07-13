@@ -46,10 +46,7 @@ export function createMockMetric(overrides?: Partial<RankedMetric>): RankedMetri
 }
 
 export function createMockChampions(count: number): ChampionSummary[] {
-  const names = [
-    "亚托克斯", "阿狸", "阿卡丽", "艾希", "布隆",
-    "凯特琳", "德莱厄斯", "伊泽瑞尔", "盖伦", "金克丝",
-  ]
+  const names = ["亚托克斯", "阿狸", "阿卡丽", "艾希", "布隆", "凯特琳", "德莱厄斯", "伊泽瑞尔", "盖伦", "金克丝"]
   return Array.from({ length: count }, (_, i) =>
     createMockChampion({
       id: i + 1,
@@ -58,7 +55,7 @@ export function createMockChampions(count: number): ChampionSummary[] {
       pickRate: 0.02 + Math.random() * 0.15,
       matches: 1000 + Math.floor(Math.random() * 20000),
       tier: ["S", "A", "B", "C", "D"][Math.floor(Math.random() * 5)] as ChampionSummary["tier"],
-    }),
+    })
   )
 }
 
@@ -71,6 +68,6 @@ export function createMockAugments(count: number): AugmentSummary[] {
       winRate: 0.45 + Math.random() * 0.15,
       pickRate: 0.02 + Math.random() * 0.15,
       matches: 500 + Math.floor(Math.random() * 10000),
-    }),
+    })
   )
 }

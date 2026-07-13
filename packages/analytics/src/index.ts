@@ -28,7 +28,7 @@ export function track(name: EventName, properties?: AnalyticsEvent["properties"]
     window.dispatchEvent(
       new CustomEvent("summoner-atlas:analytics", {
         detail: { name, properties, timestamp: Date.now() },
-      }),
+      })
     )
   } catch {
     // Analytics should never break the app
@@ -39,7 +39,9 @@ export const funnel = {
   entry: () => track(EVENTS.pageView),
   search: (query: string) => track(EVENTS.search, { query }),
   openEntity: (type: string, id: number) =>
-    track(type === "champion" ? EVENTS.championView : type === "augment" ? EVENTS.augmentView : EVENTS.itemView, { id }),
+    track(type === "champion" ? EVENTS.championView : type === "augment" ? EVENTS.augmentView : EVENTS.itemView, {
+      id,
+    }),
   changeContext: (key: string, value: string) => track(EVENTS.contextChange, { [key]: value }),
   applyFilter: (filters: Record<string, string>) => track(EVENTS.filterApply, filters),
   researchBuild: (championId: number) => track(EVENTS.buildResearch, { championId }),

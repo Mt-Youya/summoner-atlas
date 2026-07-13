@@ -2,7 +2,7 @@ import { getAugments, getChampion, getChampionCombos, getChampionSynergy } from 
 
 export async function GET(_: Request, { params }: { params: Promise<{ championId: string }> }) {
   const id = Number((await params).championId)
-  if (!Number.isInteger(id)) return Response.json({ error: "英雄编号无效" }, { status: 400 })
+  if (!Number.isInteger(id)) return Response.json({ error: "Invalid champion ID" }, { status: 400 })
   const [championResult, combosResult, synergyResult, augmentsResult] = await Promise.allSettled([
     getChampion(id),
     getChampionCombos(id),
@@ -10,7 +10,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ championId
     getAugments(),
   ])
   const champion = championResult.status === "fulfilled" ? championResult.value : null
-  if (!champion) return Response.json({ error: "英雄不存在" }, { status: 404 })
+  if (!champion) return Response.json({ error: "Champion not found" }, { status: 404 })
   const combos = combosResult.status === "fulfilled" ? combosResult.value : []
   const synergy = synergyResult.status === "fulfilled" ? synergyResult.value : []
   const augments = augmentsResult.status === "fulfilled" ? augmentsResult.value : []

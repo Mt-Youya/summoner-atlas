@@ -71,7 +71,11 @@ export function RankingTable({
               <RankChange delta={entry.previousPatchDelta} className="ml-1 hidden md:inline-flex" />
             )}
           </span>
-          <MetricValue value={entry.pickRate} type="percent" className="hidden text-xs text-muted-foreground md:inline" />
+          <MetricValue
+            value={entry.pickRate}
+            type="percent"
+            className="hidden text-xs text-muted-foreground md:inline"
+          />
           <span className="text-xs text-muted-foreground md:text-sm md:text-foreground">
             <MetricValue value={entry.matches} type="number" />
           </span>

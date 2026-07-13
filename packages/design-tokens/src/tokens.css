@@ -22,8 +22,7 @@
   --augment-gold: oklch(0.8 0.14 85);
   --augment-silver: oklch(0.72 0.03 250);
 
-  --font-sans: "Satoshi", "MiSans VF", "HarmonyOS Sans SC", "PingFang SC",
-    "Microsoft YaHei", sans-serif;
+  --font-sans: "Satoshi", "MiSans VF", "HarmonyOS Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: "Geist Mono", "Cascadia Code", "JetBrains Mono", monospace;
 
   --text-base: clamp(0.875rem, 0.85rem + 0.125vw, 0.9375rem);

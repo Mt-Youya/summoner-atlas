@@ -1,12 +1,16 @@
 import { PageFrame, PageTitle } from "@/components/page-frame"
-export const metadata = { title: "支持 | summoner-atlas" }
-export default function SupportPage() {
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
+import { canonical } from "@/lib/site"
+
+export default async function SupportPage() {
+  const locale = await getLocale()
   return (
     <PageFrame>
       <PageTitle
-        eyebrow="支持与合规"
-        title="数据来源与使用说明"
-        description="数据来自公开 RESG 接口和 CommunityDragon。英雄联盟及相关素材归 Riot Games 所有；本项目与 Riot Games 没有关联，也未获得其认可。"
+        eyebrow={t(locale, "supportCompliance")}
+        title={t(locale, "sources")}
+        description={t(locale, "supportDesc")}
       />
       <section className="flex gap-6 py-11 pb-28">
         <a
@@ -28,4 +32,12 @@ export default function SupportPage() {
       </section>
     </PageFrame>
   )
+}
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: `${t(locale, "supportCompliance")} | Summoner Atlas`,
+    alternates: { canonical: canonical("/zh/support") },
+  }
 }

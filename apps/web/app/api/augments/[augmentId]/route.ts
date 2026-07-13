@@ -2,10 +2,10 @@ import { getAugment, getChampions } from "@/lib/data"
 
 export async function GET(_: Request, { params }: { params: Promise<{ augmentId: string }> }) {
   const id = Number((await params).augmentId)
-  if (!Number.isInteger(id)) return Response.json({ error: "海克斯编号无效" }, { status: 400 })
+  if (!Number.isInteger(id)) return Response.json({ error: "Invalid augment ID" }, { status: 400 })
   const [augmentResult, championsResult] = await Promise.allSettled([getAugment(id), getChampions()])
   const augment = augmentResult.status === "fulfilled" ? augmentResult.value : null
-  if (!augment) return Response.json({ error: "海克斯不存在" }, { status: 404 })
+  if (!augment) return Response.json({ error: "Augment not found" }, { status: 404 })
   const champions = championsResult.status === "fulfilled" ? championsResult.value : []
   return Response.json(
     { augment, champions },

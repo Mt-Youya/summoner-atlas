@@ -1,22 +1,31 @@
 import { Suspense } from "react"
-import type { Metadata } from "next"
 import { PageFrame, PageTitle } from "@/components/page-frame"
 import { canonical } from "@/lib/site"
 import { RunesRanking } from "./runes-ranking"
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
 
-export const metadata: Metadata = {
-  title: "符文排行",
-  description: "查看各模式下符文的胜率、登场率与高样本数据。",
-  alternates: { canonical: canonical("/zh/runes") },
-}
-
-export default function RunesPage() {
+export default async function RunesPage() {
+  const locale = await getLocale()
   return (
     <PageFrame>
-      <PageTitle eyebrow="符文" title="符文排行" description="基于当前版本的高样本符文胜率与登场率。" />
-      <Suspense fallback={<p className="py-8 text-muted-foreground">正在加载…</p>}>
+      <PageTitle
+        eyebrow={t(locale, "eyebrowRunes")}
+        title={t(locale, "runesRanking")}
+        description={t(locale, "runesDesc")}
+      />
+      <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loading")}</p>}>
         <RunesRanking />
       </Suspense>
     </PageFrame>
   )
+}
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: `${t(locale, "runesRanking")} | Summoner Atlas`,
+    description: t(locale, "runesDesc"),
+    alternates: { canonical: canonical("/zh/runes") },
+  }
 }

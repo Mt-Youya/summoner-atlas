@@ -160,7 +160,7 @@ export function confidence(matches: number) {
   return matches >= 5000 ? "高可信" : matches >= 1000 ? "中可信" : "样本有限"
 }
 
-const spells: Record<number, string> = {
+const spellsZh: Record<number, string> = {
   1: "净化",
   3: "虚弱",
   4: "闪现",
@@ -170,7 +170,29 @@ const spells: Record<number, string> = {
   21: "屏障",
   32: "雪球",
 }
-const boots: Record<number, string> = { 1001: "速度之靴", 3006: "狂战士胫甲", 3008: "明朗之靴", 3111: "水银之靴" }
+const spellsEn: Record<number, string> = {
+  1: "Cleanse",
+  3: "Exhaust",
+  4: "Flash",
+  6: "Ghost",
+  7: "Heal",
+  12: "Teleport",
+  21: "Barrier",
+  32: "Mark",
+}
+const spellsKo: Record<number, string> = {
+  1: "정화",
+  3: "탈진",
+  4: "점멸",
+  6: "유체화",
+  7: "회복",
+  12: "순간이동",
+  21: "방어막",
+  32: "표식",
+}
+const bootsZh: Record<number, string> = { 1001: "速度之靴", 3006: "狂战士胫甲", 3008: "明朗之靴", 3111: "水银之靴" }
+const bootsEn: Record<number, string> = { 1001: "Boots", 3006: "Berserker's", 3008: "Ionian", 3111: "Mercury's" }
+const bootsKo: Record<number, string> = { 1001: "신발", 3006: "광전사의", 3008: "명석함의", 3111: "헤르메스의" }
 
 export async function getItem(id: number) {
   try {
@@ -197,10 +219,17 @@ export interface ItemRank {
 const fallbackItems: ItemRank[] = [
   { id: 6656, name: "卢登的伙伴", description: "技能命中造成额外伤害", matches: 12000, winRate: 0.523, pickRate: 0.18 },
   { id: 3157, name: "中娅沙漏", description: "主动效果: 凝滞", matches: 15000, winRate: 0.551, pickRate: 0.22 },
-  { id: 3089, name: "灭世者的死亡之帽", description: "大幅提升法术强度", matches: 10000, winRate: 0.568, pickRate: 0.15 },
+  {
+    id: 3089,
+    name: "灭世者的死亡之帽",
+    description: "大幅提升法术强度",
+    matches: 10000,
+    winRate: 0.568,
+    pickRate: 0.15,
+  },
   { id: 3135, name: "虚空之杖", description: "百分比法术穿透", matches: 9000, winRate: 0.534, pickRate: 0.12 },
   { id: 3165, name: "莫雷洛秘典", description: "施加重伤效果", matches: 11000, winRate: 0.515, pickRate: 0.14 },
-  { id: 3100, name: "巫妖之祸", description: "施法后强化普攻", matches: 8000, winRate: 0.542, pickRate: 0.10 },
+  { id: 3100, name: "巫妖之祸", description: "施法后强化普攻", matches: 8000, winRate: 0.542, pickRate: 0.1 },
   { id: 4645, name: "影焰", description: "对低血量目标造成暴击", matches: 13000, winRate: 0.556, pickRate: 0.16 },
   { id: 4629, name: "星界驱驰", description: "技能命中提供移速", matches: 7000, winRate: 0.508, pickRate: 0.08 },
 ]
@@ -209,7 +238,7 @@ export async function getItems(): Promise<ItemRank[]> {
   return withResgCache("items:global:aram:latest", 3600, async () => {
     try {
       const cDragonItems = await request<Record<string, { name: string; description: string }>>(
-        `${cdragonDefaultBase}/items.json`,
+        `${cdragonDefaultBase}/items.json`
       )
       const mapped: ItemRank[] = Object.entries(cDragonItems)
         .filter(([, v]) => v.name && !v.name.includes("BUILDING"))
@@ -219,7 +248,7 @@ export async function getItems(): Promise<ItemRank[]> {
           name: v.name,
           description: (v.description ?? "").replaceAll(/<[^>]+>/g, "").slice(0, 80),
           matches: 5000 + Math.floor(Math.random() * 15000),
-          winRate: 0.48 + Math.random() * 0.10,
+          winRate: 0.48 + Math.random() * 0.1,
           pickRate: 0.03 + Math.random() * 0.15,
         }))
       return mapped.length > 0 ? mapped : fallbackItems
@@ -240,26 +269,94 @@ export interface RuneRank {
 }
 
 const fallbackRunes: RuneRank[] = [
-  { id: 8112, name: "电刑", description: "3次攻击或技能命中造成额外伤害", path: "主宰", matches: 18000, winRate: 0.531, pickRate: 0.28 },
-  { id: 8005, name: "征服者", description: "攻击和技能叠加适应之力", path: "精密", matches: 22000, winRate: 0.548, pickRate: 0.32 },
-  { id: 8128, name: "黑暗收割", description: "低血量目标造成额外伤害并叠加", path: "主宰", matches: 16000, winRate: 0.512, pickRate: 0.25 },
-  { id: 8230, name: "相位猛冲", description: "连续攻击获得移速", path: "巫术", matches: 7000, winRate: 0.505, pickRate: 0.10 },
-  { id: 8437, name: "不灭之握", description: "周期性强化普攻并获得生命值", path: "坚决", matches: 10000, winRate: 0.558, pickRate: 0.15 },
-  { id: 8351, name: "冰川增幅", description: "定身敌方英雄减速周围", path: "启迪", matches: 8000, winRate: 0.521, pickRate: 0.12 },
-  { id: 8369, name: "先攻", description: "率先攻击获得金币", path: "启迪", matches: 12000, winRate: 0.544, pickRate: 0.18 },
-  { id: 8214, name: "召唤：艾黎", description: "攻击和技能附带护盾或伤害", path: "巫术", matches: 14000, winRate: 0.526, pickRate: 0.20 },
+  {
+    id: 8112,
+    name: "电刑",
+    description: "3次攻击或技能命中造成额外伤害",
+    path: "主宰",
+    matches: 18000,
+    winRate: 0.531,
+    pickRate: 0.28,
+  },
+  {
+    id: 8005,
+    name: "征服者",
+    description: "攻击和技能叠加适应之力",
+    path: "精密",
+    matches: 22000,
+    winRate: 0.548,
+    pickRate: 0.32,
+  },
+  {
+    id: 8128,
+    name: "黑暗收割",
+    description: "低血量目标造成额外伤害并叠加",
+    path: "主宰",
+    matches: 16000,
+    winRate: 0.512,
+    pickRate: 0.25,
+  },
+  {
+    id: 8230,
+    name: "相位猛冲",
+    description: "连续攻击获得移速",
+    path: "巫术",
+    matches: 7000,
+    winRate: 0.505,
+    pickRate: 0.1,
+  },
+  {
+    id: 8437,
+    name: "不灭之握",
+    description: "周期性强化普攻并获得生命值",
+    path: "坚决",
+    matches: 10000,
+    winRate: 0.558,
+    pickRate: 0.15,
+  },
+  {
+    id: 8351,
+    name: "冰川增幅",
+    description: "定身敌方英雄减速周围",
+    path: "启迪",
+    matches: 8000,
+    winRate: 0.521,
+    pickRate: 0.12,
+  },
+  {
+    id: 8369,
+    name: "先攻",
+    description: "率先攻击获得金币",
+    path: "启迪",
+    matches: 12000,
+    winRate: 0.544,
+    pickRate: 0.18,
+  },
+  {
+    id: 8214,
+    name: "召唤：艾黎",
+    description: "攻击和技能附带护盾或伤害",
+    path: "巫术",
+    matches: 14000,
+    winRate: 0.526,
+    pickRate: 0.2,
+  },
 ]
 
 const runePaths: Record<number, string> = {
-  8100: "主宰", 8200: "巫术", 8300: "启迪", 8400: "坚决", 8000: "精密",
+  8100: "主宰",
+  8200: "巫术",
+  8300: "启迪",
+  8400: "坚决",
+  8000: "精密",
 }
 
 export async function getRunes(): Promise<RuneRank[]> {
   return withResgCache("runes:global:aram:latest", 3600, async () => {
     try {
-      const cDragonPerks = await request<
-        { id: number; name: string; shortDesc: string; path: string }[]
-      >(`${cdragonDefaultBase}/perks.json`)
+      const cDragonPerks = await request<{ id: number; name: string; shortDesc: string; path: string }[]>(
+        `${cdragonDefaultBase}/perks.json`
+      )
       const mapped: RuneRank[] = cDragonPerks
         .filter((p) => p.name)
         .slice(0, 40)
@@ -269,7 +366,7 @@ export async function getRunes(): Promise<RuneRank[]> {
           description: (p.shortDesc ?? "").replaceAll(/<[^>]+>/g, "").slice(0, 80),
           path: runePaths[Number(p.path)] ?? p.path ?? "通用",
           matches: 3000 + Math.floor(Math.random() * 20000),
-          winRate: 0.48 + Math.random() * 0.10,
+          winRate: 0.48 + Math.random() * 0.1,
           pickRate: 0.02 + Math.random() * 0.15,
         }))
       return mapped.length > 0 ? mapped : fallbackRunes
@@ -289,11 +386,46 @@ export interface PatchInfo {
 }
 
 const fallbackPatches: PatchInfo[] = [
-  { version: "25.14", releasedAt: "2026-07-09", summary: "年中大版本更新，多英雄平衡调整", championChanges: 23, itemChanges: 8, runeChanges: 3 },
-  { version: "25.13", releasedAt: "2026-06-25", summary: "装备系统小幅调整", championChanges: 12, itemChanges: 6, runeChanges: 1 },
-  { version: "25.12", releasedAt: "2026-06-11", summary: "新英雄上线，竞技场模式回归", championChanges: 5, itemChanges: 2, runeChanges: 4 },
-  { version: "25.11", releasedAt: "2026-05-28", summary: "大乱斗平衡补丁", championChanges: 18, itemChanges: 3, runeChanges: 0 },
-  { version: "25.10", releasedAt: "2026-05-14", summary: "MSI 版本，职业赛场影响补丁", championChanges: 15, itemChanges: 10, runeChanges: 2 },
+  {
+    version: "25.14",
+    releasedAt: "2026-07-09",
+    summary: "年中大版本更新，多英雄平衡调整",
+    championChanges: 23,
+    itemChanges: 8,
+    runeChanges: 3,
+  },
+  {
+    version: "25.13",
+    releasedAt: "2026-06-25",
+    summary: "装备系统小幅调整",
+    championChanges: 12,
+    itemChanges: 6,
+    runeChanges: 1,
+  },
+  {
+    version: "25.12",
+    releasedAt: "2026-06-11",
+    summary: "新英雄上线，竞技场模式回归",
+    championChanges: 5,
+    itemChanges: 2,
+    runeChanges: 4,
+  },
+  {
+    version: "25.11",
+    releasedAt: "2026-05-28",
+    summary: "大乱斗平衡补丁",
+    championChanges: 18,
+    itemChanges: 3,
+    runeChanges: 0,
+  },
+  {
+    version: "25.10",
+    releasedAt: "2026-05-14",
+    summary: "MSI 版本，职业赛场影响补丁",
+    championChanges: 15,
+    itemChanges: 10,
+    runeChanges: 2,
+  },
 ]
 
 export async function getPatches(): Promise<PatchInfo[]> {
@@ -308,12 +440,19 @@ export async function getPatches(): Promise<PatchInfo[]> {
   })
 }
 
-export function comboLabel(combo: Combo) {
-  const spellLabel = combo.spells?.map((spell) => spells[spell] ?? `召唤师技能 ${spell}`).join(" · ")
+export function comboLabel(combo: Combo, locale = "zh") {
+  const spellMap = locale === "ko" ? spellsKo : locale === "en" ? spellsEn : spellsZh
+  const bootMap = locale === "ko" ? bootsKo : locale === "en" ? bootsEn : bootsZh
+  const fallback = locale === "en" ? "Spell" : locale === "ko" ? "스펠" : "召唤师技能"
+  const bootsFallback = locale === "en" ? "Boots" : locale === "ko" ? "신발" : "鞋子"
+  const maxLabel = locale === "en" ? "Max" : locale === "ko" ? "선마" : "主"
+  const altLabel = locale === "en" ? " > " : locale === "ko" ? " > " : "副"
+  const missingLabel = locale === "en" ? "Missing combo info" : locale === "ko" ? "조합 정보 없음" : "组合信息缺失"
+  const spellLabel = combo.spells?.map((s) => spellMap[s] ?? `${fallback} ${s}`).join(" · ")
   const parts = [
     spellLabel,
-    combo.boots_id ? (boots[combo.boots_id] ?? `鞋子 ${combo.boots_id}`) : undefined,
-    combo.max_order ? `主${combo.max_order.replace("-", "副")}` : undefined,
+    combo.boots_id ? (bootMap[combo.boots_id] ?? `${bootsFallback} ${combo.boots_id}`) : undefined,
+    combo.max_order ? `${maxLabel} ${combo.max_order.replace("-", altLabel)}` : undefined,
   ].filter(Boolean)
-  return parts.join(" ｜ ") || combo.combo_key || "组合信息缺失"
+  return parts.join(" ｜ ") || combo.combo_key || missingLabel
 }

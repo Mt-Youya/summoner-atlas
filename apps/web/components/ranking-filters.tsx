@@ -25,8 +25,7 @@ export function RankingFilters({
   const update = <K extends keyof RankingFiltersState>(key: K, value: RankingFiltersState[K]) => {
     onChange({ ...filters, [key]: value })
   }
-  const searchPlaceholder =
-    translate("rankingSearch")
+  const searchPlaceholder = translate("rankingSearch")
   return (
     <div className="flex flex-wrap gap-2">
       <Input

@@ -3,13 +3,7 @@
 import { type Region, REGIONS, regionLabels } from "@/lib/context"
 import { useTranslation } from "@/components/locale-provider"
 
-export function RegionSelector({
-  value,
-  onChange,
-}: {
-  value: Region
-  onChange: (region: Region) => void
-}) {
+export function RegionSelector({ value, onChange }: { value: Region; onChange: (region: Region) => void }) {
   const translate = useTranslation()
   return (
     <select

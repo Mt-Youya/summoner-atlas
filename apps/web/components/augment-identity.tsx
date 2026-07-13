@@ -32,10 +32,7 @@ export function AugmentIdentity({
       <span className="grid">
         <span className="text-sm">{name}</span>
         {quality && (
-          <small
-            className="text-[10px] uppercase tracking-widest"
-            style={{ color: `var(--augment-${quality})` }}
-          >
+          <small className="text-[10px] uppercase tracking-widest" style={{ color: `var(--augment-${quality})` }}>
             {quality}
           </small>
         )}

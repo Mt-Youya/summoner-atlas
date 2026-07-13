@@ -1,14 +1,6 @@
 import Image from "next/image"
 
-export function ItemIdentity({
-  name,
-  imageUrl,
-  size = 36,
-}: {
-  name: string
-  imageUrl?: string
-  size?: number
-}) {
+export function ItemIdentity({ name, imageUrl, size = 36 }: { name: string; imageUrl?: string; size?: number }) {
   return (
     <span className="inline-flex items-center gap-2">
       {imageUrl ? (

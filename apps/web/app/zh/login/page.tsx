@@ -1,36 +1,42 @@
 import Link from "next/link"
-import type { Metadata } from "next"
 import { PageFrame, PageTitle } from "@/components/page-frame"
+import { getLocale } from "@/lib/i18n-server"
+import { t } from "@summoner-atlas/i18n"
+import { canonical } from "@/lib/site"
 
-export const metadata: Metadata = { title: "登录 | Summoner Atlas" }
-
-export default function LoginPage() {
+export default async function LoginPage() {
+  const locale = await getLocale()
   return (
     <PageFrame>
-      <PageTitle eyebrow="账户" title="登录与绑定" description="授权服务待接入真实 OAuth 回调与会话 API。" />
+      <PageTitle
+        eyebrow={t(locale, "eyebrowAccount")}
+        title={t(locale, "loginBinding")}
+        description={t(locale, "loginDesc")}
+      />
       <section className="my-12 grid gap-6 md:grid-cols-2">
         <div className="rounded border border-border bg-surface p-6">
-          <h2 className="font-mono text-xs tracking-[.08em] text-primary uppercase">QQ 登录</h2>
-          <p className="mt-3 text-sm text-muted-foreground">
-            用于国服玩家绑定与数据同步。接入 QQ 互联 OAuth 2.0 后启用。
-          </p>
+          <h2 className="font-mono text-xs tracking-[.08em] text-primary uppercase">{t(locale, "qqLogin")}</h2>
+          <p className="mt-3 text-sm text-muted-foreground">{t(locale, "qqLoginDesc")}</p>
           <span className="mt-4 inline-block rounded bg-surface-raised px-3 py-1.5 text-xs text-muted-foreground">
-            待接入
+            {t(locale, "pending")}
           </span>
         </div>
         <div className="rounded border border-border bg-surface p-6">
-          <h2 className="font-mono text-xs tracking-[.08em] text-primary uppercase">Riot 登录</h2>
-          <p className="mt-3 text-sm text-muted-foreground">
-            用于国际服玩家绑定与数据同步。接入 Riot Sign On 后启用。
-          </p>
+          <h2 className="font-mono text-xs tracking-[.08em] text-primary uppercase">{t(locale, "riotLogin")}</h2>
+          <p className="mt-3 text-sm text-muted-foreground">{t(locale, "riotLoginDesc")}</p>
           <span className="mt-4 inline-block rounded bg-surface-raised px-3 py-1.5 text-xs text-muted-foreground">
-            待接入
+            {t(locale, "pending")}
           </span>
         </div>
       </section>
       <Link className="inline-flex border-b border-foreground pb-1 text-sm" href="/zh/profile">
-        查看账户设置 →
+        {t(locale, "accountBinding")}
       </Link>
     </PageFrame>
   )
+}
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return { title: `${t(locale, "loginBinding")} | Summoner Atlas`, alternates: { canonical: canonical("/zh/login") } }
 }

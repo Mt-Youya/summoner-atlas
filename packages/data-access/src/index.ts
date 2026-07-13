@@ -64,7 +64,7 @@ export function fetchChampions(signal?: AbortSignal) {
 export function fetchChampion(id: number, signal?: AbortSignal) {
   return fetchJSON<ChampionSummary & { combos: unknown[]; synergy: unknown[]; augments: unknown[] }>(
     `${BASE_URL}/champions/${id}`,
-    signal,
+    signal
   )
 }
 
@@ -73,10 +73,7 @@ export function fetchAugments(signal?: AbortSignal) {
 }
 
 export function fetchAugment(id: number, signal?: AbortSignal) {
-  return fetchJSON<AugmentSummary & { champions: unknown[] }>(
-    `${BASE_URL}/augments/${id}`,
-    signal,
-  )
+  return fetchJSON<AugmentSummary & { champions: unknown[] }>(`${BASE_URL}/augments/${id}`, signal)
 }
 
 export function fetchItems(context: DataContext, signal?: AbortSignal) {

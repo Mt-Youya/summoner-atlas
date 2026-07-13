@@ -69,7 +69,7 @@ export function MetaView() {
                 </Link>
               ))}
               {trendingUp.length === 0 && (
-                <p className="py-4 text-sm text-muted-foreground">暂无上升数据。</p>
+                <p className="py-4 text-sm text-muted-foreground">{translate("noTrendingUp")}</p>
               )}
             </div>
           </section>
@@ -95,7 +95,7 @@ export function MetaView() {
                 </Link>
               ))}
               {trendingDown.length === 0 && (
-                <p className="py-4 text-sm text-muted-foreground">暂无下降数据。</p>
+                <p className="py-4 text-sm text-muted-foreground">{translate("noTrendingDown")}</p>
               )}
             </div>
           </section>

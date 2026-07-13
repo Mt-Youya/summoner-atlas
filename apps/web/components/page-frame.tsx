@@ -21,7 +21,7 @@ export async function PageFrame({ children }: Readonly<{ children: React.ReactNo
           <span className="grid size-7 place-items-center bg-primary text-primary-foreground">R</span>
           <span>summoner-atlas</span>
         </Link>
-        <nav className="hidden gap-2 md:flex" aria-label="主导航">
+        <nav className="hidden gap-2 md:flex" aria-label="Main navigation">
           {links.map(([label, href]) => (
             <Link
               className="inline-flex min-h-11 items-center px-3 text-xs hover:bg-surface-raised"
@@ -44,8 +44,10 @@ export async function PageFrame({ children }: Readonly<{ children: React.ReactNo
       </header>
       {children}
       <footer className="flex min-h-28 flex-col justify-center gap-2 border-t border-border py-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <span>数据版本 16.13 · 公开数据快照</span>
-        <span>与 Riot Games 无关联。</span>
+        <span>
+          {t(locale, "footerVersion")} 16.13 · {t(locale, "footerSnapshot")}
+        </span>
+        <span>{t(locale, "footerNotAffiliated")}</span>
       </footer>
     </main>
   )

@@ -23,14 +23,8 @@ export function ContextSelector({
       className="flex flex-wrap items-center gap-3 border border-border bg-surface p-4"
       aria-label={translate("dataScope")}
     >
-      <RegionSelector
-        value={context.region}
-        onChange={(region) => onContextChange({ ...context, region })}
-      />
-      <ModeSelector
-        value={context.mode}
-        onChange={(mode) => onContextChange({ ...context, mode })}
-      />
+      <RegionSelector value={context.region} onChange={(region) => onContextChange({ ...context, region })} />
+      <ModeSelector value={context.mode} onChange={(mode) => onContextChange({ ...context, mode })} />
       <VersionSelector
         value={context.patch}
         patches={patches}
