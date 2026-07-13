@@ -4,7 +4,7 @@ export function ChampionIdentity({
   name,
   alias,
   imageUrl,
-  size = 40,
+  size = 48,
 }: {
   name: string
   alias?: string
@@ -19,7 +19,7 @@ export function ChampionIdentity({
           alt={name}
           width={size}
           height={size}
-          className="rounded-full"
+          className="rounded-full border-[#424242] border-solid border-2"
           style={{ width: size, height: size }}
         />
       ) : (

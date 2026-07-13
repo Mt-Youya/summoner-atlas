@@ -4,7 +4,7 @@ export function AugmentIdentity({
   name,
   quality,
   imageUrl,
-  size = 36,
+  size = 48,
 }: {
   name: string
   quality?: string
@@ -19,7 +19,7 @@ export function AugmentIdentity({
           alt={name}
           width={size}
           height={size}
-          className="rounded"
+          className="rounded bg-black rounded-full"
           style={{ width: size, height: size }}
         />
       ) : (
