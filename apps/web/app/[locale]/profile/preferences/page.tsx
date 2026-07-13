@@ -1,4 +1,5 @@
-import { PageFrame, PageTitle } from "@/components/page-frame"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
 import { PreferencesPanel } from "@/components/preferences-panel"
 import { getLocale } from "@/lib/i18n-server"
 import { t } from "@summoner-atlas/i18n"

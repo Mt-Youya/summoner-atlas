@@ -1,11 +1,11 @@
 import Link from "next/link"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { localizePath, type Locale } from "@summoner-atlas/i18n"
-import { TierMark } from "@/components/tier-mark"
-import { MetricValue } from "@/components/metric-value"
-import { SampleConfidence } from "@/components/sample-confidence"
-import { RankChange } from "@/components/rank-change"
-import { ChampionIdentity } from "@/components/champion-identity"
+import { TierMark } from "@/components/display/tier-mark"
+import { MetricValue } from "@/components/display/metric-value"
+import { SampleConfidence } from "@/components/display/sample-confidence"
+import { RankChange } from "@/components/display/rank-change"
+import { ChampionIdentity } from "@/components/identity/champion-identity"
 import { useTranslation } from "@/components/locale-provider"
 
 export interface RankingEntry {

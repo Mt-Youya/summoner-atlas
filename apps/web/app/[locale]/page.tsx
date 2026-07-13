@@ -1,13 +1,13 @@
 import Link from "next/link"
-import { ContextBar } from "@/components/context-bar"
+import { ContextBar } from "@/components/layout/context-bar"
 import { GlobalGameSearch } from "@/components/global-game-search"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { TierMark } from "@/components/tier-mark"
+import { TierMark } from "@/components/display/tier-mark"
 import { DATA_CONTEXT, getAugments, getChampions, number, percent } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
 import { localizePath, t, translateChampionName } from "@summoner-atlas/i18n"
 import { canonical } from "@/lib/site"
-import { MetricValue as MetricDisplay } from "@/components/metric-value"
+import { MetricValue as MetricDisplay } from "@/components/display/metric-value"
 
 export async function generateMetadata() {
   const locale = await getLocale()

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
-import { PageFrame, PageTitle } from "@/components/page-frame"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
 import { getLocale } from "@/lib/i18n-server"
 import { t, type MessageKey } from "@summoner-atlas/i18n"
 

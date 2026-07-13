@@ -1,8 +1,8 @@
 import Image from "next/image"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ContextBar } from "@/components/context-bar"
-import { PageFrame } from "@/components/page-frame"
+import { ContextBar } from "@/components/layout/context-bar"
+import { PageFrame } from "@/components/layout/page-frame"
 import {
   DATA_CONTEXT,
   DATA_VERSION,

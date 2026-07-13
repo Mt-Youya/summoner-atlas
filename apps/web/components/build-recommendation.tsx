@@ -1,9 +1,9 @@
 "use client"
 
-import { MetricValue } from "@/components/metric-value"
-import { SampleConfidence } from "@/components/sample-confidence"
-import { ItemIdentity } from "@/components/item-identity"
-import { RuneIdentity } from "@/components/rune-identity"
+import { MetricValue } from "@/components/display/metric-value"
+import { SampleConfidence } from "@/components/display/sample-confidence"
+import { ItemIdentity } from "@/components/identity/item-identity"
+import { RuneIdentity } from "@/components/identity/rune-identity"
 import { useTranslation } from "@/components/locale-provider"
 
 export interface BuildSlot {

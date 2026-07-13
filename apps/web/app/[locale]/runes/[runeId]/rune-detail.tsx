@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MetricValue } from "@/components/metric-value"
-import { SampleConfidence } from "@/components/sample-confidence"
-import { DataFreshness } from "@/components/data-freshness"
+import { MetricValue } from "@/components/display/metric-value"
+import { SampleConfidence } from "@/components/display/sample-confidence"
+import { DataFreshness } from "@/components/display/data-freshness"
 import { useTranslation } from "@/components/locale-provider"
 
 interface RuneData {

@@ -1,9 +1,9 @@
 "use client"
 
 import { type DataContext } from "@/lib/context"
-import { RegionSelector } from "@/components/region-selector"
-import { ModeSelector } from "@/components/mode-selector"
-import { VersionSelector } from "@/components/version-selector"
+import { RegionSelector } from "@/components/selector/region-selector"
+import { ModeSelector } from "@/components/selector/mode-selector"
+import { VersionSelector } from "@/components/selector/version-selector"
 import { useTranslation } from "@/components/locale-provider"
 
 export function ContextSelector({

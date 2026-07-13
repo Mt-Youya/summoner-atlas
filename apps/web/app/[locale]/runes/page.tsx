@@ -1,7 +1,8 @@
 import { Suspense } from "react"
-import { PageFrame, PageTitle } from "@/components/page-frame"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
 import { canonical } from "@/lib/site"
-import { RunesRanking } from "./runes-ranking"
+import { RankingView } from "@/components/ranking/ranking-view"
 import { getLocale } from "@/lib/i18n-server"
 import { t, localizePath } from "@summoner-atlas/i18n"
 
@@ -15,7 +16,7 @@ export default async function RunesPage() {
         description={t(locale, "runesDesc")}
       />
       <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loading")}</p>}>
-        <RunesRanking />
+        <RankingView type="rune" api="/api/runes" />
       </Suspense>
     </PageFrame>
   )

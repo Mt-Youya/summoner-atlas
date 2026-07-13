@@ -1,6 +1,7 @@
 import { Suspense } from "react"
-import { PageFrame, PageTitle } from "@/components/page-frame"
-import { RankingExplorer } from "@/components/ranking-explorer"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
+import { RankingView } from "@/components/ranking/ranking-view"
 import { DATA_VERSION } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
 import { t, localizePath } from "@summoner-atlas/i18n"
@@ -16,7 +17,7 @@ export default async function AugmentsPage() {
         description={t(locale, "augmentDescription")}
       />
       <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loadingRanking")}</p>}>
-        <RankingExplorer type="augment" />
+        <RankingView type="augment" api="/api/augments" />
       </Suspense>
     </PageFrame>
   )

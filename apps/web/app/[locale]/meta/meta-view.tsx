@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ContextSelector } from "@/components/context-selector"
-import { MetricValue } from "@/components/metric-value"
-import { RankChange } from "@/components/rank-change"
+import { ContextSelector } from "@/components/selector/context-selector"
+import { MetricValue } from "@/components/display/metric-value"
+import { RankChange } from "@/components/display/rank-change"
 import { DATA_CONTEXT } from "@/lib/context"
 import { AVAILABLE_PATCHES } from "@/lib/data"
 import { type DataContext } from "@/lib/context"

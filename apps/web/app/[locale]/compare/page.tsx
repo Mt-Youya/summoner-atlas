@@ -1,5 +1,6 @@
-import { PageFrame, PageTitle } from "@/components/page-frame"
-import { ContextBar } from "@/components/context-bar"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
+import { ContextBar } from "@/components/layout/context-bar"
 import { getChampions, DATA_CONTEXT } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
 import { t, localizePath } from "@summoner-atlas/i18n"

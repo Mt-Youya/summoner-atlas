@@ -1,5 +1,6 @@
 import { Suspense } from "react"
-import { PageFrame, PageTitle } from "@/components/page-frame"
+import { PageFrame } from "@/components/layout/page-frame"
+import { PageTitle } from "@/components/layout/page-title"
 import { canonical } from "@/lib/site"
 import { MetaView } from "./meta-view"
 import { getLocale } from "@/lib/i18n-server"

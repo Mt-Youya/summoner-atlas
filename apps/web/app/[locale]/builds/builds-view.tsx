@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ContextSelector } from "@/components/context-selector"
+import { ContextSelector } from "@/components/selector/context-selector"
 import { GlobalGameSearch } from "@/components/global-game-search"
 import { BuildRecommendation, type BuildRecommendationData } from "@/components/build-recommendation"
 import { DATA_CONTEXT } from "@/lib/context"
