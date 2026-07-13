@@ -16,6 +16,9 @@ next-env.d.ts
 coverage/
 .nyc_output/
 tests/
+test-results/
+playwright-report/
+playwright/.cache/
 
 # 日志
 *.log

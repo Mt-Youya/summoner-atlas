@@ -12,10 +12,10 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title: { default: "Summoner Atlas｜大乱斗版本决策", template: "%s｜Summoner Atlas" },
+  title: { default: "Summoner Atlas | 大乱斗版本决策", template: "%s | Summoner Atlas" },
   description: "基于全球公开样本的大乱斗英雄、海克斯与组合数据。",
   openGraph: {
-    title: "Summoner Atlas｜大乱斗版本决策",
+    title: "Summoner Atlas | 大乱斗版本决策",
     description: "基于全球公开样本的大乱斗英雄、海克斯与组合数据。",
     type: "website",
     locale: "zh_CN",
@@ -27,7 +27,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const requestLocale = (await headers()).get("x-summoner-atlas-locale")
   const locale = isLocale(requestLocale) ? requestLocale : "zh"
   return (
-    <html lang={locale === "ko" ? "ko" : locale === "en" ? "en" : "zh-CN"} data-scroll-behavior="smooth">
+    <html
+      lang={locale === "ko" ? "ko" : locale === "en" ? "en" : "zh-CN"}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className={`${geist.variable} ${geistMono.variable}`}>
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
         <Analytics />
