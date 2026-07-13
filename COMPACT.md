@@ -1,4 +1,4 @@
-# Summoner Atlas — 工作上下文（2026-07-13）
+# Summoner Atlas — 工作上下文（2026-07-14）
 
 ## 项目与约束
 
@@ -10,68 +10,104 @@
 
 ## 最近已提交工作
 
-当前 `HEAD`：`8dcbdde feat: redesign localized app experience`
+当前 `HEAD`：`1e500cf fix: switch item images from DataDragon to CDragon`
 
-该提交完成了大范围的本地化与界面改造：
+### 提交历史
 
-- 新增 `packages/i18n`，支持 `zh`、`en`、`ko` 三种 locale 与基础文案字典。
-- 新增 `apps/web/proxy.ts`：`/en/*` 和 `/ko/*` 内部重写至 `/zh/*`，并以 `x-summoner-atlas-locale` 请求头传递语言。
-- `apps/web/app/layout.tsx` 与 `LocaleProvider` 根据请求语言设置 `html lang` 和客户端语言上下文。
-- 新增语言选择器、全局搜索、数据上下文栏、详情页 Open Graph 图片，以及多处页面的本地化链接与标题。
-- 移除旧的 `award-home.tsx`、`home.tsx` 与大部分历史全局 CSS；页面主要采用 Tailwind 工具类。
-- 新增 `packages/ui`（Base UI/shadcn 组件集合）。
-- 新增产品与设计资料：`PRODUCT.md`、`DESIGN.md`、`REDESIGN_PLAN.md`。
+- `1e500cf` — fix: switch item images from DataDragon to CDragon（生产环境 502）
+- `cf39093` — style: enlarge identity icons and add border styling
+- `9aa262b` — feat: add data sync pipeline, ranking images, and table fixes
+- `ccd3a6d` — refactor: reorganize components into subdirectories and split PageFrame
+- `8345149` — refactor: migrate to dynamic [locale] routing and complete i18n coverage
 
-## 当前未提交变更
+## 组件结构
 
-当前工作树有两项未提交变更：
+```
+apps/web/components/
+├── display/          metric-value, tier-mark, sample-confidence, rank-change, data-freshness
+├── identity/         champion-identity, augment-identity, item-identity, rune-identity
+├── layout/           page-frame, site-header, site-footer, page-title
+├── ranking/          ranking-table, ranking-view, ranking-filters
+├── selector/         context-selector, mode-selector, region-selector, version-selector
+├── build-recommendation.tsx
+├── global-game-search.tsx
+├── language-switcher.tsx
+├── locale-provider.tsx
+└── preferences-panel.tsx
+```
 
-- `COMPACT.md`：本工作上下文的更新。
-- `apps/web/components/language-switcher.tsx`：语言切换修复。
+## 数据层架构
 
-变更内容：将语言选择从 `router.push(...)` 改为
-`window.location.assign(...)`。
+```
+apps/web/lib/data.ts          — 所有数据获取函数，CDragon + resg.top API
+apps/web/lib/resg-cache.ts    — Supabase 缓存层（withResgCache）
+apps/web/lib/augment-images.ts — 143 个海克斯的 resg.top 彩色图片映射
+apps/web/lib/context.ts       — 数据版本上下文
+apps/web/lib/site.ts          — canonical URL 工具
+apps/web/lib/supabase-server.ts — Supabase 服务端客户端
+```
 
-原因：locale 依赖 `proxy.ts` 的内部重写和请求头；客户端软导航会复用 `/zh` 的布局与 `LocaleProvider` 状态，导致选择 English/한국어 后视觉上没有切换。完整页面跳转会重新经过代理并创建正确的语言上下文。
+### 数据流
+
+resg.top API / CDragon API → `data.ts` 函数 → `withResgCache`（Supabase 缓存，TTL 3600s）→ API Route → 客户端 `RankingView` fetch → `RankingTable`
+
+### 图片 URL 来源
+
+- **Champion**: `championIcon(id)` — CDragon champion-icons 目录
+- **Augment**: 优先 `augmentResgImage(id)`（resg.top 彩色），fallback CDragon 灰度图标
+- **Item**: `cdragonIcon(iconPath)` — CDragon items.json 的 iconPath
+- **Rune**: `cdragonIcon(iconPath)` — CDragon perks.json 的 iconPath
+
+### DATA_VERSION
+
+默认 `16.13`，通过 `RESG_DATA_VERSION` 环境变量控制。resg.top 版本号为 semver 风格（如 16.13），不是 Riot 补丁号。
+
+## 缓存注意事项
+
+- `withResgCache` 优先从 Supabase `resg_cache` 表读取，命中则直接返回而不调用 API
+- 缓存 TTL 3600 秒，expires_at 过期后自动重新拉取
+- **关键问题**：旧代码写入的缓存条目不包含 `imageUrl` 等新字段，TTL 内会返回无图数据
+- fallback 数据现均已补充 `imageUrl`，API/缓存故障时也能显示图片
 
 ## 已验证
 
-- `pnpm --filter @summoner-atlas/web typecheck` 通过。
-- 本地开发服务器直接请求 `/en` 时：
-  - HTML 为 `lang="en"`；
-  - 首页包含 `Patch decision desk` 等英文文案。
-- `git diff --check` 通过。
+- `pnpm --filter @summoner-atlas/web typecheck` 零错误
+- `pnpm dev` / `pnpm build` 正常
 
-## 本地化现状与注意事项
+## 同步管线
 
-- 静态界面文案会随 `zh` / `en` / `ko` 切换。
-- 英雄名、海克斯名等来自当前数据源的字段仍为中文；这不是语言选择失败，而是数据本身尚未提供多语言字段。
-- `localizePath()` 位于 `packages/i18n/src/index.ts`，会把 `/zh/...`、`/en/...`、`/ko/...` 前缀替换为目标语言。
-- 根路由 `/` 会永久重定向至 `/zh`。
-
-## 核心位置
-
-- 语言选择：`apps/web/components/language-switcher.tsx`
-- 语言上下文：`apps/web/components/locale-provider.tsx`
-- 服务器语言读取：`apps/web/lib/i18n-server.ts`
-- 代理重写：`apps/web/proxy.ts`
-- 翻译字典与路由工具：`packages/i18n/src/index.ts`
-- 应用布局：`apps/web/app/layout.tsx`
-
-## 数据与运行命令
-
-- 数据层：`apps/web/lib/data.ts`；缓存/Supabase 相关代码在 `resg-cache.ts` 与 `supabase-server.ts`。
-- API 路由位于 `apps/web/app/api/`。
-- 常用验证：
-
-```bash
-pnpm --filter @summoner-atlas/web typecheck
-pnpm --filter @summoner-atlas/web lint
-pnpm --filter @summoner-atlas/web test
-pnpm --filter @summoner-atlas/web build
+```
+packages/data-access/
+├── src/cli.ts               — CLI 入口：pnpm sync [--static] [--resg] [--all]
+├── src/supabase.ts           — Supabase 客户端（service_role，自动 loadEnvFile）
+├── src/sync/
+│   ├── index.ts              — 编排：syncStatic(), syncResg(), syncAll()
+│   ├── helpers.ts            — CDragon URL 构建，locale 映射
+│   ├── sync-champions.ts     — CDragon champion-summary → Supabase + i18n TS 文件
+│   ├── sync-augments.ts      — CDragon cherry-augments → Supabase + i18n TS 文件
+│   ├── sync-items.ts         — CDragon items → Supabase
+│   ├── sync-summoner-spells.ts
+│   ├── sync-versions.ts      — DataDragon versions.json
+│   ├── sync-resg-champions.ts
+│   ├── sync-resg-augments.ts
+│   ├── sync-resg-items.ts
+│   ├── sync-resg-base-stats.ts
+│   └── sync-resg-synergy.ts
+└── migrations/
+    ├── 001_static_tables.sql
+    └── 002_resg_tables.sql
 ```
 
-## 下一步
+## i18n
 
-- 如需提交当前语言修复，先按 `gen-commit` 规则生成提交信息；不要自动执行提交。
-- 若要让英雄/海克斯名称也随语言变化，需要确认上游数据是否提供 locale 字段或引入一份受维护的本地化映射，不能把中文数据误判为路由故障。
+- `packages/i18n/src/index.ts` — `t()`, `localizePath()`, `translateChampionName()` 等
+- `packages/i18n/src/data-translations.ts` — 自动生成的 173 个英雄翻译（zh→[en,ko]）
+- `packages/i18n/src/augment-translations.ts` — 自动生成的 502 个海克斯名称翻译
+- `packages/i18n/src/locales/{zh,en,ko}/common.json` — 静态 UI 文案
+- 语言切换使用 `window.location.assign()` 做完整页面跳转（非客户端导航，确保 proxy.ts 重新处理 locale 请求头）
+
+## 已记录问题
+
+- Augment desc 翻译表为空（CDragon cherry-augments 无多语描述字段，需从 resg.top 补）
+- Items/runes 数据使用随机回退统计（无真实 resg.top 数据源）
+- classifyTier 函数仍内嵌于 ranking-table.tsx

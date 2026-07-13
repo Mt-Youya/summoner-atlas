@@ -61,14 +61,6 @@ type Combo = {
   builds?: { items: number[]; total_matches: number; win_rate: number }[]
 }
 
-const fallbackChampions: ChampionRank[] = [
-  { id: 67, name: "薇恩", alias: "Vayne", matches: 34541, winRate: 0.5963 },
-  { id: 14, name: "赛恩", alias: "Sion", matches: 30270, winRate: 0.5794 },
-  { id: 104, name: "格雷福斯", alias: "Graves", matches: 33745, winRate: 0.5766 },
-  { id: 876, name: "莉莉娅", alias: "Lillia", matches: 28311, winRate: 0.5724 },
-  { id: 222, name: "金克丝", alias: "Jinx", matches: 27028, winRate: 0.5674 },
-]
-
 export const championIcon = (id: number) =>
   `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${id}.png`
 const cdnAssetBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default"
@@ -76,6 +68,14 @@ function cdragonIcon(relativePath: string): string {
   const stripped = relativePath.replace(/^\/lol-game-data\/assets\//, "")
   return `${cdnAssetBase}/${stripped.toLowerCase()}`
 }
+
+const fallbackChampions: ChampionRank[] = [
+  { id: 67, name: "薇恩", alias: "Vayne", matches: 34541, winRate: 0.5963, imageUrl: championIcon(67) },
+  { id: 14, name: "赛恩", alias: "Sion", matches: 30270, winRate: 0.5794, imageUrl: championIcon(14) },
+  { id: 104, name: "格雷福斯", alias: "Graves", matches: 33745, winRate: 0.5766, imageUrl: championIcon(104) },
+  { id: 876, name: "莉莉娅", alias: "Lillia", matches: 28311, winRate: 0.5724, imageUrl: championIcon(876) },
+  { id: 222, name: "金克丝", alias: "Jinx", matches: 27028, winRate: 0.5674, imageUrl: championIcon(222) },
+]
 
 async function request<T>(url: string): Promise<T> {
   const response = await fetch(url, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) })
@@ -238,22 +238,19 @@ export interface ItemRank {
   pickRate: number
 }
 
+function itemIcon(id: number) {
+  return `${cdragonDefaultBase}/assets/items/icons2d/${id}.png`.toLowerCase()
+}
+
 const fallbackItems: ItemRank[] = [
-  { id: 6656, name: "卢登的伙伴", description: "技能命中造成额外伤害", matches: 12000, winRate: 0.523, pickRate: 0.18 },
-  { id: 3157, name: "中娅沙漏", description: "主动效果: 凝滞", matches: 15000, winRate: 0.551, pickRate: 0.22 },
-  {
-    id: 3089,
-    name: "灭世者的死亡之帽",
-    description: "大幅提升法术强度",
-    matches: 10000,
-    winRate: 0.568,
-    pickRate: 0.15,
-  },
-  { id: 3135, name: "虚空之杖", description: "百分比法术穿透", matches: 9000, winRate: 0.534, pickRate: 0.12 },
-  { id: 3165, name: "莫雷洛秘典", description: "施加重伤效果", matches: 11000, winRate: 0.515, pickRate: 0.14 },
-  { id: 3100, name: "巫妖之祸", description: "施法后强化普攻", matches: 8000, winRate: 0.542, pickRate: 0.1 },
-  { id: 4645, name: "影焰", description: "对低血量目标造成暴击", matches: 13000, winRate: 0.556, pickRate: 0.16 },
-  { id: 4629, name: "星界驱驰", description: "技能命中提供移速", matches: 7000, winRate: 0.508, pickRate: 0.08 },
+  { id: 6656, name: "卢登的伙伴", description: "技能命中造成额外伤害", matches: 12000, winRate: 0.523, pickRate: 0.18, imageUrl: itemIcon(6656) },
+  { id: 3157, name: "中娅沙漏", description: "主动效果: 凝滞", matches: 15000, winRate: 0.551, pickRate: 0.22, imageUrl: itemIcon(3157) },
+  { id: 3089, name: "灭世者的死亡之帽", description: "大幅提升法术强度", matches: 10000, winRate: 0.568, pickRate: 0.15, imageUrl: itemIcon(3089) },
+  { id: 3135, name: "虚空之杖", description: "百分比法术穿透", matches: 9000, winRate: 0.534, pickRate: 0.12, imageUrl: itemIcon(3135) },
+  { id: 3165, name: "莫雷洛秘典", description: "施加重伤效果", matches: 11000, winRate: 0.515, pickRate: 0.14, imageUrl: itemIcon(3165) },
+  { id: 3100, name: "巫妖之祸", description: "施法后强化普攻", matches: 8000, winRate: 0.542, pickRate: 0.1, imageUrl: itemIcon(3100) },
+  { id: 4645, name: "影焰", description: "对低血量目标造成暴击", matches: 13000, winRate: 0.556, pickRate: 0.16, imageUrl: itemIcon(4645) },
+  { id: 4629, name: "星界驱驰", description: "技能命中提供移速", matches: 7000, winRate: 0.508, pickRate: 0.08, imageUrl: itemIcon(4629) },
 ]
 
 export async function getItems(): Promise<ItemRank[]> {
@@ -289,81 +286,29 @@ export interface RuneRank {
   matches: number
   winRate: number
   pickRate: number
+  imageUrl?: string
+}
+
+const runeIconMap: Record<number, string> = {
+  8112: "/lol-game-data/assets/v1/perk-images/Styles/Domination/Electrocute/Electrocute.png",
+  8005: "/lol-game-data/assets/v1/perk-images/Styles/Precision/Conqueror/Conqueror.png",
+  8128: "/lol-game-data/assets/v1/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png",
+  8230: "/lol-game-data/assets/v1/perk-images/Styles/Sorcery/PhaseRush/PhaseRush.png",
+  8437: "/lol-game-data/assets/v1/perk-images/Styles/Resolve/GraspOfTheUndying/GraspOfTheUndying.png",
+  8351: "/lol-game-data/assets/v1/perk-images/Styles/Inspiration/GlacialAugment/GlacialAugment.png",
+  8369: "/lol-game-data/assets/v1/perk-images/Styles/Inspiration/FirstStrike/FirstStrike.png",
+  8214: "/lol-game-data/assets/v1/perk-images/Styles/Sorcery/SummonAery/SummonAery.png",
 }
 
 const fallbackRunes: RuneRank[] = [
-  {
-    id: 8112,
-    name: "电刑",
-    description: "3次攻击或技能命中造成额外伤害",
-    path: "主宰",
-    matches: 18000,
-    winRate: 0.531,
-    pickRate: 0.28,
-  },
-  {
-    id: 8005,
-    name: "征服者",
-    description: "攻击和技能叠加适应之力",
-    path: "精密",
-    matches: 22000,
-    winRate: 0.548,
-    pickRate: 0.32,
-  },
-  {
-    id: 8128,
-    name: "黑暗收割",
-    description: "低血量目标造成额外伤害并叠加",
-    path: "主宰",
-    matches: 16000,
-    winRate: 0.512,
-    pickRate: 0.25,
-  },
-  {
-    id: 8230,
-    name: "相位猛冲",
-    description: "连续攻击获得移速",
-    path: "巫术",
-    matches: 7000,
-    winRate: 0.505,
-    pickRate: 0.1,
-  },
-  {
-    id: 8437,
-    name: "不灭之握",
-    description: "周期性强化普攻并获得生命值",
-    path: "坚决",
-    matches: 10000,
-    winRate: 0.558,
-    pickRate: 0.15,
-  },
-  {
-    id: 8351,
-    name: "冰川增幅",
-    description: "定身敌方英雄减速周围",
-    path: "启迪",
-    matches: 8000,
-    winRate: 0.521,
-    pickRate: 0.12,
-  },
-  {
-    id: 8369,
-    name: "先攻",
-    description: "率先攻击获得金币",
-    path: "启迪",
-    matches: 12000,
-    winRate: 0.544,
-    pickRate: 0.18,
-  },
-  {
-    id: 8214,
-    name: "召唤：艾黎",
-    description: "攻击和技能附带护盾或伤害",
-    path: "巫术",
-    matches: 14000,
-    winRate: 0.526,
-    pickRate: 0.2,
-  },
+  { id: 8112, name: "电刑", description: "3次攻击或技能命中造成额外伤害", path: "主宰", matches: 18000, winRate: 0.531, pickRate: 0.28, imageUrl: cdragonIcon(runeIconMap[8112]) },
+  { id: 8005, name: "征服者", description: "攻击和技能叠加适应之力", path: "精密", matches: 22000, winRate: 0.548, pickRate: 0.32, imageUrl: cdragonIcon(runeIconMap[8005]) },
+  { id: 8128, name: "黑暗收割", description: "低血量目标造成额外伤害并叠加", path: "主宰", matches: 16000, winRate: 0.512, pickRate: 0.25, imageUrl: cdragonIcon(runeIconMap[8128]) },
+  { id: 8230, name: "相位猛冲", description: "连续攻击获得移速", path: "巫术", matches: 7000, winRate: 0.505, pickRate: 0.1, imageUrl: cdragonIcon(runeIconMap[8230]) },
+  { id: 8437, name: "不灭之握", description: "周期性强化普攻并获得生命值", path: "坚决", matches: 10000, winRate: 0.558, pickRate: 0.15, imageUrl: cdragonIcon(runeIconMap[8437]) },
+  { id: 8351, name: "冰川增幅", description: "定身敌方英雄减速周围", path: "启迪", matches: 8000, winRate: 0.521, pickRate: 0.12, imageUrl: cdragonIcon(runeIconMap[8351]) },
+  { id: 8369, name: "先攻", description: "率先攻击获得金币", path: "启迪", matches: 12000, winRate: 0.544, pickRate: 0.18, imageUrl: cdragonIcon(runeIconMap[8369]) },
+  { id: 8214, name: "召唤：艾黎", description: "攻击和技能附带护盾或伤害", path: "巫术", matches: 14000, winRate: 0.526, pickRate: 0.2, imageUrl: cdragonIcon(runeIconMap[8214]) },
 ]
 
 const runePaths: Record<number, string> = {
@@ -377,9 +322,9 @@ const runePaths: Record<number, string> = {
 export async function getRunes(): Promise<RuneRank[]> {
   return withResgCache("runes:global:aram:latest", 3600, async () => {
     try {
-      const cDragonPerks = await request<{ id: number; name: string; shortDesc: string; path: string }[]>(
-        `${cdragonDefaultBase}/perks.json`
-      )
+      const cDragonPerks = await request<
+        { id: number; name: string; shortDesc: string; iconPath: string; path: string }[]
+      >(`${cdragonDefaultBase}/perks.json`)
       const mapped: RuneRank[] = cDragonPerks
         .filter((p) => p.name)
         .slice(0, 40)
@@ -391,6 +336,7 @@ export async function getRunes(): Promise<RuneRank[]> {
           matches: 3000 + Math.floor(Math.random() * 20000),
           winRate: 0.48 + Math.random() * 0.1,
           pickRate: 0.02 + Math.random() * 0.15,
+          imageUrl: p.iconPath ? cdragonIcon(p.iconPath) : undefined,
         }))
       return mapped.length > 0 ? mapped : fallbackRunes
     } catch {
