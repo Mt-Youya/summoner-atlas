@@ -415,7 +415,7 @@ export function Home() {
           <h2>每个结论，都能追溯到样本。</h2>
         </div>
         <p>排名同时参考胜率与场次。数据来自 summoner-atlas 公开接口快照，英雄资源由 CommunityDragon 提供。</p>
-        <a href="https://www.summoner-atlas.top/" target="_blank" rel="noreferrer">
+        <a href="https://summoner-atlas.yonjay.me/" target="_blank" rel="noreferrer">
           查看现有数据站 <HugeiconsIcon icon={ArrowRight01Icon} />
         </a>
       </section>
