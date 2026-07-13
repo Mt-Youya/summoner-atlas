@@ -1,6 +1,7 @@
-export const DATA_VERSION = await request<string[]>("https://ddragon.leagueoflegends.com/api/versions.json").then(
-  (res) => res[0]
-)
+import { withResgCache } from "@/lib/resg-cache"
+
+// 可用数据版本独立于 Data Dragon 的最新游戏版本
+export const DATA_VERSION = process.env.RESG_DATA_VERSION ?? "16.13"
 
 const apiBase = "https://api.resg.top/api"
 const cdragonBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1"
@@ -64,43 +65,49 @@ function valueOrNull<T>(result: PromiseSettledResult<T>): T | null {
 }
 
 export async function getChampions(version = DATA_VERSION): Promise<ChampionRank[]> {
-  const [statsResult, summaryResult] = await Promise.allSettled([
-    request<ChampionStat[]>(`${apiBase}/champions/stats?version=${version}`),
-    request<ChampionSummary[]>(`${cdragonBase}/champion-summary.json`),
-  ])
-  const stats = valueOrNull(statsResult)
-  const summary = valueOrNull(summaryResult)
-  if (!stats || !summary) return fallbackChampions
-  const names = new Map(summary.map((champion) => [champion.id, champion]))
-  return stats.flatMap((stat) => {
-    const champion = names.get(stat.champion_id)
-    return champion
-      ? [
-          {
-            id: champion.id,
-            name: champion.name,
-            alias: champion.alias,
-            matches: Number(stat.total_matches),
-            winRate: Number(stat.avg_win_rate),
-          },
-        ]
-      : []
+  return withResgCache(`champions:${version}`, 3600, async () => {
+    const [statsResult, summaryResult] = await Promise.allSettled([
+      request<ChampionStat[]>(`${apiBase}/champions/stats?version=${version}`),
+      request<ChampionSummary[]>(`${cdragonBase}/champion-summary.json`),
+    ])
+    const stats = valueOrNull(statsResult)
+    const summary = valueOrNull(summaryResult)
+    if (!stats || !summary) return fallbackChampions
+    const names = new Map(summary.map((champion) => [champion.id, champion]))
+    return stats.flatMap((stat) => {
+      const champion = names.get(stat.champion_id)
+      return champion
+        ? [
+            {
+              id: champion.id,
+              name: champion.name,
+              alias: champion.alias,
+              matches: Number(stat.total_matches),
+              winRate: Number(stat.avg_win_rate),
+            },
+          ]
+        : []
+    })
   })
 }
 
 export async function getAugments(version = DATA_VERSION): Promise<AugmentRank[]> {
-  const augments = await request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`).catch((_) => null)
-  if (augments === null) {
-    return []
-  }
+  return withResgCache(`augments:${version}`, 3600, async () => {
+    let augments: AugmentStat[]
+    try {
+      augments = await request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`)
+    } catch {
+      return []
+    }
 
-  return augments.map((augment) => ({
-    id: augment.augment_id,
-    name: augment.display_name,
-    description: augment.description.replaceAll(/<[^>]+>/g, ""),
-    matches: Number(augment.total_matches),
-    winRate: Number(augment.win_rate),
-  }))
+    return augments.map((augment) => ({
+      id: augment.augment_id,
+      name: augment.display_name,
+      description: augment.description.replaceAll(/<[^>]+>/g, ""),
+      matches: Number(augment.total_matches),
+      winRate: Number(augment.win_rate),
+    }))
+  })
 }
 
 export async function getChampion(id: number) {
@@ -114,24 +121,28 @@ export async function getAugment(id: number) {
 }
 
 export async function getChampionCombos(id: number): Promise<Combo[]> {
-  let combos: Combo[]
-  try {
-    combos = (await request<{ combos: Combo[] }>(`${apiBase}/base-stats?championId=${id}&version=${DATA_VERSION}`))
-      .combos
-  } catch {
-    return []
-  }
-  return combos.map((combo) =>
-    Object.assign(combo, { total_matches: Number(combo.total_matches), win_rate: Number(combo.win_rate) })
-  )
+  return withResgCache(`champion-combos:${DATA_VERSION}:${id}`, 3600, async () => {
+    let combos: Combo[]
+    try {
+      combos = (await request<{ combos: Combo[] }>(`${apiBase}/base-stats?championId=${id}&version=${DATA_VERSION}`))
+        .combos
+    } catch {
+      return []
+    }
+    return combos.map((combo) =>
+      Object.assign(combo, { total_matches: Number(combo.total_matches), win_rate: Number(combo.win_rate) })
+    )
+  })
 }
 
 export async function getChampionSynergy(id: number): Promise<Combo[]> {
-  try {
-    return await request<Combo[]>(`${apiBase}/synergy?championId=${id}&version=${DATA_VERSION}`)
-  } catch {
-    return []
-  }
+  return withResgCache(`champion-synergy:${DATA_VERSION}:${id}`, 3600, async () => {
+    try {
+      return await request<Combo[]>(`${apiBase}/synergy?championId=${id}&version=${DATA_VERSION}`)
+    } catch {
+      return []
+    }
+  })
 }
 
 export function percent(value: number) {
