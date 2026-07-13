@@ -9,6 +9,10 @@ const pages = [
   "/zh/support",
   "/zh/login",
   "/zh/profile",
+  "/zh/profile/accounts",
+  "/zh/profile/preferences",
+  "/zh/compare",
+  "/zh/admin",
 ]
 export default function sitemap(): MetadataRoute.Sitemap {
   return pages.map((path) => ({

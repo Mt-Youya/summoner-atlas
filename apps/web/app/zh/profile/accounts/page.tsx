@@ -12,7 +12,7 @@ export default function AccountsPage() {
         description="QQ 和 Riot 绑定需要 OAuth 回调、用户库与服务端密钥。当前仓库未提供这些服务，因此不会伪造绑定或解绑结果。"
       />
       <Link
-        className="my-10 inline-flex border border-black/30 px-4 py-3 text-sm hover:bg-[var(--award-lime)]"
+        className="my-10 inline-flex border border-border bg-surface px-4 py-3 text-sm hover:bg-surface-raised"
         href="/zh/login"
       >
         查看授权服务状态

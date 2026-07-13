@@ -1,7 +1,11 @@
 import Image from "next/image"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { ContextBar } from "@/components/context-bar"
 import { PageFrame } from "@/components/page-frame"
 import {
+  DATA_CONTEXT,
+  DATA_VERSION,
   championIcon,
   comboLabel,
   confidence,
@@ -12,10 +16,22 @@ import {
   number,
   percent,
 } from "@/lib/data"
+import { canonical } from "@/lib/site"
 
-export async function generateMetadata({ params }: { params: Promise<{ championId: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ championId: string }> }): Promise<Metadata> {
   const champion = await getChampion(Number((await params).championId))
-  return { title: champion ? `${champion.name} 大乱斗数据 | summoner-atlas` : "英雄不存在 | summoner-atlas" }
+  if (!champion) return { title: "英雄不存在" }
+  const path = `/zh/champions/${champion.id}`
+  return {
+    title: `${champion.name} 大乱斗数据`,
+    description: `${champion.name} 在大乱斗 ${DATA_VERSION} 的胜率、场次、可信度与组合数据。`,
+    alternates: { canonical: path },
+    openGraph: {
+      title: `${champion.name}｜大乱斗数据`,
+      description: `${percent(champion.winRate)} 胜率 · ${number(champion.matches)} 场`,
+      url: canonical(path),
+    },
+  }
 }
 
 export default async function ChampionDetail({ params }: { params: Promise<{ championId: string }> }) {
@@ -43,9 +59,12 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
   return (
     <PageFrame>
       <article className="pb-28">
-        <section className="grid grid-cols-[80px_1fr] gap-5 border-b border-black/20 py-16 md:grid-cols-[120px_1fr_auto] md:items-center md:gap-7 md:py-24">
+        <div className="pt-8">
+          <ContextBar context={DATA_CONTEXT} />
+        </div>
+        <section className="grid grid-cols-[80px_1fr] gap-5 border-b border-border py-16 md:grid-cols-[120px_1fr_auto] md:items-center md:gap-7 md:py-24">
           <Image
-            className="border border-cyan-500"
+            className="border border-primary"
             src={championIcon(champion.id)}
             alt={champion.name}
             width={120}
@@ -53,57 +72,57 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
             priority
           />
           <div>
-            <span className="font-mono text-[11px] tracking-[0.1em] text-cyan-500">英雄摘要 / 16.13</span>
+            <span className="font-mono text-[11px] tracking-[0.1em] text-primary">英雄摘要 / 16.13</span>
             <h1 className="my-2 text-[clamp(3rem,7vw,5.5rem)] font-black tracking-[-0.1em]">{champion.name}</h1>
-            <p className="text-black/60">{champion.alias} · 公开数据快照</p>
+            <p className="text-muted-foreground">{champion.alias} · 公开数据快照</p>
           </div>
           <dl className="col-span-full flex gap-7 md:col-auto">
             <div className="grid gap-1.5">
-              <dt className="text-[10px] text-black/55">胜率</dt>
+              <dt className="text-[10px] text-muted-foreground">胜率</dt>
               <dd>{percent(champion.winRate)}</dd>
             </div>
             <div className="grid gap-1.5">
-              <dt className="text-[10px] text-black/55">场次</dt>
+              <dt className="text-[10px] text-muted-foreground">场次</dt>
               <dd>{number(champion.matches)}</dd>
             </div>
             <div className="grid gap-1.5">
-              <dt className="text-[10px] text-black/55">可信度</dt>
+              <dt className="text-[10px] text-muted-foreground">可信度</dt>
               <dd>{confidence(champion.matches)}</dd>
             </div>
           </dl>
         </section>
         <section className="py-16">
-          <span className="font-mono text-[11px] tracking-[0.1em] text-cyan-500">推荐方案</span>
+          <span className="font-mono text-[11px] tracking-[0.1em] text-primary">推荐方案</span>
           <h2 className="mt-3 text-4xl font-black tracking-[-0.06em]">先看可执行结论</h2>
           {bestCombo ? (
             <div className="mt-7 grid gap-3 md:grid-cols-2">
-              <div className="grid min-h-40 content-center gap-3 bg-[#151a20] p-6 text-[var(--award-paper)]">
-                <small className="text-white/55">最佳高样本组合</small>
-                <strong className="text-4xl text-cyan-400">{percent(bestCombo.win_rate)}</strong>
-                <span className="text-sm text-white/65">
+              <div className="grid min-h-40 content-center gap-3 bg-surface p-6">
+                <small className="text-muted-foreground">最佳高样本组合</small>
+                <strong className="text-4xl text-primary">{percent(bestCombo.win_rate)}</strong>
+                <span className="text-sm text-muted-foreground">
                   {number(bestCombo.total_matches)} 场 · {comboLabel(bestCombo)}
                 </span>
               </div>
-              <div className="grid min-h-40 content-center gap-3 bg-[#151a20] p-6 text-[var(--award-paper)]">
-                <small className="text-white/55">海克斯协同参考</small>
-                <strong className="text-4xl text-cyan-400">
+              <div className="grid min-h-40 content-center gap-3 bg-surface p-6">
+                <small className="text-muted-foreground">海克斯协同参考</small>
+                <strong className="text-4xl text-primary">
                   {bestSynergy ? percent(bestSynergy.win_rate) : "暂无数据"}
                 </strong>
-                <span className="text-sm text-white/65">
+                <span className="text-sm text-muted-foreground">
                   {bestSynergy ? `${number(bestSynergy.total_matches)} 场 · ${bestSynergyName}` : "暂无可信协同数据"}
                 </span>
               </div>
             </div>
           ) : (
-            <p className="py-8 text-black/60">该英雄暂无可用组合推荐，请先参考基础胜率与场次。</p>
+            <p className="py-8 text-muted-foreground">该英雄暂无可用组合推荐，请先参考基础胜率与场次。</p>
           )}
         </section>
         <section>
-          <span className="font-mono text-[11px] tracking-[0.1em] text-cyan-500">深入数据 / 综合搭配</span>
+          <span className="font-mono text-[11px] tracking-[0.1em] text-primary">深入数据 / 综合搭配</span>
           <h2 className="mt-3 text-4xl font-black tracking-[-0.06em]">高胜率组合</h2>
           {combos.slice(0, 10).map((combo, index) => (
             <div
-              className="grid min-h-20 grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-4 border-b border-black/20 text-sm"
+              className="grid min-h-20 grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-4 border-b border-border text-sm"
               key={`${combo.combo_type ?? "combo"}-${combo.combo_key ?? "default"}-${combo.tier_signature ?? "tier"}-${index}`}
             >
               <span>{comboLabel(combo)}</span>

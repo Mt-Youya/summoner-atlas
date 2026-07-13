@@ -1,7 +1,9 @@
 import { withResgCache } from "@/lib/resg-cache"
+import { createDataContext } from "@/lib/context"
 
 // 可用数据版本独立于 Data Dragon 的最新游戏版本
 export const DATA_VERSION = process.env.RESG_DATA_VERSION ?? "16.13"
+export const DATA_CONTEXT = createDataContext(DATA_VERSION)
 
 const apiBase = "https://api.resg.top/api"
 const cdragonBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1"
@@ -65,7 +67,7 @@ function valueOrNull<T>(result: PromiseSettledResult<T>): T | null {
 }
 
 export async function getChampions(version = DATA_VERSION): Promise<ChampionRank[]> {
-  return withResgCache(`champions:${version}`, 3600, async () => {
+  return withResgCache(`champions:global:aram:${version}`, 3600, async () => {
     const [statsResult, summaryResult] = await Promise.allSettled([
       request<ChampionStat[]>(`${apiBase}/champions/stats?version=${version}`),
       request<ChampionSummary[]>(`${cdragonBase}/champion-summary.json`),
@@ -92,7 +94,7 @@ export async function getChampions(version = DATA_VERSION): Promise<ChampionRank
 }
 
 export async function getAugments(version = DATA_VERSION): Promise<AugmentRank[]> {
-  return withResgCache(`augments:${version}`, 3600, async () => {
+  return withResgCache(`augments:global:aram:${version}`, 3600, async () => {
     let augments: AugmentStat[]
     try {
       augments = await request<AugmentStat[]>(`${apiBase}/augments/tier-list?version=${version}`)
@@ -121,7 +123,7 @@ export async function getAugment(id: number) {
 }
 
 export async function getChampionCombos(id: number): Promise<Combo[]> {
-  return withResgCache(`champion-combos:${DATA_VERSION}:${id}`, 3600, async () => {
+  return withResgCache(`champion-combos:global:aram:${DATA_VERSION}:${id}`, 3600, async () => {
     let combos: Combo[]
     try {
       combos = (await request<{ combos: Combo[] }>(`${apiBase}/base-stats?championId=${id}&version=${DATA_VERSION}`))
@@ -136,7 +138,7 @@ export async function getChampionCombos(id: number): Promise<Combo[]> {
 }
 
 export async function getChampionSynergy(id: number): Promise<Combo[]> {
-  return withResgCache(`champion-synergy:${DATA_VERSION}:${id}`, 3600, async () => {
+  return withResgCache(`champion-synergy:global:aram:${DATA_VERSION}:${id}`, 3600, async () => {
     try {
       return await request<Combo[]>(`${apiBase}/synergy?championId=${id}&version=${DATA_VERSION}`)
     } catch {

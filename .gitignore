@@ -15,6 +15,7 @@ next-env.d.ts
 # 测试与覆盖率
 coverage/
 .nyc_output/
+tests/
 
 # 日志
 *.log

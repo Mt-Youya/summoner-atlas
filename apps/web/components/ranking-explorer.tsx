@@ -6,11 +6,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { number, percent, type AugmentRank, type ChampionRank } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ContextBar } from "@/components/context-bar"
+import { DATA_CONTEXT } from "@/lib/data"
+import { filterRankings } from "@/lib/ranking"
+import { useTranslation } from "@/components/locale-provider"
 
 type Entry = ChampionRank | AugmentRank
 type Props = { type: "champion" | "augment" }
 
 export function RankingExplorer({ type }: Props) {
+  const translate = useTranslation()
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -19,6 +24,7 @@ export function RankingExplorer({ type }: Props) {
   const [error, setError] = useState(false)
   const query = params.get("q") ?? ""
   const sort = params.get("sort") ?? "winRate"
+  const minimumMatches = Number(params.get("minMatches") ?? "0")
   useEffect(() => {
     const controller = new AbortController()
     setPending(true)
@@ -41,78 +47,91 @@ export function RankingExplorer({ type }: Props) {
     queueMicrotask(() => setPending(false))
   }
   const filtered = useMemo(
-    () =>
-      entries
-        .filter(
-          (entry) =>
-            entry.name.toLowerCase().includes(query.toLowerCase()) ||
-            ("alias" in entry && entry.alias.toLowerCase().includes(query.toLowerCase()))
-        )
-        .toSorted((a, b) => (sort === "matches" ? b.matches - a.matches : b.winRate - a.winRate)),
-    [entries, query, sort]
+    () => filterRankings(entries, query, sort === "matches" ? "matches" : "winRate", minimumMatches),
+    [entries, query, sort, minimumMatches]
   )
+  const clear = () => router.replace(pathname)
   const href = (id: number) => (type === "champion" ? `/zh/champions/${id}` : `/zh/augments/${id}`)
   return (
     <section className="py-8 pb-28" aria-busy={pending}>
-      <div className="mb-6 flex flex-wrap gap-2">
+      <ContextBar context={DATA_CONTEXT} />
+      <div className="mb-6 mt-6 flex flex-wrap gap-2">
         <Input
-          className="min-w-[min(100%,22.5rem)] flex-1"
+          className="min-h-11 min-w-[min(100%,20rem)] flex-1 border border-border bg-surface px-3 text-sm"
           value={query}
           onChange={(event) => update("q", event.target.value)}
-          placeholder={type === "champion" ? "搜索英雄、拼音或外号" : "搜索海克斯名称"}
-          aria-label="筛选榜单"
+          placeholder={type === "champion" ? translate("rankingSearchChampion") : translate("rankingSearchAugment")}
+          aria-label={translate("rankingSearch")}
         />
         <select
-          className="h-11 border border-black/30 bg-transparent px-3 text-sm text-[var(--award-ink)] outline-none focus-visible:border-[var(--award-ink)] focus-visible:ring-2 focus-visible:ring-[var(--award-lime)]"
+          className="min-h-11 border border-border bg-surface px-3 text-sm"
           value={sort}
           onChange={(event) => update("sort", event.target.value)}
-          aria-label="排序"
+          aria-label={translate("sort")}
         >
-          <option value="winRate">按胜率</option>
-          <option value="matches">按场次</option>
+          <option value="winRate">{translate("sortWinRate")}</option>
+          <option value="matches">{translate("sortMatches")}</option>
         </select>
-        {query && (
+        <select
+          className="min-h-11 border border-border bg-surface px-3 text-sm"
+          value={minimumMatches}
+          onChange={(event) => update("minMatches", event.target.value === "0" ? "" : event.target.value)}
+          aria-label={translate("sample")}
+        >
+          <option value="0">{translate("allSamples")}</option>
+          <option value="1000">{translate("atLeast1000")}</option>
+          <option value="5000">{translate("atLeast5000")}</option>
+        </select>
+        {(query || sort !== "winRate" || minimumMatches > 0) && (
           <Button
-            className="border-black/30 bg-transparent text-[var(--award-ink)] hover:bg-[var(--award-ink)] hover:text-[var(--award-paper)]"
+            className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised"
             variant="outline"
             type="button"
-            onClick={() => update("q", "")}
+            onClick={clear}
           >
-            清除筛选
+            {translate("clear")}
           </Button>
         )}
       </div>
-      <div className="border-t-2 border-[var(--award-ink)]">
-        <div className="grid min-h-11 grid-cols-[1.8fr_.65fr_.65fr_.6fr] items-center gap-4 border-b border-black/20 font-mono text-[10px] tracking-[0.08em] text-black/60">
-          <span>排名 / 名称</span>
-          <span>胜率</span>
-          <span>场次</span>
-          <span>可信度</span>
+      <div className="border-t-2 border-foreground">
+        <div className="hidden min-h-11 grid-cols-[1.8fr_.65fr_.65fr_.6fr] items-center gap-4 border-b border-border font-mono text-[10px] tracking-[.08em] text-muted-foreground md:grid">
+          <span>{translate("rankName")}</span>
+          <span>{translate("winRate")}</span>
+          <span>{translate("matches")}</span>
+          <span>{translate("confidence")}</span>
         </div>
         {filtered.map((entry, index) => (
           <Link
             href={href(entry.id)}
-            className="group grid min-h-[76px] grid-cols-[1.8fr_.65fr_.65fr_.6fr] items-center gap-4 border-b border-black/20 transition-colors hover:bg-[var(--award-ink)] hover:px-3 hover:text-[var(--award-paper)]"
+            className="grid min-h-[76px] grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 border-b border-border py-4 transition-colors hover:bg-surface md:grid-cols-[1.8fr_.65fr_.65fr_.6fr] md:gap-4 md:py-0 md:hover:px-3"
             key={entry.id}
           >
-            <span className="grid grid-cols-[32px_1fr] gap-x-3.5 gap-y-1">
-              <b className="row-span-2 self-center font-mono text-[11px] text-black/55 group-hover:text-white/60">
+            <span className="row-span-2 grid grid-cols-[32px_1fr] gap-x-3.5 gap-y-1 md:row-auto">
+              <b className="row-span-2 self-center font-mono text-[11px] text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </b>
               <strong>{entry.name}</strong>
-              <small className="truncate text-[11px] text-black/60 group-hover:text-white/60">
+              <small className="truncate text-[11px] text-muted-foreground">
                 {"description" in entry ? entry.description : entry.alias}
               </small>
             </span>
-            <strong className="font-mono text-[var(--positive)]">{percent(entry.winRate)}</strong>
-            <span>{number(entry.matches)}</span>
-            <span>{entry.matches >= 5000 ? "高可信" : entry.matches >= 1000 ? "中可信" : "样本有限"}</span>
+            <strong className="font-mono text-positive">{percent(entry.winRate)}</strong>
+            <span className="text-xs text-muted-foreground md:text-base md:text-foreground">
+              {number(entry.matches)}
+            </span>
+            <span className="hidden md:block">
+              {entry.matches >= 5000
+                ? translate("high")
+                : entry.matches >= 1000
+                  ? translate("medium")
+                  : translate("low")}
+            </span>
           </Link>
         ))}
-        {pending && <p className="py-8 text-black/60">正在读取榜单…</p>}
-        {!pending && error && <p className="py-8 text-red-700">榜单暂时不可用，请稍后重试。</p>}
+        {pending && <p className="py-8 text-muted-foreground">{translate("loadingRanking")}</p>}
+        {!pending && error && <p className="py-8 text-negative">{translate("rankingError")}</p>}
         {!pending && !error && filtered.length === 0 && (
-          <p className="py-8 text-black/60">没有匹配数据。请清除筛选或换一个关键词。</p>
+          <p className="py-8 text-muted-foreground">{translate("rankingEmpty")}</p>
         )}
       </div>
     </section>

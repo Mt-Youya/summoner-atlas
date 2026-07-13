@@ -15,7 +15,7 @@ export default async function AugmentsPage() {
         title="找出值得拿的海克斯"
         description="排序依据真实公开样本。低场次结论会明确标记，避免把偶然高胜率当成稳定方案。"
       />
-      <Suspense fallback={<p className="empty-state">正在加载榜单控件…</p>}>
+      <Suspense fallback={<p className="py-8 text-muted-foreground">正在加载榜单控件…</p>}>
         <RankingExplorer type="augment" />
       </Suspense>
     </PageFrame>

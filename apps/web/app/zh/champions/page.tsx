@@ -12,7 +12,7 @@ export default async function ChampionsPage() {
         title="用数据选英雄"
         description="支持名称、拼音和外号检索。排序与筛选写入 URL，可直接分享当前结果。"
       />
-      <Suspense fallback={<p className="empty-state">正在加载榜单控件…</p>}>
+      <Suspense fallback={<p className="py-8 text-muted-foreground">正在加载榜单控件…</p>}>
         <RankingExplorer type="champion" />
       </Suspense>
     </PageFrame>

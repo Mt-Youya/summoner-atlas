@@ -18,7 +18,7 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
         title={`${label}维护`}
         description="该界面等待服务端角色校验、变更审计与写入 API 接入。当前不能提交任何修改，避免在无权限边界下伪造维护能力。"
       />
-      <section className="account-notice">
+      <section className="my-12 border border-border bg-surface p-6 md:mb-28">
         <h2>维护服务未连接</h2>
         <p>需要的服务：身份会话、角色权限、实体读写、审计日志与失败原因回传。</p>
       </section>

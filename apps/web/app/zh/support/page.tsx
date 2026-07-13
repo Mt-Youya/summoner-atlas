@@ -8,11 +8,21 @@ export default function SupportPage() {
         title="数据来源与使用说明"
         description="数据来自公开 RESG 接口和 CommunityDragon。英雄联盟及相关素材归 Riot Games 所有；本项目与 Riot Games 没有关联，也未获得其认可。"
       />
-      <section className="support-links">
-        <a href="https://www.communitydragon.org/" target="_blank" rel="noreferrer">
+      <section className="flex gap-6 py-11 pb-28">
+        <a
+          className="border-b border-foreground pb-1 text-sm"
+          href="https://www.communitydragon.org/"
+          target="_blank"
+          rel="noreferrer"
+        >
           CommunityDragon →
         </a>
-        <a href="https://developer.riotgames.com/" target="_blank" rel="noreferrer">
+        <a
+          className="border-b border-foreground pb-1 text-sm"
+          href="https://developer.riotgames.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Riot Developer Portal →
         </a>
       </section>
