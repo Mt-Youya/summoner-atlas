@@ -7,10 +7,10 @@ import { number, percent, type AugmentRank, type ChampionRank } from "@/lib/data
 import { Button } from "@summoner-atlas/ui/button"
 import { Input } from "@summoner-atlas/ui/input"
 import { Spinner } from "@summoner-atlas/ui/spinner"
-import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@summoner-atlas/ui/select"
 import { ContextBar } from "@/components/context-bar"
 import { DATA_CONTEXT } from "@/lib/data"
-import { translateChampionName, translateAugmentName } from "@summoner-atlas/i18n"
+import { translateChampionName, translateAugmentName, translateAugmentDesc, localizePath } from "@summoner-atlas/i18n"
 import { filterRankings } from "@/lib/ranking"
 import { useTranslation, useLocale } from "@/components/locale-provider"
 
@@ -34,7 +34,7 @@ export function RankingExplorer({ type }: Props) {
     setPending(true)
     setError(false)
     fetch(type === "champion" ? "/api/champions" : "/api/augments", { signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : Promise.reject(new Error("榜单请求失败"))))
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error("Ranking request failed"))))
       .then((data: Entry[]) => setEntries(data))
       .catch((reason: unknown) => {
         if (!(reason instanceof DOMException && reason.name === "AbortError")) setError(true)
@@ -55,7 +55,7 @@ export function RankingExplorer({ type }: Props) {
     [entries, query, sort, minimumMatches]
   )
   const clear = () => router.replace(pathname)
-  const href = (id: number) => (type === "champion" ? `/zh/champions/${id}` : `/zh/augments/${id}`)
+  const href = (id: number) => localizePath(type === "champion" ? `/zh/champions/${id}` : `/zh/augments/${id}`, locale)
   return (
     <section className="py-8 pb-28" aria-busy={pending}>
       <ContextBar context={DATA_CONTEXT} />
@@ -67,15 +67,57 @@ export function RankingExplorer({ type }: Props) {
           placeholder={type === "champion" ? translate("rankingSearchChampion") : translate("rankingSearchAugment")}
           aria-label={translate("rankingSearch")}
         />
-        <NativeSelect value={sort} onChange={(event) => update("sort", event.target.value)} aria-label={translate("sort")} className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm">
-          <NativeSelectOption value="winRate">{translate("sortWinRate")}</NativeSelectOption>
-          <NativeSelectOption value="matches">{translate("sortMatches")}</NativeSelectOption>
-        </NativeSelect>
-        <NativeSelect value={minimumMatches} onChange={(event) => update("minMatches", event.target.value === "0" ? "" : event.target.value)} aria-label={translate("sample")} className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm">
-          <NativeSelectOption value="0">{translate("allSamples")}</NativeSelectOption>
-          <NativeSelectOption value="1000">{translate("atLeast1000")}</NativeSelectOption>
-          <NativeSelectOption value="5000">{translate("atLeast5000")}</NativeSelectOption>
-        </NativeSelect>
+        {(() => {
+          const sortItems = [
+            { label: translate("sortWinRate"), value: "winRate" },
+            { label: translate("sortMatches"), value: "matches" },
+          ]
+          return (
+            <Select value={sort} items={sortItems} onValueChange={(v) => update("sort", v ?? "winRate")}>
+              <SelectTrigger
+                className="min-h-11 min-w-30 border-border bg-surface text-sm"
+                aria-label={translate("sort")}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sortItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )
+        })()}
+        {(() => {
+          const sampleItems = [
+            { label: translate("allSamples"), value: "0" },
+            { label: translate("atLeast1000"), value: "1000" },
+            { label: translate("atLeast5000"), value: "5000" },
+          ]
+          return (
+            <Select
+              value={String(minimumMatches)}
+              items={sampleItems}
+              onValueChange={(v) => update("minMatches", (v ?? "0") === "0" ? "" : (v ?? "0"))}
+            >
+              <SelectTrigger
+                className="min-h-11 min-w-35 border-border bg-surface text-sm"
+                aria-label={translate("sample")}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sampleItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )
+        })()}
         {(query || sort !== "winRate" || minimumMatches > 0) && (
           <Button
             className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised"
@@ -88,7 +130,7 @@ export function RankingExplorer({ type }: Props) {
         )}
       </div>
       <div className="border-t-2 border-foreground">
-        <div className="hidden min-h-11 grid-cols-[1.8fr_.65fr_.65fr_.6fr] items-center gap-4 border-b border-border font-mono text-[10px] tracking-[.08em] text-muted-foreground md:grid">
+        <div className="hidden min-h-11 grid-cols-[1.8fr_.65fr_.65fr_.6fr] items-center gap-4 border-b border-border font-mono text-lg tracking-[.08em] text-muted-foreground md:grid">
           <span>{translate("rankName")}</span>
           <span>{translate("winRate")}</span>
           <span>{translate("matches")}</span>
@@ -97,16 +139,20 @@ export function RankingExplorer({ type }: Props) {
         {filtered.map((entry, index) => (
           <Link
             href={href(entry.id)}
-            className="grid min-h-[76px] grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 border-b border-border py-4 transition-colors hover:bg-surface md:grid-cols-[1.8fr_.65fr_.65fr_.6fr] md:gap-4 md:py-0 md:hover:px-3"
+            className="grid min-h-19 grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 border-b border-border py-4 transition-colors hover:bg-surface md:grid-cols-[1.8fr_.65fr_.65fr_.6fr] md:gap-4 md:py-0 md:hover:px-3"
             key={entry.id}
           >
             <span className="row-span-2 grid grid-cols-[32px_1fr] gap-x-3.5 gap-y-1 md:row-auto">
               <b className="row-span-2 self-center font-mono text-[11px] text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </b>
-              <strong>{type === "champion" ? translateChampionName(entry.name, locale) : translateAugmentName(entry.name, locale)}</strong>
+              <strong>
+                {type === "champion"
+                  ? translateChampionName(entry.name, locale)
+                  : translateAugmentName(entry.name, locale)}
+              </strong>
               <small className="truncate text-[11px] text-muted-foreground">
-                {"description" in entry ? entry.description : entry.alias}
+                {"description" in entry ? translateAugmentDesc(entry.description, locale) : entry.alias}
               </small>
             </span>
             <strong className="font-mono text-positive">{percent(entry.winRate)}</strong>

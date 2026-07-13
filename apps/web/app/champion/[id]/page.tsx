@@ -1,4 +1,10 @@
+import { cookies } from "next/headers"
 import { permanentRedirect } from "next/navigation"
+import { isLocale } from "@summoner-atlas/i18n"
+
 export default async function LegacyChampion({ params }: { params: Promise<{ id: string }> }) {
-  permanentRedirect(`/zh/champions/${(await params).id}`)
+  const { id } = await params
+  const cookie = (await cookies()).get("summoner-atlas-locale")?.value
+  const locale = isLocale(cookie) ? cookie : "zh"
+  permanentRedirect(`/${locale}/champions/${id}`)
 }

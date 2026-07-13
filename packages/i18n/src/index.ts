@@ -22,7 +22,9 @@ export function localizePath(path: string, locale: Locale) {
 }
 
 // Legacy: PageTitle still uses this, but all pages now pre-translate via t()
-export function translateCopy(_locale: Locale, value: string) { return value }
+export function translateCopy(_locale: Locale, value: string) {
+  return value
+}
 
 export { translateChampionName } from "./data-translations"
 export { translateAugmentName, translateAugmentDesc } from "./augment-translations"

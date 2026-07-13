@@ -50,3 +50,5 @@ Thumbs.db
 # Pagefind 索引
 public/pagefind/
 .env*
+tmp_aug.json
+.claude/settings.local.json

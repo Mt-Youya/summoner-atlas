@@ -3,7 +3,7 @@
 import { useTranslation } from "@/components/locale-provider"
 import { Input } from "@summoner-atlas/ui/input"
 import { Button } from "@summoner-atlas/ui/button"
-import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@summoner-atlas/ui/select"
 
 export interface RankingFiltersState {
   query: string
@@ -12,7 +12,10 @@ export interface RankingFiltersState {
 }
 
 export function RankingFilters({
-  filters, onChange, showClear, onClear,
+  filters,
+  onChange,
+  showClear,
+  onClear,
 }: {
   filters: RankingFiltersState
   onChange: (next: RankingFiltersState) => void
@@ -20,34 +23,73 @@ export function RankingFilters({
   onClear: () => void
 }) {
   const translate = useTranslation()
-  const update = <K extends keyof RankingFiltersState>(key: K, value: RankingFiltersState[K]) => { onChange({ ...filters, [key]: value }) }
+  const update = <K extends keyof RankingFiltersState>(key: K, value: RankingFiltersState[K]) => {
+    onChange({ ...filters, [key]: value })
+  }
+  const sortItems = [
+    { label: translate("sortWinRate"), value: "winRate" },
+    { label: translate("sortPickRate"), value: "pickRate" },
+    { label: translate("sortMatches"), value: "matches" },
+  ]
+  const sampleItems = [
+    { label: translate("allSamples"), value: "0" },
+    { label: translate("atLeast1000"), value: "1000" },
+    { label: translate("atLeast5000"), value: "5000" },
+  ]
   return (
     <div className="flex flex-wrap gap-2">
       <Input
         className="min-h-11 min-w-[min(100%,20rem)] flex-1 border border-border bg-surface px-3 text-sm"
-        value={filters.query} onChange={(e) => update("query", e.target.value)}
-        placeholder={translate("rankingSearch")} aria-label={translate("rankingSearch")}
+        value={filters.query}
+        onChange={(e) => update("query", e.target.value)}
+        placeholder={translate("rankingSearch")}
+        aria-label={translate("rankingSearch")}
       />
-      <NativeSelect
-        value={filters.sort} onChange={(e) => update("sort", e.target.value as RankingFiltersState["sort"])}
-        aria-label={translate("sort")}
-        className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm"
+      <Select
+        value={filters.sort}
+        items={sortItems}
+        onValueChange={(v) => update("sort", (v ?? "winRate") as RankingFiltersState["sort"])}
       >
-        <NativeSelectOption value="winRate">{translate("sortWinRate")}</NativeSelectOption>
-        <NativeSelectOption value="pickRate">{translate("sortPickRate")}</NativeSelectOption>
-        <NativeSelectOption value="matches">{translate("sortMatches")}</NativeSelectOption>
-      </NativeSelect>
-      <NativeSelect
-        value={filters.minMatches} onChange={(e) => update("minMatches", Number(e.target.value))}
-        aria-label={translate("sample")}
-        className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:text-sm"
+        <SelectTrigger
+          className="min-h-11 min-w-[120px] border-border bg-surface text-sm"
+          aria-label={translate("sort")}
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {sortItems.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select
+        value={String(filters.minMatches)}
+        items={sampleItems}
+        onValueChange={(v) => update("minMatches", Number(v ?? "0"))}
       >
-        <NativeSelectOption value="0">{translate("allSamples")}</NativeSelectOption>
-        <NativeSelectOption value="1000">{translate("atLeast1000")}</NativeSelectOption>
-        <NativeSelectOption value="5000">{translate("atLeast5000")}</NativeSelectOption>
-      </NativeSelect>
+        <SelectTrigger
+          className="min-h-11 min-w-[140px] border-border bg-surface text-sm"
+          aria-label={translate("sample")}
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {sampleItems.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {showClear && (
-        <Button className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised" variant="outline" type="button" onClick={onClear}>
+        <Button
+          className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised"
+          variant="outline"
+          type="button"
+          onClick={onClear}
+        >
           {translate("clear")}
         </Button>
       )}

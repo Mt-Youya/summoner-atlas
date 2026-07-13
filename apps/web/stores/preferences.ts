@@ -1,13 +1,13 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-type Theme = "dark" | "light"
-
 interface PreferencesState {
-  theme: Theme
+  theme: "dark" | "light"
   version: string
-  setTheme: (theme: Theme) => void
+  recentlyViewed: number[]
+  setTheme: (theme: "dark" | "light") => void
   setVersion: (version: string) => void
+  addRecentlyViewed: (id: number) => void
 }
 
 export const usePreferencesStore = create<PreferencesState>()(
@@ -15,8 +15,13 @@ export const usePreferencesStore = create<PreferencesState>()(
     (set) => ({
       theme: "dark",
       version: "16.13",
+      recentlyViewed: [],
       setTheme: (theme) => set({ theme }),
       setVersion: (version) => set({ version }),
+      addRecentlyViewed: (id) =>
+        set((state) => ({
+          recentlyViewed: [id, ...state.recentlyViewed.filter((i) => i !== id)].slice(0, 10),
+        })),
     }),
     { name: "summoner-atlas-preferences" }
   )

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { useTranslation } from "@/components/locale-provider"
 
-type SearchEntry = { id: number; name: string; aliases: string[]; kind: "英雄" | "海克斯"; href: string }
+type SearchEntry = { id: number; name: string; aliases: string[]; kind: string; href: string }
 
 export function GlobalGameSearch({ entries }: { entries: SearchEntry[] }) {
   const translate = useTranslation()

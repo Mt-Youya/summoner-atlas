@@ -3,20 +3,33 @@
 import { usePathname } from "next/navigation"
 import { localeLabels, localizePath, locales } from "@summoner-atlas/i18n"
 import { useLocale, useTranslation } from "@/components/locale-provider"
-import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@summoner-atlas/ui/select"
+
+const items = locales.map((v) => ({ label: localeLabels[v], value: v }))
 
 export function LanguageSwitcher() {
   const locale = useLocale()
   const translate = useTranslation()
   const pathname = usePathname()
   return (
-    <NativeSelect
-      aria-label={translate("language")}
+    <Select
       value={locale}
-      onChange={(event) => window.location.assign(localizePath(pathname, event.target.value as typeof locale))}
-      className="[&>select]:min-h-11 [&>select]:border-border [&>select]:bg-surface [&>select]:px-2 [&>select]:text-xs [&>select]:text-foreground"
+      items={items}
+      onValueChange={(val) => window.location.assign(localizePath(pathname, val as typeof locale))}
     >
-      {locales.map((v) => (<NativeSelectOption key={v} value={v}>{localeLabels[v]}</NativeSelectOption>))}
-    </NativeSelect>
+      <SelectTrigger
+        className="min-h-11 min-w-25 border-border bg-surface text-xs text-foreground"
+        aria-label={translate("language")}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {items.map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }

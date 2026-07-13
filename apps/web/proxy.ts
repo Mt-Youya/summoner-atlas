@@ -7,7 +7,6 @@ const DEFAULT_LOCALE = "zh"
 function getUserLocale(request: NextRequest): string {
   const cookie = request.cookies.get(COOKIE_NAME)?.value
   if (cookie && isLocale(cookie)) return cookie
-
   const acceptLanguage = request.headers.get("accept-language") ?? ""
   const first = acceptLanguage.split(",")[0]?.trim().slice(0, 2).toLowerCase()
   if (first === "en") return "en"
@@ -33,16 +32,7 @@ export function proxy(request: NextRequest) {
   const locale = match[1]
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set("x-summoner-atlas-locale", locale)
-
-  if (locale === "zh") {
-    const response = NextResponse.next({ request: { headers: requestHeaders } })
-    response.cookies.set(COOKIE_NAME, "zh", { path: "/", maxAge: 60 * 60 * 24 * 365 })
-    return response
-  }
-
-  const rewriteUrl = request.nextUrl.clone()
-  rewriteUrl.pathname = pathname.replace(/^\/(en|ko)(?=\/|$)/, "/zh")
-  const response = NextResponse.rewrite(rewriteUrl, { request: { headers: requestHeaders } })
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
   response.cookies.set(COOKIE_NAME, locale, { path: "/", maxAge: 60 * 60 * 24 * 365 })
   return response
 }

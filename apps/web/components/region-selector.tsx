@@ -2,13 +2,27 @@
 
 import { type Region, REGIONS, regionLabels } from "@/lib/context"
 import { useTranslation } from "@/components/locale-provider"
-import { NativeSelect, NativeSelectOption } from "@summoner-atlas/ui/native-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@summoner-atlas/ui/select"
+
+const items = REGIONS.map((value) => ({ label: regionLabels[value], value }))
 
 export function RegionSelector({ value, onChange }: { value: Region; onChange: (region: Region) => void }) {
   const translate = useTranslation()
   return (
-    <NativeSelect value={value} onChange={(e) => onChange(e.target.value as Region)} aria-label={translate("selectRegion")} className="[&>select]:min-h-10 [&>select]:border-border [&>select]:bg-surface [&>select]:font-mono [&>select]:text-sm">
-      {REGIONS.map((r) => (<NativeSelectOption key={r} value={r}>{regionLabels[r]}</NativeSelectOption>))}
-    </NativeSelect>
+    <Select value={value} items={items} onValueChange={(val) => onChange(val as Region)}>
+      <SelectTrigger
+        className="min-h-10 min-w-20 border-border bg-surface font-mono text-sm"
+        aria-label={translate("selectRegion")}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {items.map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
