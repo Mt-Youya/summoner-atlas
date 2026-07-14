@@ -249,5 +249,18 @@
   "openAtlas": "Atlas 열기 →",
   "tft": "TFT",
   "tftDesc": "조합, 아이템 콤보 및 증강 기술. 곧 출시됩니다.",
-  "notReplaceJudgmentDesc": "데이터는 과거 표본을 설명하며 미래 결과를 보장하지 않습니다. 팀 구성, 플레이어 숙련도, 게임 타이밍이 실제 결과에 영향을 미칩니다."
+  "notReplaceJudgmentDesc": "데이터는 과거 표본을 설명하며 미래 결과를 보장하지 않습니다. 팀 구성, 플레이어 숙련도, 게임 타이밍이 실제 결과에 영향을 미칩니다.",
+  "caseFile404": "사건 파일 #404",
+  "missingInAction": "페이지 실종",
+  "missingInActionDesc": "모든 구역을 수색했습니다. 찾으시는 페이지는 공허 속으로 사라졌습니다. 너무나 깨끗합니다...",
+  "abortMission": "임무 중단",
+  "internalSystemFailure": "내부 시스템 오류",
+  "internalSystemFailureDesc": "ATLAS 코어에서 내부 오류가 발생했습니다. Unit 734가 수리를 시도 중입니다. 침착함을 유지하십시오.",
+  "systemStatus": "시스템 상태",
+  "criticalError": "심각한 오류",
+  "errorCodeLabel": "오류 코드",
+  "errorLevel": "오류 레벨",
+  "rebootSystem": "시스템 재부팅",
+  "rebooting": "재부팅 중...",
+  "emergencyProtocolActive": "비상 프로토콜 활성화"
 }

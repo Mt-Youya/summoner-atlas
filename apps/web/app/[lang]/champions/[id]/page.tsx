@@ -7,6 +7,8 @@ import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "hugeicons-react"
 import { Badge, Skeleton, Separator } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { MiniSparkline } from "@/components/charts/mini-sparkline"
+import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { ChampionDetail } from "@/lib/data-service"
 
 function confidenceVariant(level: "high" | "medium" | "low") {
@@ -27,49 +29,6 @@ function GlowStat({ value, label, unit = "%" }: { value: number; label: string; 
   )
 }
 
-function MiniSparkline({ data }: { data: { patch: string; winRate: number }[] }) {
-  if (data.length === 0) return null
-  const w = 120
-  const h = 36
-  const pad = 4
-  const vals = data.map((d) => d.winRate)
-  const min = Math.min(...vals) - 1
-  const max = Math.max(...vals) + 1
-  const range = max - min
-  const points = vals
-    .map((v, i) => {
-      const x = pad + (i / (vals.length - 1)) * (w - pad * 2)
-      const y = pad + ((max - v) / range) * (h - pad * 2)
-      return `${x},${y}`
-    })
-    .join(" ")
-
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-[120px] h-9 shrink-0">
-      <polyline
-        points={points}
-        fill="none"
-        stroke="var(--color-hextech-blue)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Fill area under line */}
-      <polygon
-        points={`${pad},${h - pad} ${points} ${w - pad},${h - pad}`}
-        fill="url(#sparkGrad)"
-        opacity={0.3}
-      />
-      <defs>
-        <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--color-hextech-blue)" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="var(--color-hextech-blue)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-    </svg>
-  )
-}
-
 /* ── Build Flow ── */
 
 function BuildFlow({ detail }: { detail: ChampionDetail }) {
@@ -80,12 +39,14 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Skill order */}
       <div className="rounded-2xl card-glow bg-card p-6">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-          {t("skillOrder")}
-        </h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("skillOrder")}</h3>
         <div className="flex flex-wrap gap-1.5">
           {build.skillOrder.slice(0, 10).map((skill, i) => (
-            <Badge key={i} variant={skill === "R" ? "default" : "secondary"} className="text-xs font-mono size-7 flex items-center justify-center p-0">
+            <Badge
+              key={i}
+              variant={skill === "R" ? "default" : "secondary"}
+              className="text-xs font-mono size-7 flex items-center justify-center p-0"
+            >
               {skill}
             </Badge>
           ))}
@@ -98,9 +59,7 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
 
       {/* Core items */}
       <div className="rounded-2xl card-glow bg-card p-6">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-          {t("coreItems")}
-        </h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("coreItems")}</h3>
         <div className="flex items-center gap-3">
           {build.coreItems.map((item, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
@@ -120,13 +79,13 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
 
       {/* Runes */}
       <div className="rounded-2xl card-glow bg-card p-6">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-          {t("runes")}
-        </h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("runes")}</h3>
         <div className="space-y-3">
           <div>
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{t("primary")}</p>
-            <Badge variant="default" className="text-xs">{build.runes.keystone}</Badge>
+            <Badge variant="default" className="text-xs">
+              {build.runes.keystone}
+            </Badge>
             <span className="text-xs text-muted-foreground ml-2">{build.runes.primaryPath}</span>
           </div>
           <div>
@@ -188,83 +147,6 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
   )
 }
 
-/* ── Patch Trend ── */
-
-function PatchTrendChart({ data }: { data: { patch: string; winRate: number }[] }) {
-  if (data.length === 0) return null
-  const w = 600
-  const h = 180
-  const pad = { top: 20, right: 20, bottom: 30, left: 40 }
-  const vals = data.map((d) => d.winRate)
-  const min = Math.floor(Math.min(...vals) - 2)
-  const max = Math.ceil(Math.max(...vals) + 2)
-  const range = max - min
-
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto">
-      {/* Y axis grid lines */}
-      {Array.from({ length: 5 }).map((_, i) => {
-        const y = pad.top + (i / 4) * (h - pad.top - pad.bottom)
-        const val = max - (i / 4) * range
-        return (
-          <g key={`grid-${i}`}>
-            <line x1={pad.left} y1={y} x2={w - pad.right} y2={y}
-              stroke="rgba(0,212,255,0.08)" strokeWidth="0.5" />
-            <text x={pad.left - 6} y={y + 4} textAnchor="end" fill="var(--text-muted)"
-              fontSize={10} fontFamily="Outfit, sans-serif">
-              {val.toFixed(0)}%
-            </text>
-          </g>
-        )
-      })}
-
-      {/* Area fill */}
-      <polygon
-        points={`${pad.left},${h - pad.bottom} ${data.map((d, i) => {
-          const x = pad.left + (i / (data.length - 1)) * (w - pad.left - pad.right)
-          const y = pad.top + ((max - d.winRate) / range) * (h - pad.top - pad.bottom)
-          return `${x},${y}`
-        }).join(" ")} ${w - pad.right},${h - pad.bottom}`}
-        fill="url(#trendGrad)"
-        opacity={0.25}
-      />
-
-      {/* Line */}
-      <polyline
-        points={data.map((d, i) => {
-          const x = pad.left + (i / (data.length - 1)) * (w - pad.left - pad.right)
-          const y = pad.top + ((max - d.winRate) / range) * (h - pad.top - pad.bottom)
-          return `${x},${y}`
-        }).join(" ")}
-        fill="none" stroke="var(--color-hextech-blue)" strokeWidth="2"
-        strokeLinecap="round" strokeLinejoin="round"
-      />
-
-      {/* Data points */}
-      {data.map((d, i) => {
-        const x = pad.left + (i / (data.length - 1)) * (w - pad.left - pad.right)
-        const y = pad.top + ((max - d.winRate) / range) * (h - pad.top - pad.bottom)
-        return (
-          <g key={`pt-${i}`}>
-            <circle cx={x} cy={y} r="3" fill="var(--color-hextech-blue)" />
-            <text x={x} y={h - 8} textAnchor="middle" fill="var(--text-muted)"
-              fontSize={10} fontFamily="Outfit, sans-serif">
-              {d.patch}
-            </text>
-          </g>
-        )
-      })}
-
-      <defs>
-        <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--color-hextech-blue)" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="var(--color-hextech-blue)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-    </svg>
-  )
-}
-
 /* ── Main Page ── */
 
 export default function ChampionDetailPage() {
@@ -289,7 +171,9 @@ export default function ChampionDetailPage() {
     }
   }, [id])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
   /* ── Loading Skeleton ── */
   if (loading) {
@@ -356,9 +240,7 @@ export default function ChampionDetailPage() {
             <p className="text-sm text-muted-foreground">{detail.champion.name}</p>
           </div>
           <div className="text-right">
-            <span className="text-2xl font-extrabold tabular-nums glow-mid">
-              {detail.winRate.toFixed(1)}%
-            </span>
+            <span className="text-2xl font-extrabold tabular-nums glow-mid">{detail.winRate.toFixed(1)}%</span>
             <p className="text-[10px] text-muted-foreground">
               {detail.matches.toLocaleString()} {t("games")}
             </p>

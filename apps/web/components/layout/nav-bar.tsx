@@ -6,6 +6,7 @@ import { Search01Icon, Sun01Icon, Moon01Icon, ArrowDown01Icon } from "hugeicons-
 import { Button, Badge, Separator } from "@summoner-atlas/ui"
 import { useTheme } from "@/hooks/use-theme"
 import { useTranslation, useLanguage, type Locale } from "@/hooks/use-translation"
+import { useCommandPalette } from "@/hooks/use-command-palette"
 import { localeLabels } from "@summoner-atlas/i18n"
 import { cn } from "@/lib/utils"
 
@@ -23,6 +24,7 @@ export function NavBar() {
   const theme = useTheme((s) => s.theme)
   const toggleTheme = useTheme((s) => s.toggle)
   const setLocale = useLanguage((s) => s.setLocale)
+  const openCmdPalette = useCommandPalette((s) => s.open)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -64,10 +66,12 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="sm" className="hidden md:inline-flex text-muted-foreground">
+          <Button variant="ghost" size="sm" onClick={openCmdPalette} className="hidden md:inline-flex text-muted-foreground">
             <Search01Icon data-icon="inline-start" />
             <span className="text-xs">{t("search")}</span>
-            <Badge variant="secondary" className="ml-2 text-[10px] px-1 py-0">/</Badge>
+            <Badge variant="secondary" className="ml-2 text-[10px] px-1 py-0">
+              Ctrl+K
+            </Badge>
           </Button>
 
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground">

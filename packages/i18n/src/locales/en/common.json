@@ -249,5 +249,18 @@
   "openAtlas": "Open Atlas →",
   "tft": "TFT",
   "tftDesc": "Compositions, item combos, and augment tech. Coming soon.",
-  "notReplaceJudgmentDesc": "Data describes past samples, not future outcomes. Team composition, player skill, and game timing still affect actual results."
+  "notReplaceJudgmentDesc": "Data describes past samples, not future outcomes. Team composition, player skill, and game timing still affect actual results.",
+  "caseFile404": "Case File #404",
+  "missingInAction": "Missing In Action",
+  "missingInActionDesc": "We've combed the perimeter. The page you're looking for has vanished into the void. It's clean... too clean.",
+  "abortMission": "Abort Mission",
+  "internalSystemFailure": "Internal System Failure",
+  "internalSystemFailureDesc": "ATLAS Core suffered an internal fault. Unit 734 is currently attempting to fix the hyper-drive. Please remain calm.",
+  "systemStatus": "System Status",
+  "criticalError": "Critical Error",
+  "errorCodeLabel": "Error Code",
+  "errorLevel": "Error Level",
+  "rebootSystem": "Reboot System",
+  "rebooting": "Rebooting...",
+  "emergencyProtocolActive": "Emergency Protocol Active"
 }

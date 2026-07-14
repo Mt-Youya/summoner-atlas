@@ -97,25 +97,26 @@ export interface AtlasGraphData {
 export type GameMode = "aram" | "summonersRift" | "arena" | "tft"
 export type Region = "cn" | "kr" | "global"
 
+export interface AugmentDetail {
+  augment: Augment
+  winRate: number
+  pickRate: number
+  matches: number
+  confidence: "high" | "medium" | "low"
+  suitableChampions: { champion: Champion; synergyScore: number }[]
+  trendData: { patch: string; winRate: number }[]
+}
+
 export interface DataService {
   getPatchSummary(): Promise<PatchSummary>
-  getTopChampions(params: {
-    mode: GameMode
-    region: Region
-    limit: number
-  }): Promise<ChampionRank[]>
+  getTopChampions(params: { mode: GameMode; region: Region; limit: number }): Promise<ChampionRank[]>
   getTrendingChampions(params: {
     mode: GameMode
     region: Region
   }): Promise<{ up: ChampionTrend[]; down: ChampionTrend[] }>
   getTopAugments(params: { mode: GameMode; limit: number }): Promise<AugmentRank[]>
-  searchChampions(params: {
-    query: string
-    mode: GameMode
-  }): Promise<ChampionSearchResult[]>
-  getChampionDetail(params: {
-    id: string
-    mode: GameMode
-  }): Promise<ChampionDetail>
+  getAugmentDetail(params: { id: string; mode: GameMode }): Promise<AugmentDetail>
+  searchChampions(params: { query: string; mode: GameMode }): Promise<ChampionSearchResult[]>
+  getChampionDetail(params: { id: string; mode: GameMode }): Promise<ChampionDetail>
   getAtlasPreview(params: { mode: GameMode }): Promise<AtlasGraphData>
 }

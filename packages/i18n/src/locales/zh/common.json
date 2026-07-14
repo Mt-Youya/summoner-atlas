@@ -249,5 +249,18 @@
   "openAtlas": "打开 Atlas 星图 →",
   "tft": "云顶之弈",
   "tftDesc": "阵容搭配、装备组合与海克斯科技。即将开放。",
-  "notReplaceJudgmentDesc": "数据描述过去样本，不承诺单局结果。阵容、玩家熟练度与对局时点仍会影响实际选择。"
+  "notReplaceJudgmentDesc": "数据描述过去样本，不承诺单局结果。阵容、玩家熟练度与对局时点仍会影响实际选择。",
+  "caseFile404": "案件编号 #404",
+  "missingInAction": "页面失踪",
+  "missingInActionDesc": "我们搜遍了每个角落。你寻找的页面已经消失在虚空之中。这里干净得...太干净了。",
+  "abortMission": "中止任务",
+  "internalSystemFailure": "内部系统故障",
+  "internalSystemFailureDesc": "Atlas 核心发生内部错误。Unit 734 正在尝试修复超光速引擎。请保持冷静。",
+  "systemStatus": "系统状态",
+  "criticalError": "严重错误",
+  "errorCodeLabel": "错误代码",
+  "errorLevel": "错误级别",
+  "rebootSystem": "重启系统",
+  "rebooting": "重启中...",
+  "emergencyProtocolActive": "紧急协议已激活"
 }
