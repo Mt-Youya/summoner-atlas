@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/champions", i18nKey: "champions" },
   { href: "/augments", i18nKey: "augments" },
   { href: "/builds", i18nKey: "builds" },
+  { href: "/atlas", i18nKey: "openAtlas" },
   { href: "/meta", i18nKey: "meta" },
   { href: "/compare", i18nKey: "compare" },
   { href: "/patches", i18nKey: "patches" },
