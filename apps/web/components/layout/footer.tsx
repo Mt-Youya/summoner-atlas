@@ -63,9 +63,7 @@ export function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
               {t("supportCompliance")}
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {t("footerNotAffiliated")}
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t("footerNotAffiliated")}</p>
           </div>
         </div>
 

@@ -2,12 +2,17 @@
   "name": "summoner-atlas",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "pnpm --filter @summoner-atlas/web dev",
-    "build": "pnpm --filter @summoner-atlas/web build"
+    "build": "pnpm --filter @summoner-atlas/web build",
+    "lint": "oxlint .",
+    "fmt": "oxfmt --write ."
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "packageManager": "pnpm@10.0.0"
 }

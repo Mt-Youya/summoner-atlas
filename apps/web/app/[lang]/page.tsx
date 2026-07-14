@@ -5,7 +5,17 @@ import Link from "next/link"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
-import { Search01Icon, AnalyticsUpIcon, AnalyticsDownIcon, ArrowRight01Icon, SparklesIcon, Clock01Icon, HashtagIcon, ZapIcon, Cancel01Icon } from "hugeicons-react"
+import {
+  Search01Icon,
+  AnalyticsUpIcon,
+  AnalyticsDownIcon,
+  ArrowRight01Icon,
+  SparklesIcon,
+  Clock01Icon,
+  HashtagIcon,
+  ZapIcon,
+  Cancel01Icon,
+} from "hugeicons-react"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -57,15 +67,18 @@ function HeroSection({
   const starRef = useRef<HTMLDivElement>(null)
   const countRef = useRef<HTMLSpanElement>(null)
 
-  useGSAP(() => {
-    // Star-field infinite drift
-    gsap.to(starRef.current, {
-      backgroundPosition: "50% 50%",
-      duration: 60,
-      repeat: -1,
-      ease: "none",
-    })
-  }, { scope: starRef })
+  useGSAP(
+    () => {
+      // Star-field infinite drift
+      gsap.to(starRef.current, {
+        backgroundPosition: "50% 50%",
+        duration: 60,
+        repeat: -1,
+        ease: "none",
+      })
+    },
+    { scope: starRef }
+  )
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -119,12 +132,7 @@ function HeroSection({
           </div>
 
           {/* Search dropdown */}
-          <SearchDropdown
-            results={searchResults}
-            visible={searchVisible}
-            hasQuery={hasSearchQuery}
-            t={t}
-          />
+          <SearchDropdown results={searchResults} visible={searchVisible} hasQuery={hasSearchQuery} t={t} />
         </div>
 
         {/* Meta line */}
@@ -164,9 +172,7 @@ function StrongPicksSection({
               {t("patchSummary")}
               <span className="text-hextech-blue glow-mid"> {t("stablePicks")}</span>
             </h2>
-            <p className="text-muted-foreground mt-3 text-lg max-w-lg">
-              {t("contextHelp")}
-            </p>
+            <p className="text-muted-foreground mt-3 text-lg max-w-lg">{t("contextHelp")}</p>
           </div>
           <Link
             href="/champions"
@@ -262,9 +268,12 @@ function TrendEntry({ item, positive }: { item: ChampionTrend; positive: boolean
       </div>
       <div className="text-right">
         <span className={`font-bold text-lg tabular-nums ${positive ? "text-emerald-400" : "text-red-400"}`}>
-          {positive ? "+" : ""}{change.toFixed(1)}%
+          {positive ? "+" : ""}
+          {change.toFixed(1)}%
         </span>
-        <div className={`h-1 w-16 rounded-full mt-1 ml-auto overflow-hidden ${positive ? "bg-emerald-500/20" : "bg-red-500/20"}`}>
+        <div
+          className={`h-1 w-16 rounded-full mt-1 ml-auto overflow-hidden ${positive ? "bg-emerald-500/20" : "bg-red-500/20"}`}
+        >
           <div
             className={`h-full rounded-full transition-all duration-700 ${positive ? "bg-emerald-400" : "bg-red-400"}`}
             style={{ width: `${Math.min(Math.abs(change) * 20, 100)}%` }}
@@ -297,9 +306,7 @@ function TrendingSection({
               <div className="size-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                 <AnalyticsUpIcon className="size-4 text-emerald-400" />
               </div>
-              <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">
-                {t("trendingUp")}
-              </span>
+              <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">{t("trendingUp")}</span>
             </div>
             {trending.up.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">{t("noTrendingUp")}</p>
@@ -313,9 +320,7 @@ function TrendingSection({
               <div className="size-8 rounded-lg bg-red-500/10 flex items-center justify-center">
                 <AnalyticsDownIcon className="size-4 text-red-400" />
               </div>
-              <span className="text-sm font-semibold text-red-400 uppercase tracking-wider">
-                {t("trendingDown")}
-              </span>
+              <span className="text-sm font-semibold text-red-400 uppercase tracking-wider">{t("trendingDown")}</span>
             </div>
             {trending.down.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">{t("noTrendingDown")}</p>
@@ -331,13 +336,7 @@ function TrendingSection({
 
 /* ── Section 4: Augments — Horizontal Scroll ── */
 
-function AugmentsSection({
-  augments,
-  t,
-}: {
-  augments: AugmentRank[]
-  t: (key: string, fallback?: string) => string
-}) {
+function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: string, fallback?: string) => string }) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -435,9 +434,7 @@ function AtlasPreviewSection({
               {t("comboResearch")}
               <span className="text-hextech-blue glow-mid"> Atlas</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-12 max-w-xl mx-auto">
-              {t("comboResearchDesc")}
-            </p>
+            <p className="text-muted-foreground text-lg mb-12 max-w-xl mx-auto">{t("comboResearchDesc")}</p>
 
             {/* SVG star chart — static preview */}
             <div className="relative w-full max-w-3xl mx-auto aspect-[16/8] mb-12">
@@ -445,15 +442,23 @@ function AtlasPreviewSection({
                 {Array.from({ length: 6 }).map((_, i) => (
                   <line
                     key={`h-${i}`}
-                    x1={0} y1={i * 12} x2={100} y2={i * 12}
-                    stroke="rgba(0,212,255,0.06)" strokeWidth={0.1}
+                    x1={0}
+                    y1={i * 12}
+                    x2={100}
+                    y2={i * 12}
+                    stroke="rgba(0,212,255,0.06)"
+                    strokeWidth={0.1}
                   />
                 ))}
                 {Array.from({ length: 8 }).map((_, i) => (
                   <line
                     key={`v-${i}`}
-                    x1={i * 14.2} y1={0} x2={i * 14.2} y2={60}
-                    stroke="rgba(0,212,255,0.06)" strokeWidth={0.1}
+                    x1={i * 14.2}
+                    y1={0}
+                    x2={i * 14.2}
+                    y2={60}
+                    stroke="rgba(0,212,255,0.06)"
+                    strokeWidth={0.1}
                   />
                 ))}
                 {atlasData?.links.map((link, i) => {
@@ -463,8 +468,12 @@ function AtlasPreviewSection({
                   return (
                     <line
                       key={`link-${i}`}
-                      x1={source.x} y1={source.y} x2={target.x} y2={target.y}
-                      stroke="rgba(0,212,255,0.15)" strokeWidth={link.strength * 0.5}
+                      x1={source.x}
+                      y1={source.y}
+                      x2={target.x}
+                      y2={target.y}
+                      stroke="rgba(0,212,255,0.15)"
+                      strokeWidth={link.strength * 0.5}
                     />
                   )
                 })}
@@ -474,13 +483,24 @@ function AtlasPreviewSection({
                   const r = node.size * 0.8
                   return (
                     <g key={node.id}>
-                      <circle cx={node.x} cy={node.y} r={r + 0.8} fill={fill} opacity={0.15}
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={r + 0.8}
+                        fill={fill}
+                        opacity={0.15}
                         className="animate-pulse"
                         style={{ animationDelay: `${i * 0.3}s`, animationDuration: "3s" }}
                       />
                       <circle cx={node.x} cy={node.y} r={r} fill={fill} />
-                      <text x={node.x} y={node.y + r + 1.8} textAnchor="middle"
-                        fill="var(--text-secondary)" fontSize={1.2} fontFamily="Outfit, sans-serif">
+                      <text
+                        x={node.x}
+                        y={node.y + r + 1.8}
+                        textAnchor="middle"
+                        fill="var(--text-secondary)"
+                        fontSize={1.2}
+                        fontFamily="Outfit, sans-serif"
+                      >
                         {node.name}
                       </text>
                     </g>
@@ -507,8 +527,20 @@ function AtlasPreviewSection({
 
 function ModeEntriesSection({ t }: { t: (key: string, fallback?: string) => string }) {
   const modes = [
-    { href: "/champions?mode=summonersRift", titleKey: "summonersRift", descKey: "summonersRiftDesc", available: false, seed: "summoners-rift" },
-    { href: "/champions?mode=tft", titleKey: "tft" as const, descKey: "tftDesc" as const, available: false, seed: "tft" },
+    {
+      href: "/champions?mode=summonersRift",
+      titleKey: "summonersRift",
+      descKey: "summonersRiftDesc",
+      available: false,
+      seed: "summoners-rift",
+    },
+    {
+      href: "/champions?mode=tft",
+      titleKey: "tft" as const,
+      descKey: "tftDesc" as const,
+      available: false,
+      seed: "tft",
+    },
     { href: "/champions?mode=arena", titleKey: "arena", descKey: "arenaDesc", available: false, seed: "arena" },
   ]
 
@@ -535,7 +567,10 @@ function ModeEntriesSection({ t }: { t: (key: string, fallback?: string) => stri
                 <h3 className="text-xl font-bold text-foreground mb-2">{t(mode.titleKey)}</h3>
                 <p className="text-sm text-muted-foreground mb-6">{t(mode.descKey)}</p>
                 {mode.available ? (
-                  <Link href={mode.href} className="inline-flex items-center gap-2 text-sm font-medium text-hextech-blue hover:text-hextech-amber transition-colors duration-300">
+                  <Link
+                    href={mode.href}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-hextech-blue hover:text-hextech-amber transition-colors duration-300"
+                  >
                     {t("details")} <ArrowRight01Icon className="size-4" />
                   </Link>
                 ) : (
@@ -595,9 +630,7 @@ function SearchDropdown({
             <p className="text-xs text-muted-foreground">{item.champion.name}</p>
           </div>
           <div className="text-right flex flex-col items-end gap-1">
-            <span className="text-sm font-bold tabular-nums text-foreground">
-              {item.winRate.toFixed(1)}%
-            </span>
+            <span className="text-sm font-bold tabular-nums text-foreground">{item.winRate.toFixed(1)}%</span>
             <Badge variant={confidenceVariant(item.confidence)} className="text-[10px]">
               {t(item.confidence)}
             </Badge>
@@ -703,42 +736,47 @@ export default function HomePage() {
   }, [])
 
   // Section staggered reveal on scroll
-  useGSAP(() => {
-    if (!dataReady) return
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const dur = prefersReduced ? 0 : 0.8
-    const cardDur = prefersReduced ? 0 : 0.55
-    const sections = gsap.utils.toArray<HTMLElement>("[data-animate]")
-    sections.forEach((el) => {
-      gsap.from(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-        opacity: 0,
-        y: prefersReduced ? 0 : 48,
-        duration: dur,
-        ease: "power2.out",
+  useGSAP(
+    () => {
+      if (!dataReady) return
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      const dur = prefersReduced ? 0 : 0.8
+      const cardDur = prefersReduced ? 0 : 0.55
+      const sections = gsap.utils.toArray<HTMLElement>("[data-animate]")
+      sections.forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: prefersReduced ? 0 : 48,
+          duration: dur,
+          ease: "power2.out",
+        })
       })
-    })
-    const cards = gsap.utils.toArray<HTMLElement>("[data-stagger] [data-card]")
-    cards.forEach((el) => {
-      gsap.from(el, {
-        scrollTrigger: {
-          trigger: el.closest("[data-stagger]") as HTMLElement,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-        opacity: 0,
-        y: prefersReduced ? 0 : 32,
-        scale: prefersReduced ? 1 : 0.96,
-        duration: cardDur,
-        ease: "power2.out",
+      const cards = gsap.utils.toArray<HTMLElement>("[data-stagger] [data-card]")
+      cards.forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el.closest("[data-stagger]") as HTMLElement,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: prefersReduced ? 0 : 32,
+          scale: prefersReduced ? 1 : 0.96,
+          duration: cardDur,
+          ease: "power2.out",
+        })
       })
-    })
-    return () => { ScrollTrigger.getAll().forEach((st) => st.kill()) }
-  }, { scope: contentRef, dependencies: [dataReady] })
+      return () => {
+        ScrollTrigger.getAll().forEach((st) => st.kill())
+      }
+    },
+    { scope: contentRef, dependencies: [dataReady] }
+  )
 
   async function handleSearch(query: string) {
     if (query.length < 1) {
