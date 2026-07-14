@@ -5,6 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./request": "./request.ts"
+    "./request": "./request.ts",
+    "./locales/zh": "./src/locales/zh/common.json",
+    "./locales/en": "./src/locales/en/common.json",
+    "./locales/ko": "./src/locales/ko/common.json"
   }
 }

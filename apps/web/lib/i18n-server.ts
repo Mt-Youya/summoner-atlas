@@ -1,6 +1,17 @@
 import { headers } from "next/headers"
-import { resolveRequestLocale, type Locale } from "@summoner-atlas/i18n/request"
+
+export type Locale = "zh" | "en" | "ko"
+
+const supportedLocales: Locale[] = ["zh", "en", "ko"]
+
+function resolveRequestLocale(headerValue: string | null | undefined): Locale {
+  if (headerValue && supportedLocales.includes(headerValue as Locale)) {
+    return headerValue as Locale
+  }
+  return "zh"
+}
 
 export async function getLocale(): Promise<Locale> {
-  return resolveRequestLocale((await headers()).get("x-summoner-atlas-locale"))
+  const hdrs = await headers()
+  return resolveRequestLocale(hdrs.get("x-summoner-atlas-locale"))
 }

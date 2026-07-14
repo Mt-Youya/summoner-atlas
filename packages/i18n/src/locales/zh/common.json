@@ -21,6 +21,8 @@
   "aram": "大乱斗",
   "summonersRift": "召唤师峡谷",
   "arena": "竞技场",
+  "primary": "主系",
+  "secondary": "副系",
   "contextHelp": "每小时刷新缓存；当前仅接入可核验的大乱斗公开数据。",
   "updated": "数据更新时间",
   "updatedAt": "更新于",
@@ -244,5 +246,8 @@
   "publiclyVerifiableTitle": "公开可核验",
   "publiclyVerifiableDesc": "英雄与海克斯统计读取公开接口；英雄名称与图标使用 CommunityDragon 资源。",
   "notReplaceJudgmentTitle": "不替代判断",
+  "openAtlas": "打开 Atlas 星图 →",
+  "tft": "云顶之弈",
+  "tftDesc": "阵容搭配、装备组合与海克斯科技。即将开放。",
   "notReplaceJudgmentDesc": "数据描述过去样本，不承诺单局结果。阵容、玩家熟练度与对局时点仍会影响实际选择。"
 }

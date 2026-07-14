@@ -21,6 +21,8 @@
   "aram": "ARAM",
   "summonersRift": "Summoner's Rift",
   "arena": "Arena",
+  "primary": "Primary",
+  "secondary": "Secondary",
   "contextHelp": "Cache refreshes hourly. Only verifiable public ARAM data is available.",
   "updated": "Data updated",
   "updatedAt": "Updated",
@@ -244,5 +246,8 @@
   "publiclyVerifiableTitle": "Publicly verifiable",
   "publiclyVerifiableDesc": "Champion and augment stats come from public APIs; names and icons use CommunityDragon resources.",
   "notReplaceJudgmentTitle": "Does not replace judgment",
+  "openAtlas": "Open Atlas →",
+  "tft": "TFT",
+  "tftDesc": "Compositions, item combos, and augment tech. Coming soon.",
   "notReplaceJudgmentDesc": "Data describes past samples, not future outcomes. Team composition, player skill, and game timing still affect actual results."
 }

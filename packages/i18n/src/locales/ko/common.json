@@ -21,6 +21,8 @@
   "aram": "칼바람 나락",
   "summonersRift": "소환사의 협곡",
   "arena": "격전장",
+  "primary": "주",
+  "secondary": "부",
   "contextHelp": "캐시는 매시간 갱신됩니다. 검증 가능한 공개 ARAM 데이터만 제공합니다.",
   "updated": "데이터 갱신 시간",
   "updatedAt": "갱신",
@@ -244,5 +246,8 @@
   "publiclyVerifiableTitle": "공개 검증 가능",
   "publiclyVerifiableDesc": "챔피언 및 증강 통계는 공개 API에서 가져옵니다; 이름과 아이콘은 CommunityDragon 리소스를 사용합니다.",
   "notReplaceJudgmentTitle": "판단을 대체하지 않음",
+  "openAtlas": "Atlas 열기 →",
+  "tft": "TFT",
+  "tftDesc": "조합, 아이템 콤보 및 증강 기술. 곧 출시됩니다.",
   "notReplaceJudgmentDesc": "데이터는 과거 표본을 설명하며 미래 결과를 보장하지 않습니다. 팀 구성, 플레이어 숙련도, 게임 타이밍이 실제 결과에 영향을 미칩니다."
 }
