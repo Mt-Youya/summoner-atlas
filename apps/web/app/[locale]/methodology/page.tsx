@@ -4,6 +4,13 @@ import { getLocale } from "@/lib/i18n-server"
 import { t, localizePath } from "@summoner-atlas/i18n"
 import { canonical } from "@/lib/site"
 
+const cards = [
+  { titleKey: "versionFixedTitle", descKey: "versionFixedDesc" },
+  { titleKey: "sampleTierTitle", descKey: "sampleTierDesc" },
+  { titleKey: "publiclyVerifiableTitle", descKey: "publiclyVerifiableDesc" },
+  { titleKey: "notReplaceJudgmentTitle", descKey: "notReplaceJudgmentDesc" },
+] as const
+
 export default async function MethodologyPage() {
   const locale = await getLocale()
   return (
@@ -13,27 +20,16 @@ export default async function MethodologyPage() {
         title={t(locale, "methodologyTitle")}
         description={t(locale, "methodologyDesc")}
       />
-      <section className="grid gap-4 py-12 md:grid-cols-2 md:pb-28">
-        <article className="min-h-52 border border-border bg-surface p-6">
-          <span className="font-mono text-xs text-primary">01</span>
-          <h2 className="my-3 text-3xl tracking-[-.04em]">{t(locale, "versionFixedTitle")}</h2>
-          <p className="text-sm leading-6 text-muted-foreground">{t(locale, "versionFixedDesc")}</p>
-        </article>
-        <article className="min-h-52 border border-border bg-surface p-6">
-          <span className="font-mono text-xs text-primary">02</span>
-          <h2 className="my-3 text-3xl tracking-[-.04em]">{t(locale, "sampleTierTitle")}</h2>
-          <p className="text-sm leading-6 text-muted-foreground">{t(locale, "sampleTierDesc")}</p>
-        </article>
-        <article className="min-h-52 border border-border bg-surface p-6">
-          <span className="font-mono text-xs text-primary">03</span>
-          <h2 className="my-3 text-3xl tracking-[-.04em]">{t(locale, "publiclyVerifiableTitle")}</h2>
-          <p className="text-sm leading-6 text-muted-foreground">{t(locale, "publiclyVerifiableDesc")}</p>
-        </article>
-        <article className="min-h-52 border border-border bg-surface p-6">
-          <span className="font-mono text-xs text-primary">04</span>
-          <h2 className="my-3 text-3xl tracking-[-.04em]">{t(locale, "notReplaceJudgmentTitle")}</h2>
-          <p className="text-sm leading-6 text-muted-foreground">{t(locale, "notReplaceJudgmentDesc")}</p>
-        </article>
+      <section className="grid gap-3 py-12 sm:grid-cols-2 md:pb-28">
+        {cards.map(({ titleKey, descKey }) => (
+          <div
+            key={titleKey}
+            className="flex min-h-[180px] flex-col gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm"
+          >
+            <h2 className="text-xl font-bold tracking-[-0.03em]">{t(locale, titleKey)}</h2>
+            <p className="text-sm leading-6 text-muted-foreground">{t(locale, descKey)}</p>
+          </div>
+        ))}
       </section>
     </PageFrame>
   )

@@ -1,8 +1,9 @@
 import Image from "next/image"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ContextSelector } from "@/components/selector/context-selector"
 import { PageFrame } from "@/components/layout/page-frame"
+import { DataContextBar } from "@/components/home/data-context-bar"
+import { ChampionHeroClient } from "./hero-client"
 import {
   DATA_CONTEXT,
   DATA_VERSION,
@@ -29,7 +30,7 @@ function confidenceLabel(locale: string, matches: number): string {
 
 export async function generateMetadata({ params }: { params: Promise<{ championId: string }> }): Promise<Metadata> {
   const champion = await getChampion(Number((await params).championId))
-  if (!champion) return { title: "Champion not found" }
+  if (!champion) return { title: "Champion not found / 英雄未找到" }
   const path = `/zh/champions/${champion.id}`
   return {
     title: `${translateChampionName(champion.name, "en")} ARAM data`,
@@ -57,71 +58,70 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
   const combos = combosResult.status === "fulfilled" ? combosResult.value : []
   const synergy = synergyResult.status === "fulfilled" ? synergyResult.value : []
   const augments = augmentsResult.status === "fulfilled" ? augmentsResult.value : []
-  const bestCombo = combos.filter((combo) => combo.total_matches >= 5000).toSorted((a, b) => b.win_rate - a.win_rate)[0]
+
+  const bestCombo = combos.filter((c) => c.total_matches >= 5000).toSorted((a, b) => b.win_rate - a.win_rate)[0]
   const bestSynergy = synergy
-    .filter((combo) => combo.total_matches >= 1000)
+    .filter((c) => c.total_matches >= 1000)
     .toSorted((a, b) => b.win_rate - a.win_rate)[0]
-  const augmentNames = new Map(augments.map((augment) => [augment.id, translateAugmentName(augment.name, locale)]))
+  const augmentNames = new Map(augments.map((a) => [a.id, translateAugmentName(a.name, locale)]))
   const bestSynergyName = bestSynergy?.combo_key
     ?.match(/\d+/g)
-    ?.map((augmentId) => augmentNames.get(Number(augmentId)) ?? `Augment #${augmentId}`)
+    ?.map((augId) => augmentNames.get(Number(augId)) ?? `Augment #${augId}`)
     .join(" · ")
+
   return (
     <PageFrame>
       <article className="pb-28">
-        <div className="pt-8">
-          <ContextSelector readonly context={DATA_CONTEXT} />
+        <div className="pt-6">
+          <DataContextBar />
         </div>
-        <section className="grid grid-cols-[80px_1fr] gap-5 border-b border-border py-16 md:grid-cols-[120px_1fr_auto] md:items-center md:gap-7 md:py-24">
+
+        {/* Hero */}
+        <ChampionHeroClient
+          championName={translateChampionName(champion.name, locale)}
+          alias={champion.alias}
+          winRate={percent(champion.winRate)}
+          matches={number(champion.matches)}
+          confidence={confidenceLabel(locale, champion.matches)}
+          summaryLabel={t(locale, "championSummary")}
+          winRateLabel={t(locale, "winRate")}
+          matchesLabel={t(locale, "matches")}
+          confidenceLabel={t(locale, "confidence")}
+          publicSnapshotLabel={t(locale, "publicSnapshot")}
+          dataVersion={DATA_VERSION}
+        >
           <Image
-            className="border border-primary"
             src={championIcon(champion.id)}
             alt={translateChampionName(champion.name, locale)}
-            width={120}
-            height={120}
+            width={140}
+            height={140}
+            className="rounded-2xl border border-white/[0.08]"
             priority
           />
-          <div>
-            <span className="font-mono text-[11px] tracking-widest text-primary">
-              {t(locale, "championSummary")} / {DATA_VERSION}
-            </span>
-            <h1 className="my-2 text-[clamp(3rem,7vw,5.5rem)] font-black tracking-[-0.1em]">
-              {translateChampionName(champion.name, locale)}
-            </h1>
-            <p className="text-muted-foreground">
-              {champion.alias} · {t(locale, "publicSnapshot")}
-            </p>
-          </div>
-          <dl className="col-span-full flex gap-7 md:col-auto">
-            <div className="grid gap-1.5">
-              <dt className="text-[10px] text-muted-foreground">{t(locale, "winRate")}</dt>
-              <dd>{percent(champion.winRate)}</dd>
-            </div>
-            <div className="grid gap-1.5">
-              <dt className="text-[10px] text-muted-foreground">{t(locale, "matches")}</dt>
-              <dd>{number(champion.matches)}</dd>
-            </div>
-            <div className="grid gap-1.5">
-              <dt className="text-[10px] text-muted-foreground">{t(locale, "confidence")}</dt>
-              <dd>{confidenceLabel(locale, champion.matches)}</dd>
-            </div>
-          </dl>
-        </section>
+        </ChampionHeroClient>
+
+        {/* Best Combo + Synergy */}
         <section className="py-16">
-          <span className="font-mono text-[11px] tracking-widest text-primary">{t(locale, "recommendedBuild")}</span>
-          <h2 className="mt-3 text-4xl font-black tracking-[-0.06em]">{t(locale, "actionableFirst")}</h2>
+          <span className="font-mono text-[11px] font-semibold tracking-[0.12em] text-primary">
+            {t(locale, "recommendedBuild")}
+          </span>
+          <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] font-black leading-[0.94] tracking-[-0.05em]">
+            {t(locale, "actionableFirst")}
+          </h2>
           {bestCombo ? (
-            <div className="mt-7 grid gap-3 md:grid-cols-2">
-              <div className="grid min-h-40 content-center gap-3 bg-surface p-6">
-                <small className="text-muted-foreground">{t(locale, "bestComboHighSample")}</small>
-                <strong className="text-4xl text-primary">{percent(bestCombo.win_rate)}</strong>
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              <div className="flex flex-col justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+                <span className="text-xs text-muted-foreground">{t(locale, "bestComboHighSample")}</span>
+                <strong className="text-[clamp(2.5rem,4vw,3.5rem)] font-black leading-none text-primary">
+                  {percent(bestCombo.win_rate)}
+                </strong>
                 <span className="text-sm text-muted-foreground">
                   {number(bestCombo.total_matches)} {t(locale, "games")} · {comboLabel(bestCombo, locale)}
                 </span>
               </div>
-              <div className="grid min-h-40 content-center gap-3 bg-surface p-6">
-                <small className="text-muted-foreground">{t(locale, "augmentSynergyRef")}</small>
-                <strong className="text-4xl text-primary">
+              <div className="flex flex-col justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+                <span className="text-xs text-muted-foreground">{t(locale, "augmentSynergyRef")}</span>
+                <strong className="text-[clamp(2.5rem,4vw,3.5rem)] font-black leading-none text-primary">
                   {bestSynergy ? percent(bestSynergy.win_rate) : t(locale, "noData")}
                 </strong>
                 <span className="text-sm text-muted-foreground">
@@ -132,25 +132,33 @@ export default async function ChampionDetail({ params }: { params: Promise<{ cha
               </div>
             </div>
           ) : (
-            <p className="py-8 text-muted-foreground">{t(locale, "noComboAvailable")}</p>
+            <p className="py-12 text-muted-foreground">{t(locale, "noComboAvailable")}</p>
           )}
         </section>
+
+        {/* Full Combo List */}
         <section>
-          <span className="font-mono text-[11px] tracking-widest text-primary">{t(locale, "deepDataCombo")}</span>
-          <h2 className="mt-3 text-4xl font-black tracking-[-0.06em]">{t(locale, "topWinRateCombos")}</h2>
-          {combos.slice(0, 10).map((combo, index) => (
-            <div
-              className="grid min-h-20 grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-4 border-b border-border text-sm"
-              key={`${combo.combo_type ?? "combo"}-${combo.combo_key ?? "default"}-${combo.tier_signature ?? "tier"}-${index}`}
-            >
-              <span>{comboLabel(combo, locale)}</span>
-              <strong>{percent(combo.win_rate)}</strong>
-              <span>
-                {number(combo.total_matches)} {t(locale, "games")}
-              </span>
-              <span>{confidenceLabel(locale, combo.total_matches)}</span>
-            </div>
-          ))}
+          <span className="font-mono text-[11px] font-semibold tracking-[0.12em] text-primary">
+            {t(locale, "deepDataCombo")}
+          </span>
+          <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] font-black leading-[0.94] tracking-[-0.05em]">
+            {t(locale, "topWinRateCombos")}
+          </h2>
+          <div className="mt-8 overflow-hidden rounded-xl border border-white/[0.06]">
+            {combos.slice(0, 10).map((combo, index) => (
+              <div
+                className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-4 border-b border-white/[0.03] px-5 py-4 text-sm last:border-b-0 transition-colors hover:bg-white/[0.02]"
+                key={`${combo.combo_type ?? "combo"}-${combo.combo_key ?? "default"}-${combo.tier_signature ?? "tier"}-${index}`}
+              >
+                <span className="truncate">{comboLabel(combo, locale)}</span>
+                <strong className="font-mono tabular-nums text-positive">{percent(combo.win_rate)}</strong>
+                <span className="font-mono tabular-nums text-xs text-muted-foreground">
+                  {number(combo.total_matches)} {t(locale, "games")}
+                </span>
+                <span className="text-xs text-muted-foreground">{confidenceLabel(locale, combo.total_matches)}</span>
+              </div>
+            ))}
+          </div>
         </section>
       </article>
     </PageFrame>

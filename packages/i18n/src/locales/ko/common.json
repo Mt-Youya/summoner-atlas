@@ -78,6 +78,7 @@
   "login": "로그인",
   "admin": "관리자",
   "loading": "불러오는 중…",
+  "menu": "메뉴",
   "error": "오류 발생",
   "notFound": "페이지 없음",
   "pageNotFound": "찾으시는 페이지가 존재하지 않거나 이동되었습니다.",

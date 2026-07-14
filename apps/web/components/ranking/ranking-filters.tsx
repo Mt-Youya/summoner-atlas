@@ -36,10 +36,14 @@ export function RankingFilters({
     { label: translate("atLeast1000"), value: "1000" },
     { label: translate("atLeast5000"), value: "5000" },
   ]
+
+  const glassInput = "min-h-11 border-white/[0.08] bg-white/[0.03] text-sm backdrop-blur-sm placeholder:text-white/20 focus:border-primary/40 focus:bg-white/[0.05]"
+  const glassSelect = "min-h-11 border-white/[0.08] bg-white/[0.03] text-sm backdrop-blur-sm"
+
   return (
     <div className="flex flex-wrap gap-2">
       <Input
-        className="min-h-11 min-w-[min(100%,20rem)] flex-1 border border-border bg-surface px-3 text-sm"
+        className={`min-w-[min(100%,18rem)] flex-1 ${glassInput}`}
         value={filters.query}
         onChange={(e) => update("query", e.target.value)}
         placeholder={translate("rankingSearch")}
@@ -50,10 +54,7 @@ export function RankingFilters({
         items={sortItems}
         onValueChange={(v) => update("sort", (v ?? "winRate") as RankingFiltersState["sort"])}
       >
-        <SelectTrigger
-          className="min-h-11 min-w-[120px] border-border bg-surface text-sm"
-          aria-label={translate("sort")}
-        >
+        <SelectTrigger className={`min-w-[120px] ${glassSelect}`} aria-label={translate("sort")}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -69,10 +70,7 @@ export function RankingFilters({
         items={sampleItems}
         onValueChange={(v) => update("minMatches", Number(v ?? "0"))}
       >
-        <SelectTrigger
-          className="min-h-11 min-w-[140px] border-border bg-surface text-sm"
-          aria-label={translate("sample")}
-        >
+        <SelectTrigger className={`min-w-[140px] ${glassSelect}`} aria-label={translate("sample")}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -85,7 +83,7 @@ export function RankingFilters({
       </Select>
       {showClear && (
         <Button
-          className="min-h-11 border border-border bg-surface px-3 text-sm hover:bg-surface-raised"
+          className="min-h-11 border border-white/[0.08] bg-white/[0.03] px-4 text-sm backdrop-blur-sm hover:bg-white/[0.06] hover:text-foreground"
           variant="outline"
           type="button"
           onClick={onClear}

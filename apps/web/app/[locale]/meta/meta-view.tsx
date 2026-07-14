@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ContextSelector } from "@/components/selector/context-selector"
 import { MetricValue } from "@/components/display/metric-value"
 import { RankChange } from "@/components/display/rank-change"
-import { DATA_CONTEXT } from "@/lib/context"
+import { ContextSelector } from "@/components/selector/context-selector"
+import { DATA_CONTEXT, type DataContext } from "@/lib/context"
 import { AVAILABLE_PATCHES } from "@/lib/data"
-import { type DataContext } from "@/lib/context"
 import { useTranslation, useLocale } from "@/components/locale-provider"
 import { localizePath } from "@summoner-atlas/i18n"
 
@@ -46,26 +45,26 @@ export function MetaView() {
     <>
       <ContextSelector context={context} patches={AVAILABLE_PATCHES} onContextChange={setContext} />
       {pending ? (
-        <p className="py-12 text-muted-foreground">{translate("loadingRanking")}</p>
+        <p className="py-16 text-center text-muted-foreground">{translate("loadingRanking")}</p>
       ) : (
-        <div className="mt-8 grid gap-8 pb-28 md:grid-cols-2">
-          <section className="rounded border border-border bg-surface p-5">
-            <h3 className="mb-4 font-mono text-xs tracking-[.08em] text-positive uppercase">
+        <div className="mt-8 grid gap-6 pb-28 md:grid-cols-2">
+          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+            <h3 className="mb-5 font-mono text-[11px] font-semibold tracking-[0.12em] text-positive uppercase">
               {translate("trendingUp")}
             </h3>
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-white/[0.04]">
               {trendingUp.slice(0, 10).map((entry) => (
                 <Link
                   key={entry.id}
                   href={localizePath(`/zh/champions/${entry.id}`, locale)}
-                  className="flex items-center justify-between py-2.5 transition-colors hover:bg-surface-raised"
+                  className="flex items-center justify-between py-3 transition-colors hover:bg-white/[0.03] -mx-2 px-2 rounded-lg"
                 >
                   <span className="grid">
                     <strong className="text-sm">{entry.name}</strong>
-                    <small className="text-[11px] text-muted-foreground">{entry.alias}</small>
+                    <span className="text-[11px] text-muted-foreground">{entry.alias}</span>
                   </span>
                   <span className="flex items-center gap-2">
-                    <MetricValue value={entry.winRate} type="percent" className="text-positive" />
+                    <MetricValue value={entry.winRate} type="percent" className="font-semibold text-positive tabular-nums" />
                     <RankChange delta={entry.previousPatchDelta} />
                   </span>
                 </Link>
@@ -75,23 +74,23 @@ export function MetaView() {
               )}
             </div>
           </section>
-          <section className="rounded border border-border bg-surface p-5">
-            <h3 className="mb-4 font-mono text-xs tracking-[.08em] text-negative uppercase">
+          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+            <h3 className="mb-5 font-mono text-[11px] font-semibold tracking-[0.12em] text-negative uppercase">
               {translate("trendingDown")}
             </h3>
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-white/[0.04]">
               {trendingDown.slice(0, 10).map((entry) => (
                 <Link
                   key={entry.id}
                   href={localizePath(`/zh/champions/${entry.id}`, locale)}
-                  className="flex items-center justify-between py-2.5 transition-colors hover:bg-surface-raised"
+                  className="flex items-center justify-between py-3 transition-colors hover:bg-white/[0.03] -mx-2 px-2 rounded-lg"
                 >
                   <span className="grid">
                     <strong className="text-sm">{entry.name}</strong>
-                    <small className="text-[11px] text-muted-foreground">{entry.alias}</small>
+                    <span className="text-[11px] text-muted-foreground">{entry.alias}</span>
                   </span>
                   <span className="flex items-center gap-2">
-                    <MetricValue value={entry.winRate} type="percent" className="text-negative" />
+                    <MetricValue value={entry.winRate} type="percent" className="font-semibold text-negative tabular-nums" />
                     <RankChange delta={entry.previousPatchDelta} />
                   </span>
                 </Link>

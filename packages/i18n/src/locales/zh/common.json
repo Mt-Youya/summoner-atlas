@@ -78,6 +78,7 @@
   "login": "登录",
   "admin": "后台",
   "loading": "加载中…",
+  "menu": "菜单",
   "error": "出错了",
   "notFound": "页面未找到",
   "pageNotFound": "你要找的页面不存在或已迁移。",

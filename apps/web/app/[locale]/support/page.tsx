@@ -13,22 +13,22 @@ export default async function SupportPage() {
         title={t(locale, "sources")}
         description={t(locale, "supportDesc")}
       />
-      <section className="flex gap-6 py-11 pb-28">
+      <section className="flex flex-wrap gap-6 py-12 pb-28">
         <a
-          className="border-b border-foreground pb-1 text-sm"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm text-primary transition-colors hover:text-primary/80"
           href="https://www.communitydragon.org/"
           target="_blank"
           rel="noreferrer"
         >
-          CommunityDragon →
+          CommunityDragon <span aria-hidden="true">&rarr;</span>
         </a>
         <a
-          className="border-b border-foreground pb-1 text-sm"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm text-primary transition-colors hover:text-primary/80"
           href="https://developer.riotgames.com/"
           target="_blank"
           rel="noreferrer"
         >
-          Riot Developer Portal →
+          Riot Developer Portal <span aria-hidden="true">&rarr;</span>
         </a>
       </section>
     </PageFrame>

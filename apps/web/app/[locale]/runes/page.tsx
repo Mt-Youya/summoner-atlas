@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { PageFrame } from "@/components/layout/page-frame"
 import { PageTitle } from "@/components/layout/page-title"
+import { DataContextBar } from "@/components/home/data-context-bar"
 import { canonical } from "@/lib/site"
 import { RankingView } from "@/components/ranking/ranking-view"
 import { getLocale } from "@/lib/i18n-server"
@@ -15,6 +16,7 @@ export default async function RunesPage() {
         title={t(locale, "runesRanking")}
         description={t(locale, "runesDesc")}
       />
+      <DataContextBar />
       <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loading")}</p>}>
         <RankingView type="rune" api="/api/runes" />
       </Suspense>

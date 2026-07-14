@@ -12,12 +12,18 @@ export async function PageTitle({
 }) {
   const locale = await getLocale()
   return (
-    <section className="border-b border-border pt-[clamp(5.5rem,12vw,10.4rem)] pb-14">
-      <span className="font-mono text-xs font-bold tracking-[.1em] text-primary">{translateCopy(locale, eyebrow)}</span>
-      <h1 className="mt-3 max-w-[10ch] text-[clamp(3rem,7vw,6.25rem)] font-black leading-[.88] tracking-[-.1em]">
+    <section className="border-b border-white/[0.06] pt-[clamp(5rem,10vw,9rem)] pb-12 md:pb-16">
+      <span className="font-mono text-[11px] font-semibold tracking-[0.12em] text-primary">
+        {translateCopy(locale, eyebrow)}
+      </span>
+      <h1 className="mt-4 max-w-2xl text-[clamp(2.75rem,6vw,5rem)] font-black leading-[0.9] tracking-[-0.07em]">
         {translateCopy(locale, title)}
       </h1>
-      <p className="mt-5 max-w-[62ch] leading-8 text-muted-foreground">{translateCopy(locale, description)}</p>
+      {description && (
+        <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">
+          {translateCopy(locale, description)}
+        </p>
+      )}
     </section>
   )
 }

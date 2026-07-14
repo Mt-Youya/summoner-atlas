@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { PageFrame } from "@/components/layout/page-frame"
 import { PageTitle } from "@/components/layout/page-title"
+import { DataContextBar } from "@/components/home/data-context-bar"
 import { RankingView } from "@/components/ranking/ranking-view"
 import { DATA_VERSION } from "@/lib/data"
 import { getLocale } from "@/lib/i18n-server"
@@ -16,6 +17,7 @@ export default async function AugmentsPage() {
         title={t(locale, "researchAugments")}
         description={t(locale, "augmentDescription")}
       />
+      <DataContextBar />
       <Suspense fallback={<p className="py-8 text-muted-foreground">{t(locale, "loadingRanking")}</p>}>
         <RankingView type="augment" api="/api/augments" />
       </Suspense>
