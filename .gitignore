@@ -27,5 +27,8 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
+# node version
+.node-version
+
 # misc
 *.log
