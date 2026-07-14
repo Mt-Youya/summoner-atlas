@@ -6,7 +6,8 @@ import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "../lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog"
 import { InputGroup, InputGroupAddon } from "./input-group"
-import { Search01Icon, Checkmark01Icon } from "hugeicons-react"
+import { Search01Icon, Checkmark01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
