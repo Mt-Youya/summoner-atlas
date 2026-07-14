@@ -31,9 +31,7 @@ function generateMockPatches(): MockPatch[] {
       { itemName: "Luden's Tempest", type: "buff" as const, summary: "AP increased 90 -> 95." },
       { itemName: "Shadowflame", type: "nerf" as const, summary: "Magic pen reduced 15 -> 12." },
     ],
-    runeChanges: [
-      { runeName: "Electrocute", type: "adjust" as const, summary: "Cooldown 25s -> 20s. Damage -10." },
-    ],
+    runeChanges: [{ runeName: "Electrocute", type: "adjust" as const, summary: "Cooldown 25s -> 20s. Damage -10." }],
   }))
 }
 
@@ -63,7 +61,9 @@ export default function PatchesPage() {
       <div className="max-w-5xl mx-auto px-6 py-10 space-y-6">
         <Skeleton className="h-9 w-48" />
         <Skeleton className="h-8 w-64" />
-        {Array.from({ length: 3 }).map((_, i) => (<Skeleton key={i} className="h-32 rounded-2xl" />))}
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-32 rounded-2xl" />
+        ))}
       </div>
     )
   }
@@ -97,7 +97,9 @@ export default function PatchesPage() {
         <div className="space-y-6">
           <div className="rounded-2xl card-glow bg-card p-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-bold text-foreground">{t("version")} {selected.version}</h2>
+              <h2 className="text-xl font-bold text-foreground">
+                {t("version")} {selected.version}
+              </h2>
               <span className="text-sm text-muted-foreground">{selected.publishDate}</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">{selected.summary}</p>
@@ -105,11 +107,15 @@ export default function PatchesPage() {
 
           {/* Champion Changes */}
           <div className="rounded-2xl card-glow bg-card p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("championChanges")}</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+              {t("championChanges")}
+            </h3>
             <div className="space-y-3">
               {selected.championChanges.map((c, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">{changeLabel(c.type)}</Badge>
+                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">
+                    {changeLabel(c.type)}
+                  </Badge>
                   <span className="font-medium text-sm text-foreground">{c.championName}</span>
                   <span className="text-sm text-muted-foreground">{c.summary}</span>
                 </div>
@@ -119,11 +125,15 @@ export default function PatchesPage() {
 
           {/* Item Changes */}
           <div className="rounded-2xl card-glow bg-card p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("itemChanges")}</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+              {t("itemChanges")}
+            </h3>
             <div className="space-y-3">
               {selected.itemChanges.map((c, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">{changeLabel(c.type)}</Badge>
+                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">
+                    {changeLabel(c.type)}
+                  </Badge>
                   <span className="font-medium text-sm text-foreground">{c.itemName}</span>
                   <span className="text-sm text-muted-foreground">{c.summary}</span>
                 </div>
@@ -133,11 +143,15 @@ export default function PatchesPage() {
 
           {/* Rune Changes */}
           <div className="rounded-2xl card-glow bg-card p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("runeChanges")}</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+              {t("runeChanges")}
+            </h3>
             <div className="space-y-3">
               {selected.runeChanges.map((c, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">{changeLabel(c.type)}</Badge>
+                  <Badge variant={changeVariant(c.type)} className="text-[10px] w-14 justify-center">
+                    {changeLabel(c.type)}
+                  </Badge>
                   <span className="font-medium text-sm text-foreground">{c.runeName}</span>
                   <span className="text-sm text-muted-foreground">{c.summary}</span>
                 </div>

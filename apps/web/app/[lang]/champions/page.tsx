@@ -14,10 +14,6 @@ import type { ChampionRank, GameMode, Region } from "@/lib/data-service"
 type SortField = "winRate" | "pickRate" | "matches" | "name" | "rank"
 type SortOrder = "asc" | "desc"
 
-function confidenceVariant(level: "high" | "medium" | "low") {
-  return level === "high" ? "default" : level === "medium" ? "secondary" : "outline"
-}
-
 const MODES: { value: GameMode; i18nKey: string }[] = [
   { value: "aram", i18nKey: "aram" },
   { value: "summonersRift", i18nKey: "summonersRift" },
@@ -70,7 +66,9 @@ export default function ChampionsPage() {
     }
   }, [mode, region])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
   // Client-side filter + sort
   const filtered = useMemo(() => {
@@ -93,15 +91,25 @@ export default function ChampionsPage() {
     list.sort((a, b) => {
       let va: number, vb: number
       if (sortField === "name") {
-        va = 0; vb = 0
+        va = 0
+        vb = 0
         return sortOrder === "asc"
           ? a.champion.nameZh.localeCompare(b.champion.nameZh)
           : b.champion.nameZh.localeCompare(a.champion.nameZh)
       }
-      if (sortField === "rank") { va = a.rank; vb = b.rank }
-      else if (sortField === "winRate") { va = a.winRate; vb = b.winRate }
-      else if (sortField === "pickRate") { va = a.pickRate; vb = b.pickRate }
-      else { va = a.matches; vb = b.matches }
+      if (sortField === "rank") {
+        va = a.rank
+        vb = b.rank
+      } else if (sortField === "winRate") {
+        va = a.winRate
+        vb = b.winRate
+      } else if (sortField === "pickRate") {
+        va = a.pickRate
+        vb = b.pickRate
+      } else {
+        va = a.matches
+        vb = b.matches
+      }
       return sortOrder === "asc" ? va - vb : vb - va
     })
 
@@ -119,9 +127,7 @@ export default function ChampionsPage() {
 
   function SortIcon({ field }: { field: SortField }) {
     if (sortField !== field) return <ArrowUpDown01Icon className="size-3.5 text-muted-foreground/50" />
-    return sortOrder === "asc"
-      ? <ArrowUp01Icon className="size-3.5" />
-      : <ArrowDown01Icon className="size-3.5" />
+    return sortOrder === "asc" ? <ArrowUp01Icon className="size-3.5" /> : <ArrowDown01Icon className="size-3.5" />
   }
 
   /* ── Loading ── */
@@ -189,7 +195,9 @@ export default function ChampionsPage() {
           </SelectTrigger>
           <SelectContent>
             {MODES.map((m) => (
-              <SelectItem key={m.value} value={m.value}>{t(m.i18nKey)}</SelectItem>
+              <SelectItem key={m.value} value={m.value}>
+                {t(m.i18nKey)}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -200,7 +208,9 @@ export default function ChampionsPage() {
           </SelectTrigger>
           <SelectContent>
             {REGIONS.map((r) => (
-              <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+              <SelectItem key={r.value} value={r.value}>
+                {r.label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -211,7 +221,9 @@ export default function ChampionsPage() {
           </SelectTrigger>
           <SelectContent>
             {MIN_MATCHES.map((m) => (
-              <SelectItem key={m.value} value={String(m.value)}>{t(m.i18nKey)}</SelectItem>
+              <SelectItem key={m.value} value={String(m.value)}>
+                {t(m.i18nKey)}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -227,7 +239,11 @@ export default function ChampionsPage() {
           <SparklesIcon className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("rankingEmpty")}</p>
           <button
-            onClick={() => { setSearch(""); setMinMatches(0); setMode("aram"); }}
+            onClick={() => {
+              setSearch("")
+              setMinMatches(0)
+              setMode("aram")
+            }}
             className="mt-3 text-sm text-primary hover:underline"
           >
             {t("clear")}
@@ -241,19 +257,29 @@ export default function ChampionsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-16 cursor-pointer select-none" onClick={() => handleSort("rank")}>
-                    <span className="inline-flex items-center gap-1"># <SortIcon field="rank" /></span>
+                    <span className="inline-flex items-center gap-1">
+                      # <SortIcon field="rank" />
+                    </span>
                   </TableHead>
                   <TableHead className="cursor-pointer select-none" onClick={() => handleSort("name")}>
-                    <span className="inline-flex items-center gap-1">{t("champion")} <SortIcon field="name" /></span>
+                    <span className="inline-flex items-center gap-1">
+                      {t("champion")} <SortIcon field="name" />
+                    </span>
                   </TableHead>
                   <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("winRate")}>
-                    <span className="inline-flex items-center gap-1">{t("winRate")} <SortIcon field="winRate" /></span>
+                    <span className="inline-flex items-center gap-1">
+                      {t("winRate")} <SortIcon field="winRate" />
+                    </span>
                   </TableHead>
                   <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("pickRate")}>
-                    <span className="inline-flex items-center gap-1">{t("pickRate")} <SortIcon field="pickRate" /></span>
+                    <span className="inline-flex items-center gap-1">
+                      {t("pickRate")} <SortIcon field="pickRate" />
+                    </span>
                   </TableHead>
                   <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("matches")}>
-                    <span className="inline-flex items-center gap-1">{t("matches")} <SortIcon field="matches" /></span>
+                    <span className="inline-flex items-center gap-1">
+                      {t("matches")} <SortIcon field="matches" />
+                    </span>
                   </TableHead>
                   <TableHead className="text-right">{t("confidence")}</TableHead>
                 </TableRow>

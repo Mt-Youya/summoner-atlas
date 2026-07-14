@@ -9,10 +9,7 @@ import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { AugmentDetail } from "@/lib/data-service"
-
-function confidenceVariant(level: "high" | "medium" | "low") {
-  return level === "high" ? "default" : level === "medium" ? "secondary" : "outline"
-}
+import { confidenceVariant } from "@/lib/utils"
 
 export default function AugmentDetailPage() {
   const { t } = useTranslation()
@@ -35,17 +32,24 @@ export default function AugmentDetailPage() {
     }
   }, [id])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
         <div className="flex items-center gap-4">
           <Skeleton className="size-10 rounded-lg" />
-          <div className="space-y-2"><Skeleton className="h-5 w-40" /><Skeleton className="h-3 w-24" /></div>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-40" />
+            <Skeleton className="h-3 w-24" />
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-6">
-          {Array.from({ length: 3 }).map((_, i) => (<Skeleton key={i} className="h-24 rounded-2xl" />))}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 rounded-2xl" />
+          ))}
         </div>
         <Skeleton className="h-48 rounded-2xl" />
       </div>
@@ -60,10 +64,15 @@ export default function AugmentDetailPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("dataUnavailable")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button onClick={load} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity">
+        <button
+          onClick={load}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity"
+        >
           {t("reload")}
         </button>
-        <Link href="/" className="block mt-4 text-sm text-muted-foreground hover:text-primary transition-colors">{t("backToHome")}</Link>
+        <Link href="/" className="block mt-4 text-sm text-muted-foreground hover:text-primary transition-colors">
+          {t("backToHome")}
+        </Link>
       </div>
     )
   }
@@ -73,7 +82,10 @@ export default function AugmentDetailPage() {
       {/* Sticky Header */}
       <div className="sticky top-16 z-30 -mx-6 px-6 py-4 bg-background/80 backdrop-blur-xl border-b">
         <div className="flex items-center gap-4">
-          <Link href="/augments" className="size-10 flex items-center justify-center rounded-xl bg-muted hover:bg-muted/80 transition-colors">
+          <Link
+            href="/augments"
+            className="size-10 flex items-center justify-center rounded-xl bg-muted hover:bg-muted/80 transition-colors"
+          >
             <ArrowLeft01Icon className="size-5 text-muted-foreground" />
           </Link>
           <div className="size-12 rounded-xl bg-muted flex items-center justify-center">
@@ -85,7 +97,9 @@ export default function AugmentDetailPage() {
           </div>
           <div className="text-right">
             <span className="text-2xl font-extrabold tabular-nums glow-mid">{detail.winRate.toFixed(1)}%</span>
-            <p className="text-[10px] text-muted-foreground">{detail.matches.toLocaleString()} {t("games")}</p>
+            <p className="text-[10px] text-muted-foreground">
+              {detail.matches.toLocaleString()} {t("games")}
+            </p>
           </div>
         </div>
       </div>
@@ -93,15 +107,23 @@ export default function AugmentDetailPage() {
       {/* Core Stats */}
       <div className="grid grid-cols-3 gap-6 items-center">
         <div className="text-center">
-          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">{detail.winRate.toFixed(1)}<span className="text-lg md:text-xl ml-0.5 text-muted-foreground font-medium">%</span></div>
+          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">
+            {detail.winRate.toFixed(1)}
+            <span className="text-lg md:text-xl ml-0.5 text-muted-foreground font-medium">%</span>
+          </div>
           <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("winRate")}</p>
         </div>
         <div className="text-center">
-          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">{detail.pickRate.toFixed(1)}<span className="text-lg md:text-xl ml-0.5 text-muted-foreground font-medium">%</span></div>
+          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">
+            {detail.pickRate.toFixed(1)}
+            <span className="text-lg md:text-xl ml-0.5 text-muted-foreground font-medium">%</span>
+          </div>
           <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("pickRate")}</p>
         </div>
         <div className="text-center">
-          <Badge variant={confidenceVariant(detail.confidence)} className="text-sm px-4 py-1.5">{t(detail.confidence)}</Badge>
+          <Badge variant={confidenceVariant(detail.confidence)} className="text-sm px-4 py-1.5">
+            {t(detail.confidence)}
+          </Badge>
         </div>
       </div>
 
@@ -120,8 +142,11 @@ export default function AugmentDetailPage() {
         <h2 className="text-2xl font-bold text-foreground mb-6">{t("suitableChampions")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {detail.suitableChampions.map((sc, i) => (
-            <Link key={sc.champion.id} href={`/champions/${sc.champion.id}`}
-              className="group rounded-2xl card-glow bg-card p-5 hover:shadow-[var(--glow-high)] transition-all duration-500">
+            <Link
+              key={sc.champion.id}
+              href={`/champions/${sc.champion.id}`}
+              className="group rounded-2xl card-glow bg-card p-5 hover:shadow-[var(--glow-high)] transition-all duration-500"
+            >
               <div className="flex items-center gap-3 mb-3">
                 <Avatar size="sm">
                   <AvatarImage src={sc.champion.avatarUrl} alt={sc.champion.name} />
@@ -131,13 +156,20 @@ export default function AugmentDetailPage() {
                   <p className="font-semibold text-sm text-foreground">{sc.champion.nameZh}</p>
                   <p className="text-xs text-muted-foreground">{sc.champion.name}</p>
                 </div>
-                <Badge variant={i === 0 ? "default" : "secondary"} className="ml-auto text-[10px]">#{i + 1}</Badge>
+                <Badge variant={i === 0 ? "default" : "secondary"} className="ml-auto text-[10px]">
+                  #{i + 1}
+                </Badge>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-hextech-blue rounded-full transition-all duration-700" style={{ width: `${sc.synergyScore}%` }} />
+                  <div
+                    className="h-full bg-hextech-blue rounded-full transition-all duration-700"
+                    style={{ width: `${sc.synergyScore}%` }}
+                  />
                 </div>
-                <span className="text-xs font-bold tabular-nums text-hextech-blue glow-mid">{sc.synergyScore.toFixed(0)}</span>
+                <span className="text-xs font-bold tabular-nums text-hextech-blue glow-mid">
+                  {sc.synergyScore.toFixed(0)}
+                </span>
               </div>
             </Link>
           ))}

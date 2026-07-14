@@ -36,7 +36,9 @@ export default function MetaPage() {
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
         <Skeleton className="h-9 w-48" />
         <div className="grid grid-cols-3 gap-4">
-          {Array.from({ length: 3 }).map((_, i) => (<Skeleton key={i} className="h-24 rounded-2xl" />))}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 rounded-2xl" />
+          ))}
         </div>
         <Skeleton className="h-48 rounded-2xl" />
       </div>
@@ -74,14 +76,22 @@ export default function MetaPage() {
         <div className="rounded-2xl card-glow bg-card overflow-hidden">
           <div className="divide-y divide-border/50">
             {topChampions.map((item) => (
-              <Link key={item.champion.id} href={`/champions/${item.champion.id}`}
-                className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors">
+              <Link
+                key={item.champion.id}
+                href={`/champions/${item.champion.id}`}
+                className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors"
+              >
                 <span className="font-mono text-sm text-muted-foreground w-6">#{item.rank}</span>
-                <div className="size-8 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${item.champion.avatarUrl})` }} />
+                <div
+                  className="size-8 rounded-lg bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.champion.avatarUrl})` }}
+                />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground">{item.champion.nameZh}</p>
                 </div>
-                <Badge variant="default" className="text-xs">{item.winRate.toFixed(1)}%</Badge>
+                <Badge variant="default" className="text-xs">
+                  {item.winRate.toFixed(1)}%
+                </Badge>
               </Link>
             ))}
           </div>
@@ -94,14 +104,19 @@ export default function MetaPage() {
         <div className="rounded-2xl card-glow bg-card overflow-hidden">
           <div className="divide-y divide-border/50">
             {topAugments.map((item, i) => (
-              <Link key={item.augment.id} href={`/augments/${item.augment.id}`}
-                className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors">
+              <Link
+                key={item.augment.id}
+                href={`/augments/${item.augment.id}`}
+                className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors"
+              >
                 <span className="font-mono text-sm text-muted-foreground w-6">#{i + 1}</span>
                 <SparklesIcon className="size-4 text-hextech-blue" />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
                 </div>
-                <Badge variant="secondary" className="text-xs">{item.winRate.toFixed(1)}%</Badge>
+                <Badge variant="secondary" className="text-xs">
+                  {item.winRate.toFixed(1)}%
+                </Badge>
               </Link>
             ))}
           </div>

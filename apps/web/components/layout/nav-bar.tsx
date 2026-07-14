@@ -67,7 +67,12 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="sm" onClick={openCmdPalette} className="hidden md:inline-flex text-muted-foreground">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={openCmdPalette}
+            className="hidden md:inline-flex text-muted-foreground"
+          >
             <Search01Icon data-icon="inline-start" />
             <span className="text-xs">{t("search")}</span>
             <Badge variant="secondary" className="ml-2 text-[10px] px-1 py-0">

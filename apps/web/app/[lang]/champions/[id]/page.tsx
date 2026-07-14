@@ -10,10 +10,7 @@ import { useTranslation } from "@/hooks/use-translation"
 import { MiniSparkline } from "@/components/charts/mini-sparkline"
 import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { ChampionDetail } from "@/lib/data-service"
-
-function confidenceVariant(level: "high" | "medium" | "low") {
-  return level === "high" ? "default" : level === "medium" ? "secondary" : "outline"
-}
+import { confidenceVariant } from "@/lib/utils"
 
 /* ── Helpers ── */
 

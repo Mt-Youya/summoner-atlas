@@ -56,21 +56,23 @@ export default function AugmentsPage() {
     }
   }, [mode])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
   const filtered = useMemo(() => {
     let list = [...data]
     if (debouncedSearch.trim()) {
       const q = debouncedSearch.toLowerCase()
-      list = list.filter(
-        (a) => a.augment.name.toLowerCase().includes(q) || a.augment.nameZh.includes(q)
-      )
+      list = list.filter((a) => a.augment.name.toLowerCase().includes(q) || a.augment.nameZh.includes(q))
     }
     if (minMatches > 0) list = list.filter((a) => a.matches >= minMatches)
     list.sort((a, b) => {
       let va: number, vb: number
       if (sortField === "name") {
-        return sortOrder === "asc" ? a.augment.nameZh.localeCompare(b.augment.nameZh) : b.augment.nameZh.localeCompare(a.augment.nameZh)
+        return sortOrder === "asc"
+          ? a.augment.nameZh.localeCompare(b.augment.nameZh)
+          : b.augment.nameZh.localeCompare(a.augment.nameZh)
       }
       va = sortField === "winRate" ? a.winRate : a.matches
       vb = sortField === "winRate" ? b.winRate : b.matches
@@ -81,7 +83,10 @@ export default function AugmentsPage() {
 
   function handleSort(field: SortField) {
     if (sortField === field) setSortOrder((o) => (o === "asc" ? "desc" : "asc"))
-    else { setSortField(field); setSortOrder("desc") }
+    else {
+      setSortField(field)
+      setSortOrder("desc")
+    }
   }
 
   function SortIcon({ field }: { field: SortField }) {
@@ -93,8 +98,13 @@ export default function AugmentsPage() {
     return (
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
         <Skeleton className="h-9 w-48" />
-        <div className="flex gap-3"><Skeleton className="h-8 w-32" /><Skeleton className="h-8 w-40" /></div>
-        {Array.from({ length: 10 }).map((_, i) => (<Skeleton key={i} className="h-12 rounded-xl" />))}
+        <div className="flex gap-3">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <Skeleton key={i} className="h-12 rounded-xl" />
+        ))}
       </div>
     )
   }
@@ -107,7 +117,10 @@ export default function AugmentsPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("rankingError")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button onClick={load} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]">
+        <button
+          onClick={load}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]"
+        >
           {t("reload")}
         </button>
       </div>
@@ -124,17 +137,40 @@ export default function AugmentsPage() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative w-full sm:w-64">
           <Search01Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-          <Input placeholder={t("rankingSearchAugment")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+          <Input
+            placeholder={t("rankingSearchAugment")}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
         </div>
         <Select value={mode} onValueChange={(v) => setMode(v as GameMode)}>
-          <SelectTrigger size="sm" className="w-[130px]"><SelectValue /></SelectTrigger>
-          <SelectContent>{MODES.map((m) => (<SelectItem key={m.value} value={m.value}>{t(m.i18nKey)}</SelectItem>))}</SelectContent>
+          <SelectTrigger size="sm" className="w-[130px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {MODES.map((m) => (
+              <SelectItem key={m.value} value={m.value}>
+                {t(m.i18nKey)}
+              </SelectItem>
+            ))}
+          </SelectContent>
         </Select>
         <Select value={String(minMatches)} onValueChange={(v) => setMinMatches(Number(v))}>
-          <SelectTrigger size="sm" className="w-[150px]"><SelectValue /></SelectTrigger>
-          <SelectContent>{MIN_MATCHES.map((m) => (<SelectItem key={m.value} value={String(m.value)}>{t(m.i18nKey)}</SelectItem>))}</SelectContent>
+          <SelectTrigger size="sm" className="w-[150px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {MIN_MATCHES.map((m) => (
+              <SelectItem key={m.value} value={String(m.value)}>
+                {t(m.i18nKey)}
+              </SelectItem>
+            ))}
+          </SelectContent>
         </Select>
-        <span className="text-xs text-muted-foreground ml-auto">{filtered.length} {t("augments")}</span>
+        <span className="text-xs text-muted-foreground ml-auto">
+          {filtered.length} {t("augments")}
+        </span>
       </div>
 
       {filtered.length === 0 ? (
@@ -149,13 +185,19 @@ export default function AugmentsPage() {
               <TableRow>
                 <TableHead className="w-12">#</TableHead>
                 <TableHead className="cursor-pointer select-none" onClick={() => handleSort("name")}>
-                  <span className="inline-flex items-center gap-1">{t("augment")} <SortIcon field="name" /></span>
+                  <span className="inline-flex items-center gap-1">
+                    {t("augment")} <SortIcon field="name" />
+                  </span>
                 </TableHead>
                 <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("winRate")}>
-                  <span className="inline-flex items-center gap-1">{t("winRate")} <SortIcon field="winRate" /></span>
+                  <span className="inline-flex items-center gap-1">
+                    {t("winRate")} <SortIcon field="winRate" />
+                  </span>
                 </TableHead>
                 <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("matches")}>
-                  <span className="inline-flex items-center gap-1">{t("matches")} <SortIcon field="matches" /></span>
+                  <span className="inline-flex items-center gap-1">
+                    {t("matches")} <SortIcon field="matches" />
+                  </span>
                 </TableHead>
                 <TableHead>{t("suitableChampions")}</TableHead>
               </TableRow>
@@ -165,7 +207,10 @@ export default function AugmentsPage() {
                 <TableRow key={item.augment.id} className="hover:bg-muted/50 transition-colors">
                   <TableCell className="font-mono text-muted-foreground text-sm">{i + 1}</TableCell>
                   <TableCell>
-                    <Link href={`/augments/${item.augment.id}`} className="flex items-center gap-3 hover:text-primary transition-colors">
+                    <Link
+                      href={`/augments/${item.augment.id}`}
+                      className="flex items-center gap-3 hover:text-primary transition-colors"
+                    >
                       <div className="size-8 rounded-lg bg-muted flex items-center justify-center">
                         <SparklesIcon className="size-4 text-hextech-blue" />
                       </div>
@@ -175,8 +220,12 @@ export default function AugmentsPage() {
                       </div>
                     </Link>
                   </TableCell>
-                  <TableCell className="text-right tabular-nums font-semibold text-sm">{item.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right tabular-nums text-sm text-muted-foreground">{item.matches.toLocaleString()}</TableCell>
+                  <TableCell className="text-right tabular-nums font-semibold text-sm">
+                    {item.winRate.toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums text-sm text-muted-foreground">
+                    {item.matches.toLocaleString()}
+                  </TableCell>
                   <TableCell>
                     <AvatarGroup>
                       {item.suitableChampions.slice(0, 3).map((c) => (
@@ -197,8 +246,11 @@ export default function AugmentsPage() {
       {/* Mobile list */}
       <div className="md:hidden space-y-3">
         {filtered.map((item, i) => (
-          <Link key={item.augment.id} href={`/augments/${item.augment.id}`}
-            className="flex items-center gap-4 rounded-2xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all">
+          <Link
+            key={item.augment.id}
+            href={`/augments/${item.augment.id}`}
+            className="flex items-center gap-4 rounded-2xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
+          >
             <span className="font-mono text-sm text-muted-foreground w-6 text-right">{i + 1}</span>
             <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
               <SparklesIcon className="size-5 text-hextech-blue" />
@@ -209,7 +261,9 @@ export default function AugmentsPage() {
             </div>
             <div className="text-right">
               <p className="font-bold text-sm tabular-nums glow-mid">{item.winRate.toFixed(1)}%</p>
-              <p className="text-[10px] text-muted-foreground">{item.matches.toLocaleString()} {t("games")}</p>
+              <p className="text-[10px] text-muted-foreground">
+                {item.matches.toLocaleString()} {t("games")}
+              </p>
             </div>
           </Link>
         ))}

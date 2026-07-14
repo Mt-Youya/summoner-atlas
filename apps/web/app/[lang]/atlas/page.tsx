@@ -30,7 +30,9 @@ export default function AtlasPage() {
     }
   }, [])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
   useEffect(() => {
     if (!data || !svgRef.current) return
@@ -45,9 +47,12 @@ export default function AtlasPage() {
 
     const g = svg.append("g")
 
-    const zoom = d3.zoom<SVGSVGElement, unknown>()
+    const zoom = d3
+      .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.3, 3])
-      .on("zoom", (event) => { g.attr("transform", event.transform.toString()) })
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform.toString())
+      })
     svg.call(zoom)
 
     // Prepare data
@@ -55,11 +60,21 @@ export default function AtlasPage() {
       data.nodes.map((n) => ({ ...n }))
     const links = data.links.map((l) => ({ ...l }))
 
-    const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id((d: any) => d.id).distance(80))
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force(
+        "link",
+        d3
+          .forceLink(links)
+          .id((d: any) => d.id)
+          .distance(80)
+      )
       .force("charge", d3.forceManyBody().strength(-200))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius((d: any) => d.size * 5 + 8))
+      .force(
+        "collision",
+        d3.forceCollide().radius((d: any) => d.size * 5 + 8)
+      )
 
     if (prefersReduced) {
       simulation.stop()
@@ -71,7 +86,8 @@ export default function AtlasPage() {
     }
 
     // Draw links
-    const link = g.append("g")
+    const link = g
+      .append("g")
       .selectAll("line")
       .data(links)
       .join("line")
@@ -80,7 +96,8 @@ export default function AtlasPage() {
       .attr("stroke-dasharray", "4 2")
 
     // Draw nodes
-    const node = g.append("g")
+    const node = g
+      .append("g")
       .selectAll<SVGGElement, any>("g")
       .data(nodes)
       .join("g")
@@ -90,14 +107,16 @@ export default function AtlasPage() {
         router.push(`/${locale}${path}`)
       })
 
-    node.append("circle")
+    node
+      .append("circle")
       .attr("r", (d) => d.size * 3 + 6)
-      .attr("fill", (d) => d.type === "champion" ? "url(#nodeChampGrad)" : "url(#nodeAugGrad)")
-      .attr("stroke", (d) => d.type === "champion" ? "#00D4FF" : "#7B2FBE")
+      .attr("fill", (d) => (d.type === "champion" ? "url(#nodeChampGrad)" : "url(#nodeAugGrad)"))
+      .attr("stroke", (d) => (d.type === "champion" ? "#00D4FF" : "#7B2FBE"))
       .attr("stroke-width", 1.5)
       .attr("opacity", 0.9)
 
-    node.append("text")
+    node
+      .append("text")
       .text((d) => d.name)
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
@@ -133,11 +152,15 @@ export default function AtlasPage() {
     } else {
       node.attr("transform", (d: any) => `translate(${d.x},${d.y})`)
       link
-        .attr("x1", (d: any) => d.source.x ?? 0).attr("y1", (d: any) => d.source.y ?? 0)
-        .attr("x2", (d: any) => d.target.x ?? 0).attr("y2", (d: any) => d.target.y ?? 0)
+        .attr("x1", (d: any) => d.source.x ?? 0)
+        .attr("y1", (d: any) => d.source.y ?? 0)
+        .attr("x2", (d: any) => d.target.x ?? 0)
+        .attr("y2", (d: any) => d.target.y ?? 0)
     }
 
-    return () => { simulation.stop() }
+    return () => {
+      simulation.stop()
+    }
   }, [data, locale, router])
 
   if (loading) {
@@ -157,7 +180,10 @@ export default function AtlasPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("error")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button onClick={load} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]">
+        <button
+          onClick={load}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]"
+        >
           {t("reload")}
         </button>
       </div>
@@ -190,9 +216,7 @@ export default function AtlasPage() {
         <svg ref={svgRef} className="w-full" style={{ minHeight: "500px" }} />
       </div>
 
-      <p className="text-xs text-muted-foreground text-center">
-        {t("contextHelp")}
-      </p>
+      <p className="text-xs text-muted-foreground text-center">{t("contextHelp")}</p>
     </div>
   )
 }

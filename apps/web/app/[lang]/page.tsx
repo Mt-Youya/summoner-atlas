@@ -30,11 +30,9 @@ import type {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
-/* ── Helpers ── */
+import { confidenceVariant } from "@/lib/utils"
 
-function confidenceVariant(level: "high" | "medium" | "low") {
-  return level === "high" ? "default" : level === "medium" ? "secondary" : "outline"
-}
+/* ── Helpers ── */
 
 function GlowNumber({ value, unit = "%", size = "lg" }: { value: number; unit?: string; size?: "sm" | "lg" }) {
   const cls = size === "lg" ? "text-5xl md:text-7xl font-extrabold" : "text-3xl md:text-4xl font-bold"

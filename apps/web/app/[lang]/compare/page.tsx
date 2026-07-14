@@ -47,7 +47,8 @@ export default function ComparePage() {
     }
   }, [champAId, champBId])
 
-  const selectClasses = "w-full h-10 px-3 rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+  const selectClasses =
+    "w-full h-10 px-3 rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
@@ -60,12 +61,20 @@ export default function ComparePage() {
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <select className={selectClasses} value={champAId} onChange={(e) => setChampAId(e.target.value)}>
           <option value="">{t("championOne")}</option>
-          {champions.map((c) => (<option key={c.id} value={c.id}>{c.nameZh} — {c.name}</option>))}
+          {champions.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.nameZh} — {c.name}
+            </option>
+          ))}
         </select>
         <span className="text-muted-foreground font-bold text-sm">{t("vs")}</span>
         <select className={selectClasses} value={champBId} onChange={(e) => setChampBId(e.target.value)}>
           <option value="">{t("championTwo")}</option>
-          {champions.map((c) => (<option key={c.id} value={c.id}>{c.nameZh} — {c.name}</option>))}
+          {champions.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.nameZh} — {c.name}
+            </option>
+          ))}
         </select>
         <button
           onClick={compare}
@@ -79,7 +88,9 @@ export default function ComparePage() {
       {/* Results */}
       {loading && (
         <div className="grid grid-cols-2 gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (<Skeleton key={i} className="h-24 rounded-2xl" />))}
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 rounded-2xl" />
+          ))}
         </div>
       )}
 
@@ -95,21 +106,39 @@ export default function ComparePage() {
           {/* Side-by-side stats */}
           <div className="grid grid-cols-2 gap-6">
             <div className="rounded-2xl card-glow bg-card p-6 text-center">
-              <div className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3" style={{ backgroundImage: `url(${detailA.champion.splashUrl})` }} />
+              <div
+                className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3"
+                style={{ backgroundImage: `url(${detailA.champion.splashUrl})` }}
+              />
               <h3 className="font-bold text-foreground">{detailA.champion.nameZh}</h3>
               <p className="text-xs text-muted-foreground mb-4">{detailA.champion.name}</p>
               <div className="grid grid-cols-2 gap-3">
-                <div><p className="text-2xl font-extrabold glow-mid">{detailA.winRate.toFixed(1)}%</p><p className="text-[10px] text-muted-foreground">{t("winRate")}</p></div>
-                <div><p className="text-2xl font-extrabold glow-mid">{detailA.pickRate.toFixed(1)}%</p><p className="text-[10px] text-muted-foreground">{t("pickRate")}</p></div>
+                <div>
+                  <p className="text-2xl font-extrabold glow-mid">{detailA.winRate.toFixed(1)}%</p>
+                  <p className="text-[10px] text-muted-foreground">{t("winRate")}</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-extrabold glow-mid">{detailA.pickRate.toFixed(1)}%</p>
+                  <p className="text-[10px] text-muted-foreground">{t("pickRate")}</p>
+                </div>
               </div>
             </div>
             <div className="rounded-2xl card-glow bg-card p-6 text-center">
-              <div className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3" style={{ backgroundImage: `url(${detailB.champion.splashUrl})` }} />
+              <div
+                className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3"
+                style={{ backgroundImage: `url(${detailB.champion.splashUrl})` }}
+              />
               <h3 className="font-bold text-foreground">{detailB.champion.nameZh}</h3>
               <p className="text-xs text-muted-foreground mb-4">{detailB.champion.name}</p>
               <div className="grid grid-cols-2 gap-3">
-                <div><p className="text-2xl font-extrabold glow-mid">{detailB.winRate.toFixed(1)}%</p><p className="text-[10px] text-muted-foreground">{t("winRate")}</p></div>
-                <div><p className="text-2xl font-extrabold glow-mid">{detailB.pickRate.toFixed(1)}%</p><p className="text-[10px] text-muted-foreground">{t("pickRate")}</p></div>
+                <div>
+                  <p className="text-2xl font-extrabold glow-mid">{detailB.winRate.toFixed(1)}%</p>
+                  <p className="text-[10px] text-muted-foreground">{t("winRate")}</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-extrabold glow-mid">{detailB.pickRate.toFixed(1)}%</p>
+                  <p className="text-[10px] text-muted-foreground">{t("pickRate")}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -118,19 +147,31 @@ export default function ComparePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[detailA, detailB].map((d, di) => (
               <div key={di} className="space-y-4">
-                <h4 className="font-semibold text-foreground">{d.champion.nameZh} {t("recommendedBuild")}</h4>
+                <h4 className="font-semibold text-foreground">
+                  {d.champion.nameZh} {t("recommendedBuild")}
+                </h4>
                 <div className="rounded-2xl card-glow bg-card p-4">
                   <p className="text-[10px] text-muted-foreground uppercase mb-2">{t("skillOrder")}</p>
                   <div className="flex flex-wrap gap-1">
                     {d.build.skillOrder.slice(0, 6).map((s, i) => (
-                      <Badge key={i} variant={s === "R" ? "default" : "secondary"} className="text-xs font-mono size-6 flex items-center justify-center p-0">{s}</Badge>
+                      <Badge
+                        key={i}
+                        variant={s === "R" ? "default" : "secondary"}
+                        className="text-xs font-mono size-6 flex items-center justify-center p-0"
+                      >
+                        {s}
+                      </Badge>
                     ))}
                   </div>
                 </div>
                 <div className="rounded-2xl card-glow bg-card p-4">
                   <p className="text-[10px] text-muted-foreground uppercase mb-2">{t("runes")}</p>
-                  <Badge variant="default" className="text-xs">{d.build.runes.keystone}</Badge>
-                  <span className="text-xs text-muted-foreground ml-2">{d.build.runes.primaryPath} / {d.build.runes.secondaryPath}</span>
+                  <Badge variant="default" className="text-xs">
+                    {d.build.runes.keystone}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground ml-2">
+                    {d.build.runes.primaryPath} / {d.build.runes.secondaryPath}
+                  </span>
                 </div>
               </div>
             ))}

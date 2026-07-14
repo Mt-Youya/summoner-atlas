@@ -470,10 +470,12 @@ export const mockDataService: DataService = {
       pickRate: +(5 + pseudoRandom() * 12).toFixed(1),
       matches: Math.floor(25000 * (0.5 + pseudoRandom())),
       confidence: (pseudoRandom() > 0.5 ? "high" : "medium") as "high" | "medium",
-      suitableChampions: shuffle(champions).slice(0, 6).map((champion) => ({
-        champion,
-        synergyScore: +(50 + pseudoRandom() * 40).toFixed(1),
-      })),
+      suitableChampions: shuffle(champions)
+        .slice(0, 6)
+        .map((champion) => ({
+          champion,
+          synergyScore: +(50 + pseudoRandom() * 40).toFixed(1),
+        })),
       trendData: [
         { patch: "25.10", winRate: +(50 + pseudoRandom() * 6).toFixed(1) },
         { patch: "25.11", winRate: +(50 + pseudoRandom() * 6).toFixed(1) },

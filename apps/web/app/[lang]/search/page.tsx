@@ -34,14 +34,19 @@ export default function SearchPage() {
     Promise.all([
       mockDataService.searchChampions({ query: debouncedQuery, mode }),
       mockDataService.getTopAugments({ mode, limit: 50 }),
-    ]).then(([champResults, augResults]) => {
-      setChampions(champResults)
-      setAugments(augResults.filter((a) =>
-        a.augment.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-        a.augment.nameZh.includes(debouncedQuery)
-      ))
-      setLoading(false)
-    }).catch(() => setLoading(false))
+    ])
+      .then(([champResults, augResults]) => {
+        setChampions(champResults)
+        setAugments(
+          augResults.filter(
+            (a) =>
+              a.augment.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+              a.augment.nameZh.includes(debouncedQuery)
+          )
+        )
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }, [debouncedQuery, mode])
 
   const hasResults = champions.length > 0 || augments.length > 0
@@ -85,7 +90,9 @@ export default function SearchPage() {
       {/* Results */}
       {loading ? (
         <div className="space-y-3">
-          {Array.from({ length: 5 }).map((_, i) => (<Skeleton key={i} className="h-16 rounded-xl" />))}
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 rounded-xl" />
+          ))}
         </div>
       ) : !debouncedQuery.trim() ? (
         <div className="text-center py-16">
@@ -100,8 +107,11 @@ export default function SearchPage() {
       ) : tab === "champions" ? (
         <div className="space-y-2">
           {champions.map((item) => (
-            <Link key={item.champion.id} href={`/champions/${item.champion.id}`}
-              className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all">
+            <Link
+              key={item.champion.id}
+              href={`/champions/${item.champion.id}`}
+              className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
+            >
               <Avatar size="lg">
                 <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
                 <AvatarFallback>{item.champion.nameZh.slice(0, 2)}</AvatarFallback>
@@ -112,7 +122,9 @@ export default function SearchPage() {
               </div>
               <div className="text-right">
                 <p className="font-bold text-sm tabular-nums">{item.winRate.toFixed(1)}%</p>
-                <Badge variant="secondary" className="text-[10px]">{item.matches.toLocaleString()} {t("games")}</Badge>
+                <Badge variant="secondary" className="text-[10px]">
+                  {item.matches.toLocaleString()} {t("games")}
+                </Badge>
               </div>
             </Link>
           ))}
@@ -120,8 +132,11 @@ export default function SearchPage() {
       ) : (
         <div className="space-y-2">
           {augments.map((item) => (
-            <Link key={item.augment.id} href={`/augments/${item.augment.id}`}
-              className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all">
+            <Link
+              key={item.augment.id}
+              href={`/augments/${item.augment.id}`}
+              className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
+            >
               <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
                 <SparklesIcon className="size-5 text-hextech-blue" />
               </div>
@@ -131,7 +146,9 @@ export default function SearchPage() {
               </div>
               <div className="text-right">
                 <p className="font-bold text-sm tabular-nums">{item.winRate.toFixed(1)}%</p>
-                <Badge variant="secondary" className="text-[10px]">{item.matches.toLocaleString()} {t("games")}</Badge>
+                <Badge variant="secondary" className="text-[10px]">
+                  {item.matches.toLocaleString()} {t("games")}
+                </Badge>
               </div>
             </Link>
           ))}
