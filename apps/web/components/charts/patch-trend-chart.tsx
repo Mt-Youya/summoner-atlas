@@ -1,6 +1,14 @@
 "use client"
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
 import { hextechChartColors } from "./chart-theme"
 
 export function PatchTrendChart({ data }: { data: { patch: string; winRate: number }[] }) {
@@ -19,7 +27,11 @@ export function PatchTrendChart({ data }: { data: { patch: string; winRate: numb
             <stop offset="100%" stopColor="#00D4FF" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="4 4" stroke={hextechChartColors.muted} vertical={false} />
+        <CartesianGrid
+          strokeDasharray="4 4"
+          stroke={hextechChartColors.muted}
+          vertical={false}
+        />
         <XAxis
           dataKey="patch"
           tick={{ fill: "var(--muted-foreground)", fontSize: 11, fontFamily: "Outfit, sans-serif" }}

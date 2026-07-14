@@ -3,9 +3,9 @@
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 
-import { cn } from "apps/web/lib/utils"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "packages/ui/src/components/dialog"
-import { InputGroup, InputGroupAddon } from "packages/ui/src/components/input-group"
+import { cn } from "../lib/utils"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog"
+import { InputGroup, InputGroupAddon } from "./input-group"
 import { Search01Icon, Checkmark01Icon } from "hugeicons-react"
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
