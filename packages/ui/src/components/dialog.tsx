@@ -3,8 +3,8 @@
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 
-import { cn } from "apps/web/lib/utils"
-import { Button } from "packages/ui/src/index"
+import { cn } from "../lib/utils"
+import { Button } from "./button"
 import { Cancel01Icon } from "hugeicons-react"
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
