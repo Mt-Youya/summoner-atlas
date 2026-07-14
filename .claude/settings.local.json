@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p apps/web/components/charts)",
+      "Bash(cp packages/ui/src/charts/* apps/web/components/charts/)",
+      "Bash(rm packages/ui/src/charts/*)",
+      "Bash(rmdir packages/ui/src/charts)"
+    ]
+  }
+}
