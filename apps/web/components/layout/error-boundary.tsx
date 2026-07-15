@@ -3,6 +3,7 @@
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Component, type ReactNode } from "react"
 import { Alert01Icon } from "@hugeicons/core-free-icons"
+import { Button } from "@summoner-atlas/ui"
 
 interface Props {
   children: ReactNode
@@ -35,7 +36,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
             <p className="text-muted-foreground mb-6">An unexpected error occurred. Please try refreshing the page.</p>
-            <button
+            <Button
               onClick={() => {
                 this.setState({ hasError: false })
                 window.location.reload()
@@ -43,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity"
             >
               Reload
-            </button>
+            </Button>
           </div>
         </div>
       )

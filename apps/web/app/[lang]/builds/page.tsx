@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Search01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
 import {
+  Button,
   Badge,
   Skeleton,
   Separator,
@@ -69,9 +70,16 @@ export default function BuildsPage() {
           icon={Search01Icon}
           className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none z-10"
         />
-        <Select value={selectedId ?? ""} onValueChange={(value) => value && loadBuild(value)}>
+        <Select
+          items={[
+            { label: t("selectChampion"), value: null },
+            ...championList.map((champion) => ({ label: champion.name, value: champion.id })),
+          ]}
+          value={selectedId}
+          onValueChange={(value) => value && loadBuild(value)}
+        >
           <SelectTrigger className="w-full max-w-md pl-9">
-            <SelectValue placeholder={t("selectChampion")} />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -112,9 +120,9 @@ export default function BuildsPage() {
       {error && (
         <div className="text-center py-12">
           <p className="text-destructive mb-4">{t("error")}</p>
-          <button onClick={() => selectedId && loadBuild(selectedId)} className="text-sm text-primary hover:underline">
+          <Button onClick={() => selectedId && loadBuild(selectedId)} className="text-sm text-primary hover:underline">
             {t("reload")}
-          </button>
+          </Button>
         </div>
       )}
 

@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useRef, useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { SparklesIcon } from "@hugeicons/core-free-icons"
-import { Skeleton } from "@summoner-atlas/ui"
+import { Button, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import * as d3 from "d3"
@@ -181,12 +181,12 @@ export default function AtlasPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("error")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button
+        <Button
           onClick={load}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]"
         >
           {t("reload")}
-        </button>
+        </Button>
       </div>
     )
   }

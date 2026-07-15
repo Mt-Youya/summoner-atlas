@@ -17,7 +17,7 @@ import {
   ZapIcon,
   Cancel01Icon,
 } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Progress } from "@summoner-atlas/ui"
+import { Badge, Input, Skeleton, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import type {
@@ -114,7 +114,7 @@ function HeroSection({
           <div className="absolute inset-0 bg-hextech-blue/10 rounded-2xl blur-xl group-hover:bg-hextech-blue/20 transition-all duration-500" />
           <div className="relative flex items-center bg-[var(--bg-elevated)] border border-[var(--border-glow)] rounded-2xl px-6 py-5 shadow-[var(--glow-mid)] group-hover:shadow-[var(--glow-high)] transition-shadow duration-500">
             <HugeiconsIcon icon={Search01Icon} className="size-5 text-muted-foreground mr-3 shrink-0" />
-            <input
+            <Input
               type="text"
               value={query}
               onChange={(e) => {
