@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import { resolve } from "node:path"
+import { NextResponse } from "next/server"
 
 try {
   process.loadEnvFile(resolve(process.cwd(), "../../.env"))
@@ -37,9 +37,9 @@ export async function GET() {
     return NextResponse.json({ images: [] }, { status: 503 })
   }
 
-  const url = new URL("/rest/v1/static_champions", supabaseUrl)
-  url.searchParams.set("select", "alias,image_url")
-  url.searchParams.set("image_url", "not.is.null")
+  const url = new URL("/rest/v1/static_augments", supabaseUrl)
+  url.searchParams.set("select", "name_en,icon_url")
+  url.searchParams.set("icon_url", "not.is.null")
 
   const response = await fetch(url, {
     headers: {
@@ -53,11 +53,11 @@ export async function GET() {
     return NextResponse.json({ images: [] }, { status: 502 })
   }
 
-  const images = (await response.json()) as { alias: string; image_url: string | null }[]
+  const images = (await response.json()) as { name_en: string; icon_url: string | null }[]
   return NextResponse.json(
     {
-      images: images.flatMap(({ alias, image_url }) =>
-        image_url ? [{ alias, imageUrl: normalizeImageUrl(image_url) }] : []
+      images: images.flatMap(({ name_en, icon_url }) =>
+        icon_url ? [{ name: name_en, imageUrl: normalizeImageUrl(icon_url) }] : []
       ),
     },
     { headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600" } }

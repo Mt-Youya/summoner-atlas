@@ -182,8 +182,10 @@ const champions: Champion[] = [
 ]
 
 type ChampionImage = { alias: string; imageUrl: string }
+type AugmentImage = { name: string; imageUrl: string }
 
 let championImagesPromise: Promise<void> | undefined
+let augmentImagesPromise: Promise<void> | undefined
 
 function normalizeChampionName(value: string) {
   return value.toLowerCase().replaceAll(/[^a-z0-9]/g, "")
@@ -355,6 +357,29 @@ const augments: Augment[] = [
   },
 ]
 
+const augmentImageAliases: Record<string, string> = {
+  juice: "juicebox",
+  theegg: "prismaticegg",
+}
+
+async function hydrateAugmentImages() {
+  augmentImagesPromise ??= fetch("/api/augment-images")
+    .then(async (response) => (response.ok ? ((await response.json()) as { images: AugmentImage[] }).images : []))
+    .then((images) => {
+      const imageByName = new Map(images.map((image) => [normalizeChampionName(image.name), image.imageUrl]))
+
+      for (const augment of augments) {
+        const normalizedName = normalizeChampionName(augment.name)
+        const imageUrl = imageByName.get(normalizedName) ?? imageByName.get(augmentImageAliases[normalizedName])
+
+        if (imageUrl) augment.iconUrl = imageUrl
+      }
+    })
+    .catch(() => undefined)
+
+  await augmentImagesPromise
+}
+
 /* ── Helpers ── */
 
 let _seed = 42
@@ -421,6 +446,7 @@ export const mockDataService: DataService = {
 
   async getTopAugments({ limit }) {
     await hydrateChampionImages()
+    await hydrateAugmentImages()
     return shuffle(augments)
       .slice(0, limit)
       .map((augment) => ({
@@ -453,6 +479,7 @@ export const mockDataService: DataService = {
 
   async getChampionDetail({ id }) {
     await hydrateChampionImages()
+    await hydrateAugmentImages()
     const champion = pickChamp(id)
     return {
       champion,
@@ -489,6 +516,7 @@ export const mockDataService: DataService = {
 
   async getAugmentDetail({ id }) {
     await hydrateChampionImages()
+    await hydrateAugmentImages()
     const augment = augments.find((a) => a.id === id) ?? augments[0]
     return {
       augment,
@@ -514,6 +542,7 @@ export const mockDataService: DataService = {
 
   async getAtlasPreview() {
     await hydrateChampionImages()
+    await hydrateAugmentImages()
     const nodes = [
       ...shuffle(champions)
         .slice(0, 12)
