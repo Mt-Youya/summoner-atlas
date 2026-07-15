@@ -145,7 +145,7 @@ export default function AugmentsPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
       <div>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowError")}</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("augments")}</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("augmentRanking")}</h1>
       </div>
 
@@ -231,8 +231,12 @@ export default function AugmentsPage() {
                         href={`/augments/${item.augment.id}`}
                         className="flex items-center gap-3 hover:text-primary transition-colors"
                       >
-                        <div className="size-8 rounded-lg bg-muted flex items-center justify-center">
-                          <HugeiconsIcon icon={SparklesIcon} className="size-4 text-hextech-blue" />
+                        <div className="size-8 overflow-hidden rounded-lg bg-muted">
+                          {item.augment.iconUrl ? (
+                            <img src={item.augment.iconUrl} alt="" className="size-full object-cover" />
+                          ) : (
+                            <HugeiconsIcon icon={SparklesIcon} className="m-2 size-4 text-hextech-blue" />
+                          )}
                         </div>
                         <div>
                           <p className="font-semibold text-foreground text-sm">{item.augment.nameZh}</p>
@@ -273,8 +277,12 @@ export default function AugmentsPage() {
             className="flex items-center gap-4 rounded-2xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
           >
             <span className="font-mono text-sm text-muted-foreground w-6 text-right">{i + 1}</span>
-            <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
-              <HugeiconsIcon icon={SparklesIcon} className="size-5 text-hextech-blue" />
+            <div className="size-10 overflow-hidden rounded-xl bg-muted">
+              {item.augment.iconUrl ? (
+                <img src={item.augment.iconUrl} alt="" className="size-full object-cover" />
+              ) : (
+                <HugeiconsIcon icon={SparklesIcon} className="m-2.5 size-5 text-hextech-blue" />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
