@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { Search01Icon } from "hugeicons-react"
 import { Badge } from "@summoner-atlas/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@summoner-atlas/ui/dialog"
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@summoner-atlas/ui/command"

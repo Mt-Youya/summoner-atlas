@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { SparklesIcon } from "hugeicons-react"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
-import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 
 interface MockPatch {

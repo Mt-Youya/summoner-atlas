@@ -6,7 +6,6 @@ import { SparklesIcon } from "hugeicons-react"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
-import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { ChampionRank, AugmentRank, PatchSummary } from "@/lib/data-service"
 
 export default function MetaPage() {

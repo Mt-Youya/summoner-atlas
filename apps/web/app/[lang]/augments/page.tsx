@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDown01Icon, SparklesIcon } from "hugeicons-react"
-import { Badge, Skeleton, Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@summoner-atlas/ui"
+import { Skeleton, Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"

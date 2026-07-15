@@ -1,13 +1,6 @@
 import type {
   Champion,
   Augment,
-  PatchSummary,
-  ChampionRank,
-  ChampionTrend,
-  AugmentRank,
-  ChampionSearchResult,
-  ChampionDetail,
-  AtlasGraphData,
   DataService,
 } from "./data-service"
 

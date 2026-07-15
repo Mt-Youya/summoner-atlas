@@ -1,12 +1,11 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import Link from "next/link"
-import { ArrowLeft01Icon, SparklesIcon } from "hugeicons-react"
+import { SparklesIcon } from "@hugeicons/core-free-icons"
+import { } from "@"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
-import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { ChampionDetail } from "@/lib/data-service"
 
 export default function ComparePage() {
