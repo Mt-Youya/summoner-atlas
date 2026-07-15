@@ -1,24 +1,41 @@
 import type { Augment, Champion, DataService } from "./data-service"
 
-type ChampionCatalogEntry = {
-  id: number
-  alias: string
-  nameZh: string
+type ApiChampion = {
+  id: string
+  numericId: number
   name: string
+  nameZh: string
   imageUrl: string
-  matches: number | null
-  winRate: number | null
+  winRate: number
+  matches: number
 }
 
-type AugmentCatalogEntry = {
-  id: number
-  nameZh: string
-  name: string
-  imageUrl: string
-  description?: string
-  matches: number | null
-  winRate: number | null
+type ApiChampionDetail = ApiChampion & {
+  builds: {
+    spells: { id: number; icon: string }[]
+    boots: { id: number; icon: string }
+    skillOrder: string
+    winRate: number
+    matches: number
+  }[]
 }
+
+type ApiAugment = {
+  id: string
+  name: string
+  nameZh: string
+  imageUrl: string
+  description: string
+  winRate: number
+  matches: number
+}
+
+type ApiVersion = {
+  version: string
+  created_at: string
+}
+
+type ApiResponse<T> = { data: T; meta: Record<string, unknown> }
 
 let champions: Champion[] = []
 let augments: Augment[] = []
@@ -32,25 +49,23 @@ function normalizeId(value: string) {
 }
 
 async function hydrateChampionCatalog() {
-  championCatalogPromise ??= fetch("/api/champion-images")
-    .then(async (response) =>
-      response.ok ? ((await response.json()) as { champions: ChampionCatalogEntry[] }).champions : []
-    )
+  championCatalogPromise ??= fetch("/api/v1/champions")
+    .then(async (response) => {
+      if (!response.ok) return []
+      const json = (await response.json()) as ApiResponse<ApiChampion[]>
+      return json.data
+    })
     .then((entries) => {
       champions = entries.map((entry) => ({
-        id: normalizeId(entry.alias),
+        id: normalizeId(entry.id),
         name: entry.name,
         nameZh: entry.nameZh,
-        aliases: [entry.alias, entry.name, entry.nameZh],
+        aliases: [entry.id, entry.name, entry.nameZh],
         avatarUrl: entry.imageUrl,
         splashUrl: entry.imageUrl,
       }))
       championStats = new Map(
-        entries.flatMap((entry) =>
-          entry.matches !== null && entry.winRate !== null
-            ? [[normalizeId(entry.alias), { matches: entry.matches, winRate: entry.winRate }] as const]
-            : []
-        )
+        entries.map((entry) => [normalizeId(entry.id), { matches: entry.matches, winRate: entry.winRate / 100 }])
       )
     })
     .catch(() => undefined)
@@ -59,24 +74,22 @@ async function hydrateChampionCatalog() {
 }
 
 async function hydrateAugmentCatalog() {
-  augmentCatalogPromise ??= fetch("/api/augment-images")
-    .then(async (response) =>
-      response.ok ? ((await response.json()) as { images: AugmentCatalogEntry[] }).images : []
-    )
+  augmentCatalogPromise ??= fetch("/api/v1/augments")
+    .then(async (response) => {
+      if (!response.ok) return []
+      const json = (await response.json()) as ApiResponse<ApiAugment[]>
+      return json.data
+    })
     .then((entries) => {
       augments = entries.map((entry) => ({
-        id: String(entry.id),
+        id: entry.id,
         name: entry.name,
         nameZh: entry.nameZh,
         description: entry.description ?? "",
-        iconUrl: entry.imageUrl,
+        iconUrl: entry.imageUrl ?? "",
       }))
       augmentStats = new Map(
-        entries.flatMap((entry) =>
-          entry.matches !== null && entry.winRate !== null
-            ? [[String(entry.id), { matches: entry.matches, winRate: entry.winRate }] as const]
-            : []
-        )
+        entries.map((entry) => [entry.id, { matches: entry.matches, winRate: entry.winRate / 100 }])
       )
     })
     .catch(() => undefined)
@@ -105,13 +118,26 @@ function rankedChampions() {
     .toSorted((a, b) => b.winRate - a.winRate || b.matches - a.matches)
 }
 
+async function fetchChampionDetail(championId: string): Promise<ApiChampionDetail | null> {
+  try {
+    const response = await fetch(`/api/v1/champions/${championId}`)
+    if (!response.ok) return null
+    const json = (await response.json()) as ApiResponse<ApiChampionDetail>
+    return json.data
+  } catch {
+    return null
+  }
+}
+
 export const mockDataService: DataService = {
   async getPatchSummary() {
     await hydrateChampionCatalog()
-    const versions = await fetch("/api/game-versions")
-      .then(async (response) =>
-        response.ok ? ((await response.json()) as { versions: { version: string; created_at: string }[] }).versions : []
-      )
+    const versions = await fetch("/api/v1/versions")
+      .then(async (response) => {
+        if (!response.ok) return []
+        const json = (await response.json()) as ApiResponse<ApiVersion[]>
+        return json.data
+      })
       .catch(() => [])
     const latest = versions[0]
     return {
@@ -159,13 +185,13 @@ export const mockDataService: DataService = {
 
   async searchChampions({ query }) {
     await hydrateChampionCatalog()
-    const normalizedQuery = query.trim().toLowerCase()
+    const q = query.trim().toLowerCase()
     return champions
       .filter(
         (champion) =>
-          champion.name.toLowerCase().includes(normalizedQuery) ||
+          champion.name.toLowerCase().includes(q) ||
           champion.nameZh.includes(query.trim()) ||
-          champion.aliases.some((alias) => alias.toLowerCase().includes(normalizedQuery))
+          champion.aliases.some((alias) => alias.toLowerCase().includes(q))
       )
       .map((champion) => {
         const stats = championStats.get(champion.id)
@@ -182,15 +208,29 @@ export const mockDataService: DataService = {
     await Promise.all([hydrateChampionCatalog(), hydrateAugmentCatalog()])
     const champion = championById(id)
     const stats = championStats.get(champion.id)
+
+    const detail = await fetchChampionDetail(id)
+    const topBuild = detail?.builds?.toSorted((a, b) => b.matches - a.matches)[0]
+    const skillOrder = topBuild?.skillOrder ? topBuild.skillOrder.split("-").flatMap((s) => Array(3).fill(s)) : []
+
     return {
       champion,
       winRate: (stats?.winRate ?? 0) * 100,
       matches: stats?.matches ?? 0,
       confidence: stats && stats.matches >= 30_000 ? ("high" as const) : ("low" as const),
       build: {
-        skillOrder: [],
-        coreItems: [],
-        runes: { primaryPath: "", secondaryPath: "", keystone: "" },
+        skillOrder,
+        coreItems: topBuild
+          ? [
+              { name: `Boots ${topBuild.boots.id}`, iconUrl: topBuild.boots.icon },
+              ...topBuild.spells.map((s) => ({ name: `Spell ${s.id}`, iconUrl: s.icon })),
+            ]
+          : [],
+        runes: {
+          primaryPath: topBuild?.skillOrder?.split("-")[0] ?? "",
+          secondaryPath: topBuild?.skillOrder?.split("-")[1] ?? "",
+          keystone: "",
+        },
       },
       topAugmentCombos: [],
       trendData: [],
@@ -213,7 +253,9 @@ export const mockDataService: DataService = {
 
   async getAtlasPreview() {
     await Promise.all([hydrateChampionCatalog(), hydrateAugmentCatalog()])
-    const atlasChampions = rankedChampions().slice(0, 24).map((entry) => entry.champion)
+    const atlasChampions = rankedChampions()
+      .slice(0, 24)
+      .map((entry) => entry.champion)
     const atlasAugments = augments.filter((augment) => augment.description).slice(0, 16)
     const nodes = [
       ...atlasChampions.map((champion, index) => ({

@@ -27,20 +27,13 @@ function DrawerOverlay({ className, ...props }: DrawerPrimitive.Backdrop.Props) 
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
-      className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs",
-        className
-      )}
+      className={cn("fixed inset-0 isolate z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs", className)}
       {...props}
     />
   )
 }
 
-function DrawerContent({
-  className,
-  children,
-  ...props
-}: DrawerPrimitive.Popup.Props) {
+function DrawerContent({ className, children, ...props }: DrawerPrimitive.Popup.Props) {
   return (
     <DrawerPortal>
       <DrawerOverlay />
@@ -64,7 +57,13 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="drawer-footer" className={cn("flex flex-col-reverse gap-2 px-6 py-4 sm:flex-row sm:justify-end", className)} {...props} />
+  return (
+    <div
+      data-slot="drawer-footer"
+      className={cn("flex flex-col-reverse gap-2 px-6 py-4 sm:flex-row sm:justify-end", className)}
+      {...props}
+    />
+  )
 }
 
 function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {

@@ -13,8 +13,8 @@ export default function PatchesPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch("/api/game-versions")
-      .then(async (response) => (response.ok ? ((await response.json()) as { versions: GameVersion[] }).versions : []))
+    fetch("/api/v1/versions")
+      .then(async (response) => (response.ok ? ((await response.json()) as { data: GameVersion[] }).data : []))
       .then((data) => {
         setVersions(data)
         setSelectedVersion(data[0]?.version ?? "")

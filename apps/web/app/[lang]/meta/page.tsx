@@ -7,10 +7,11 @@ import { SparklesIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { localizedName } from "@/lib/utils"
 import type { ChampionRank, AugmentRank, PatchSummary } from "@/lib/data-service"
 
 export default function MetaPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [topChampions, setTopChampions] = useState<ChampionRank[]>([])
   const [topAugments, setTopAugments] = useState<AugmentRank[]>([])
   const [summary, setSummary] = useState<PatchSummary | null>(null)
@@ -87,7 +88,9 @@ export default function MetaPage() {
                   style={item.champion.avatarUrl ? { backgroundImage: `url(${item.champion.avatarUrl})` } : undefined}
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground">{item.champion.nameZh}</p>
+                  <p className="font-semibold text-sm text-foreground">
+                    {localizedName(item.champion, locale).primary}
+                  </p>
                 </div>
                 <Badge variant="default" className="text-xs">
                   {item.winRate.toFixed(1)}%
@@ -112,13 +115,17 @@ export default function MetaPage() {
                 <span className="font-mono text-sm text-muted-foreground w-6">#{i + 1}</span>
                 <div className="size-8 overflow-hidden rounded-lg bg-muted">
                   {item.augment.iconUrl ? (
-                    <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                    <img
+                      src={item.augment.iconUrl}
+                      alt={localizedName(item.augment, locale).primary}
+                      className="size-full object-cover"
+                    />
                   ) : (
                     <HugeiconsIcon icon={SparklesIcon} className="m-2 size-4 text-hextech-blue" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
+                  <p className="font-semibold text-sm text-foreground">{localizedName(item.augment, locale).primary}</p>
                   <p className="truncate text-xs text-muted-foreground">{item.augment.description}</p>
                 </div>
                 <Badge variant="secondary" className="text-xs">

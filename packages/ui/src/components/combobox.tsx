@@ -13,10 +13,7 @@ function Combobox({ className, ...props }: Record<string, unknown> & { className
   return <Root data-slot="combobox" className={cn("relative w-full", className as string)} {...props} />
 }
 
-function ComboboxInput({
-  className,
-  ...props
-}: ComboboxPrimitive.Input.Props) {
+function ComboboxInput({ className, ...props }: ComboboxPrimitive.Input.Props) {
   return (
     <div data-slot="combobox-input-wrapper" className="relative">
       <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
@@ -112,12 +109,4 @@ function ComboboxEmpty({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-export {
-  Combobox,
-  ComboboxInput,
-  ComboboxTrigger,
-  ComboboxContent,
-  ComboboxGroup,
-  ComboboxItem,
-  ComboboxEmpty,
-}
+export { Combobox, ComboboxInput, ComboboxTrigger, ComboboxContent, ComboboxGroup, ComboboxItem, ComboboxEmpty }

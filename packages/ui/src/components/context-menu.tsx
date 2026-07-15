@@ -21,11 +21,7 @@ function ContextMenuTrigger({ className, ...props }: ContextMenuPrimitive.Trigge
   )
 }
 
-function ContextMenuContent({
-  className,
-  children,
-  ...props
-}: ContextMenuPrimitive.Popup.Props) {
+function ContextMenuContent({ className, children, ...props }: ContextMenuPrimitive.Popup.Props) {
   return (
     <ContextMenuPrimitive.Portal>
       <ContextMenuPrimitive.Positioner className="isolate z-50">
@@ -125,11 +121,7 @@ function ContextMenuSub({ ...props }: ContextMenuPrimitive.Root.Props) {
   return <ContextMenuPrimitive.Root data-slot="context-menu-sub" {...props} />
 }
 
-function ContextMenuSubTrigger({
-  className,
-  children,
-  ...props
-}: ContextMenuPrimitive.SubmenuTrigger.Props) {
+function ContextMenuSubTrigger({ className, children, ...props }: ContextMenuPrimitive.SubmenuTrigger.Props) {
   return (
     <ContextMenuPrimitive.SubmenuTrigger
       data-slot="context-menu-sub-trigger"

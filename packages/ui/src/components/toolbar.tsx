@@ -9,10 +9,7 @@ function Toolbar({ className, ...props }: ToolbarPrimitive.Root.Props) {
   return (
     <ToolbarPrimitive.Root
       data-slot="toolbar"
-      className={cn(
-        "flex w-fit items-center gap-1 rounded-lg border bg-background p-1",
-        className
-      )}
+      className={cn("flex w-fit items-center gap-1 rounded-lg border bg-background p-1", className)}
       {...props}
     />
   )
@@ -23,13 +20,7 @@ function ToolbarGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function ToolbarSeparator({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="toolbar-separator"
-      className={cn("mx-1 h-6 w-px shrink-0 bg-border", className)}
-      {...props}
-    />
-  )
+  return <div data-slot="toolbar-separator" className={cn("mx-1 h-6 w-px shrink-0 bg-border", className)} {...props} />
 }
 
 function ToolbarButton({ className, ...props }: ToolbarPrimitive.Button.Props) {

@@ -8,10 +8,11 @@ import { Badge, Skeleton, Tabs, TabsList, TabsTrigger, Avatar, AvatarImage, Avat
 import { Input } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { localizedName } from "@/lib/utils"
 import type { ChampionSearchResult, AugmentRank, GameMode } from "@/lib/data-service"
 
 export default function SearchPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [query, setQuery] = useState("")
   const [debouncedQuery, setDebouncedQuery] = useState("")
   const [champions, setChampions] = useState<ChampionSearchResult[]>([])
@@ -39,11 +40,13 @@ export default function SearchPage() {
       .then(([champResults, augResults]) => {
         setChampions(champResults)
         setAugments(
-          augResults.filter(
-            (a) =>
-              a.augment.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-              a.augment.nameZh.includes(debouncedQuery)
-          )
+          augResults.filter((a) => {
+            const names = localizedName(a.augment, locale)
+            return (
+              names.primary.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+              names.secondary.toLowerCase().includes(debouncedQuery.toLowerCase())
+            )
+          })
         )
         setLoading(false)
       })
@@ -55,7 +58,7 @@ export default function SearchPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 space-y-6">
       <div>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowError")}</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowSearch")}</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("search")}</h1>
       </div>
 
@@ -120,11 +123,11 @@ export default function SearchPage() {
             >
               <Avatar size="lg">
                 <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
-                <AvatarFallback>{item.champion.nameZh.slice(0, 2)}</AvatarFallback>
+                <AvatarFallback>{localizedName(item.champion, locale).primary.slice(0, 2)}</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm text-foreground">{item.champion.nameZh}</p>
-                <p className="text-xs text-muted-foreground">{item.champion.name}</p>
+                <p className="font-semibold text-sm text-foreground">{localizedName(item.champion, locale).primary}</p>
+                <p className="text-xs text-muted-foreground">{localizedName(item.champion, locale).secondary}</p>
               </div>
               <div className="text-right">
                 <p className="font-bold text-sm tabular-nums">{item.winRate.toFixed(1)}%</p>
@@ -145,13 +148,17 @@ export default function SearchPage() {
             >
               <div className="size-10 overflow-hidden rounded-xl bg-muted">
                 {item.augment.iconUrl ? (
-                  <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                  <img
+                    src={item.augment.iconUrl}
+                    alt={localizedName(item.augment, locale).primary}
+                    className="size-full object-cover"
+                  />
                 ) : (
                   <HugeiconsIcon icon={SparklesIcon} className="m-2.5 size-5 text-hextech-blue" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
+                <p className="font-semibold text-sm text-foreground">{localizedName(item.augment, locale).primary}</p>
                 <p className="truncate text-xs text-muted-foreground">{item.augment.description}</p>
               </div>
               <div className="text-right">

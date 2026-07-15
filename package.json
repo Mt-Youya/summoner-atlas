@@ -2,6 +2,7 @@
   "name": "summoner-atlas",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "pnpm --filter @summoner-atlas/web dev",
     "build": "pnpm --filter @summoner-atlas/web build",

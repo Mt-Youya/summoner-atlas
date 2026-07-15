@@ -3,8 +3,16 @@
 import { HugeiconsIcon } from "@hugeicons/react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
-import { Search01Icon, Sun01Icon, Moon01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons"
-import { Button, Badge, Separator, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@summoner-atlas/ui"
+import { Search01Icon, Sun01Icon, Moon01Icon, Language } from "@hugeicons/core-free-icons"
+import {
+  Button,
+  Badge,
+  Separator,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@summoner-atlas/ui"
 import { useTheme } from "@/hooks/use-theme"
 import { useTranslation, useLanguage, type Locale } from "@/hooks/use-translation"
 import { useCommandPalette } from "@/hooks/use-command-palette"
@@ -91,20 +99,19 @@ export function NavBar() {
             <DropdownMenuTrigger
               render={
                 <Button variant="ghost" size="sm" className="text-muted-foreground gap-1">
-                  <span className="uppercase text-xs font-semibold tracking-wider">{locale}</span>
-                  <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
+                  <HugeiconsIcon icon={Language} />
+                  <span className="uppercase text-xs font-semibold tracking-wider">{localeLabels[locale]}</span>
                 </Button>
               }
             />
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent>
               {(Object.entries(localeLabels) as [Locale, string][]).map(([key, label]) => (
                 <DropdownMenuItem
                   key={key}
                   onClick={() => switchLocale(key)}
-                  className={cn(
-                    locale === key && "text-primary font-semibold"
-                  )}
+                  className={cn(locale === key && "text-primary font-semibold")}
                 >
+                  <HugeiconsIcon icon={Language} data-icon="inline-start" />
                   {label}
                 </DropdownMenuItem>
               ))}

@@ -34,11 +34,7 @@ function BreadcrumbLink({
   asChild?: boolean
 }) {
   return (
-    <a
-      data-slot="breadcrumb-link"
-      className={cn("transition-colors hover:text-foreground", className)}
-      {...props}
-    />
+    <a data-slot="breadcrumb-link" className={cn("transition-colors hover:text-foreground", className)} {...props} />
   )
 }
 
@@ -56,7 +52,11 @@ function BreadcrumbSeparator({ className, ...props }: React.ComponentProps<"li">
 
 function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span">) {
   return (
-    <span data-slot="breadcrumb-ellipsis" className={cn("flex size-5 items-center justify-center", className)} {...props}>
+    <span
+      data-slot="breadcrumb-ellipsis"
+      className={cn("flex size-5 items-center justify-center", className)}
+      {...props}
+    >
       <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
     </span>
   )

@@ -64,14 +64,16 @@ export default function AtlasPage() {
     const nodeRadius = (node: AtlasGraphNode) => node.size * 4 + 8
 
     const defs = svg.append("defs")
-    ;[
+    const nodeGrads = [
       { id: "nodeChampGrad", c1: "#00D4FF", c2: "#0066AA" },
       { id: "nodeAugGrad", c1: "#7B2FBE", c2: "#3A1570" },
-    ].forEach(({ id, c1, c2 }) => {
+    ]
+    for (const { id, c1, c2 } of nodeGrads) {
       const grad = defs.append("radialGradient").attr("id", id)
       grad.append("stop").attr("offset", "0%").attr("stop-color", c1)
       grad.append("stop").attr("offset", "100%").attr("stop-color", c2)
-    })
+    }
+
     for (const node of nodes) {
       defs
         .append("clipPath")

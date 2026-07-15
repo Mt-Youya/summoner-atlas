@@ -6,7 +6,9 @@ import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible"
 import { cn } from "@/lib/utils"
 
 function Collapsible({ className, ...props }: CollapsiblePrimitive.Root.Props) {
-  return <CollapsiblePrimitive.Root data-slot="collapsible" className={cn("flex flex-col gap-2", className)} {...props} />
+  return (
+    <CollapsiblePrimitive.Root data-slot="collapsible" className={cn("flex flex-col gap-2", className)} {...props} />
+  )
 }
 
 function CollapsibleTrigger({ className, ...props }: CollapsiblePrimitive.Trigger.Props) {

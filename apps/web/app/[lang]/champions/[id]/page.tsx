@@ -11,7 +11,7 @@ import { useTranslation } from "@/hooks/use-translation"
 import { MiniSparkline } from "@/components/charts/mini-sparkline"
 import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { ChampionDetail } from "@/lib/data-service"
-import { confidenceVariant } from "@/lib/utils"
+import { confidenceVariant, localizedName } from "@/lib/utils"
 
 /* ── Helpers ── */
 
@@ -102,7 +102,7 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
 /* ── Augment Combos ── */
 
 function AugmentCombos({ detail }: { detail: ChampionDetail }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
 
   if (detail.topAugmentCombos.length === 0) {
     return (
@@ -132,13 +132,17 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
           <div className="mb-3 flex items-center gap-3">
             <div className="size-10 shrink-0 overflow-hidden rounded-xl bg-muted">
               {combo.augment.iconUrl ? (
-                <img src={combo.augment.iconUrl} alt={combo.augment.nameZh} className="size-full object-cover" />
+                <img
+                  src={combo.augment.iconUrl}
+                  alt={localizedName(combo.augment, locale).primary}
+                  className="size-full object-cover"
+                />
               ) : (
                 <HugeiconsIcon icon={SparklesIcon} className="m-2.5 size-5 text-hextech-blue" />
               )}
             </div>
             <div className="min-w-0">
-              <h4 className="font-semibold text-foreground">{combo.augment.nameZh}</h4>
+              <h4 className="font-semibold text-foreground">{localizedName(combo.augment, locale).primary}</h4>
               <p className="truncate text-xs text-muted-foreground">{combo.augment.description}</p>
             </div>
           </div>
@@ -157,7 +161,7 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
 /* ── Main Page ── */
 
 export default function ChampionDetailPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const params = useParams<{ id: string }>()
   const id = params.id
 
@@ -243,8 +247,8 @@ export default function ChampionDetailPage() {
             style={detail.champion.splashUrl ? { backgroundImage: `url(${detail.champion.splashUrl})` } : undefined}
           />
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold text-foreground">{detail.champion.nameZh}</h1>
-            <p className="text-sm text-muted-foreground">{detail.champion.name}</p>
+            <h1 className="text-xl font-bold text-foreground">{localizedName(detail.champion, locale).primary}</h1>
+            <p className="text-sm text-muted-foreground">{localizedName(detail.champion, locale).secondary}</p>
           </div>
           <div className="text-right">
             <span className="text-2xl font-extrabold tabular-nums glow-mid">{detail.winRate.toFixed(1)}%</span>

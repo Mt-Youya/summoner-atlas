@@ -2,7 +2,17 @@
 
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UserIcon, Sword01Icon, MagicWand01Icon, Sun01Icon, Moon01Icon } from "@hugeicons/core-free-icons"
-import { Badge, Card, CardContent, CardHeader, CardTitle, CardDescription, Separator, Switch, Label } from "@summoner-atlas/ui"
+import {
+  Badge,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Separator,
+  Switch,
+  Label,
+} from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 import { useTheme } from "@/hooks/use-theme"
 

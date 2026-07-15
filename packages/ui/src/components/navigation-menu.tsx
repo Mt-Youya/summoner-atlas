@@ -35,11 +35,7 @@ const navigationMenuTriggerStyle = cn(
   "group inline-flex h-8 w-max items-center justify-center gap-1 rounded-lg px-2.5 text-sm font-medium transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[popup-open]:bg-muted data-[popup-open]:text-foreground"
 )
 
-function NavigationMenuTrigger({
-  className,
-  children,
-  ...props
-}: NavigationMenuPrimitive.Trigger.Props) {
+function NavigationMenuTrigger({ className, children, ...props }: NavigationMenuPrimitive.Trigger.Props) {
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
@@ -55,10 +51,7 @@ function NavigationMenuTrigger({
   )
 }
 
-function NavigationMenuContent({
-  className,
-  ...props
-}: NavigationMenuPrimitive.Popup.Props) {
+function NavigationMenuContent({ className, ...props }: NavigationMenuPrimitive.Popup.Props) {
   return (
     <NavigationMenuPrimitive.Portal>
       <NavigationMenuPrimitive.Positioner className="isolate z-50">
@@ -75,10 +68,7 @@ function NavigationMenuContent({
   )
 }
 
-function NavigationMenuLink({
-  className,
-  ...props
-}: React.ComponentProps<"a">) {
+function NavigationMenuLink({ className, ...props }: React.ComponentProps<"a">) {
   return (
     <a
       data-slot="navigation-menu-link"

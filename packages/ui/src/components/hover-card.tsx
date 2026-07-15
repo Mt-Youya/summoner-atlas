@@ -12,11 +12,7 @@ function HoverCard({ ...props }: Record<string, unknown>) {
 
 function HoverCardTrigger({ className, ...props }: PreviewCardPrimitive.Trigger.Props) {
   return (
-    <PreviewCardPrimitive.Trigger
-      data-slot="hover-card-trigger"
-      className={cn("outline-none", className)}
-      {...props}
-    />
+    <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" className={cn("outline-none", className)} {...props} />
   )
 }
 

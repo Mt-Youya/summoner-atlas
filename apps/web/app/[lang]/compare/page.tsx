@@ -16,10 +16,11 @@ import {
 } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { localizedName } from "@/lib/utils"
 import type { ChampionDetail } from "@/lib/data-service"
 
 export default function ComparePage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
 
   const [champions, setChampions] = useState<{ id: string; nameZh: string; name: string }[]>([])
   const [initialized, setInitialized] = useState(false)
@@ -31,7 +32,7 @@ export default function ComparePage() {
   const [error, setError] = useState(false)
 
   const championItems = champions.map((champion) => ({
-    label: `${champion.nameZh} — ${champion.name}`,
+    label: `${localizedName(champion, locale).primary} — ${localizedName(champion, locale).secondary}`,
     value: champion.id,
   }))
   const championAItems = [{ label: t("championOne"), value: null }, ...championItems]
@@ -66,7 +67,7 @@ export default function ComparePage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
       <div>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowError")}</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowCompare")}</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("championCompare")}</h1>
       </div>
 
@@ -137,8 +138,8 @@ export default function ComparePage() {
                   detailA.champion.splashUrl ? { backgroundImage: `url(${detailA.champion.splashUrl})` } : undefined
                 }
               />
-              <h3 className="font-bold text-foreground">{detailA.champion.nameZh}</h3>
-              <p className="text-xs text-muted-foreground mb-4">{detailA.champion.name}</p>
+              <h3 className="font-bold text-foreground">{localizedName(detailA.champion, locale).primary}</h3>
+              <p className="text-xs text-muted-foreground mb-4">{localizedName(detailA.champion, locale).secondary}</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <p className="text-2xl font-extrabold glow-mid">{detailA.winRate.toFixed(1)}%</p>
@@ -157,8 +158,8 @@ export default function ComparePage() {
                   detailB.champion.splashUrl ? { backgroundImage: `url(${detailB.champion.splashUrl})` } : undefined
                 }
               />
-              <h3 className="font-bold text-foreground">{detailB.champion.nameZh}</h3>
-              <p className="text-xs text-muted-foreground mb-4">{detailB.champion.name}</p>
+              <h3 className="font-bold text-foreground">{localizedName(detailB.champion, locale).primary}</h3>
+              <p className="text-xs text-muted-foreground mb-4">{localizedName(detailB.champion, locale).secondary}</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <p className="text-2xl font-extrabold glow-mid">{detailB.winRate.toFixed(1)}%</p>
@@ -177,7 +178,7 @@ export default function ComparePage() {
             {[detailA, detailB].map((d, di) => (
               <div key={di} className="space-y-4">
                 <h4 className="font-semibold text-foreground">
-                  {d.champion.nameZh} {t("recommendedBuild")}
+                  {localizedName(d.champion, locale).primary} {t("recommendedBuild")}
                 </h4>
                 <div className="rounded-2xl card-glow bg-card p-4">
                   <p className="text-[10px] text-muted-foreground uppercase mb-2">{t("skillOrder")}</p>

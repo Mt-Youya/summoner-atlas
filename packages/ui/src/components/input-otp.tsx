@@ -7,11 +7,7 @@ import { cn } from "@/lib/utils"
 
 function InputOtp({ className, ...props }: OtpFieldPrimitive.Root.Props) {
   return (
-    <OtpFieldPrimitive.Root
-      data-slot="input-otp"
-      className={cn("flex items-center gap-2", className)}
-      {...props}
-    />
+    <OtpFieldPrimitive.Root data-slot="input-otp" className={cn("flex items-center gap-2", className)} {...props} />
   )
 }
 

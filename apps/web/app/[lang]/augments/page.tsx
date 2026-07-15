@@ -20,6 +20,7 @@ import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectVa
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { localizedName } from "@/lib/utils"
 import type { AugmentRank, GameMode } from "@/lib/data-service"
 
 type SortField = "winRate" | "matches" | "name"
@@ -38,7 +39,7 @@ const MIN_MATCHES = [
 ]
 
 export default function AugmentsPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [data, setData] = useState<AugmentRank[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -75,15 +76,18 @@ export default function AugmentsPage() {
     let list = [...data]
     if (debouncedSearch.trim()) {
       const q = debouncedSearch.toLowerCase()
-      list = list.filter((a) => a.augment.name.toLowerCase().includes(q) || a.augment.nameZh.includes(q))
+      list = list.filter((a) => {
+        const names = localizedName(a.augment, locale)
+        return names.primary.toLowerCase().includes(q) || names.secondary.toLowerCase().includes(q)
+      })
     }
     if (minMatches > 0) list = list.filter((a) => a.matches >= minMatches)
     list.sort((a, b) => {
       let va: number, vb: number
       if (sortField === "name") {
-        return sortOrder === "asc"
-          ? a.augment.nameZh.localeCompare(b.augment.nameZh)
-          : b.augment.nameZh.localeCompare(a.augment.nameZh)
+        const na = localizedName(a.augment, locale).primary
+        const nb = localizedName(b.augment, locale).primary
+        return sortOrder === "asc" ? na.localeCompare(nb) : nb.localeCompare(na)
       }
       va = sortField === "winRate" ? a.winRate : a.matches
       vb = sortField === "winRate" ? b.winRate : b.matches
@@ -252,8 +256,13 @@ export default function AugmentsPage() {
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold text-foreground text-sm">{item.augment.nameZh}</p>
-                          <p className="max-w-[240px] truncate text-xs text-muted-foreground" title={item.augment.description}>
+                          <p className="font-semibold text-foreground text-sm">
+                            {localizedName(item.augment, locale).primary}
+                          </p>
+                          <p
+                            className="max-w-[240px] truncate text-xs text-muted-foreground"
+                            title={item.augment.description}
+                          >
                             {item.augment.description}
                           </p>
                         </div>
@@ -270,7 +279,7 @@ export default function AugmentsPage() {
                         {item.suitableChampions.slice(0, 3).map((c) => (
                           <Avatar key={c.id} size="sm">
                             <AvatarImage src={c.avatarUrl} alt={c.name} />
-                            <AvatarFallback>{c.nameZh.slice(0, 1)}</AvatarFallback>
+                            <AvatarFallback>{localizedName(c, locale).primary.slice(0, 1)}</AvatarFallback>
                           </Avatar>
                         ))}
                       </AvatarGroup>
@@ -300,7 +309,7 @@ export default function AugmentsPage() {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
+              <p className="font-semibold text-sm text-foreground">{localizedName(item.augment, locale).primary}</p>
               <p className="truncate text-xs text-muted-foreground" title={item.augment.description}>
                 {item.augment.description}
               </p>

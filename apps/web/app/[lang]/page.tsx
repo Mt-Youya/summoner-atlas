@@ -31,7 +31,7 @@ import type {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
-import { confidenceVariant } from "@/lib/utils"
+import { confidenceVariant, localizedName } from "@/lib/utils"
 
 /* ── Helpers ── */
 
@@ -159,6 +159,7 @@ function StrongPicksSection({
   champions: ChampionRank[]
   t: (key: string, fallback?: string) => string
 }) {
+  const { locale } = useTranslation()
   const top5 = champions.slice(0, 5)
 
   return (
@@ -211,7 +212,7 @@ function StrongPicksSection({
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-hextech-blue mb-1">
-                        #{item.rank} — {item.champion.nameZh}
+                        #{item.rank} — {localizedName(item.champion, locale).primary}
                       </p>
                       <p className="text-xs text-muted-foreground">{item.champion.name}</p>
                     </div>
@@ -252,6 +253,7 @@ function StrongPicksSection({
 /* ── Section 3: Trending — Dual Column Diverging ── */
 
 function TrendEntry({ item, positive }: { item: ChampionTrend; positive: boolean }) {
+  const { locale } = useTranslation()
   const change = item.winRateChange
   return (
     <Link
@@ -264,7 +266,7 @@ function TrendEntry({ item, positive }: { item: ChampionTrend; positive: boolean
         style={item.champion.splashUrl ? { backgroundImage: `url(${item.champion.splashUrl})` } : undefined}
       />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-foreground">{item.champion.nameZh}</p>
+        <p className="text-sm font-semibold text-foreground">{localizedName(item.champion, locale).primary}</p>
         <p className="text-xs text-muted-foreground">{item.currentWinRate.toFixed(1)}%</p>
       </div>
       <div className="text-right">
@@ -334,6 +336,7 @@ function TrendingSection({
 /* ── Section 4: Augments — Horizontal Scroll ── */
 
 function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: string, fallback?: string) => string }) {
+  const { locale } = useTranslation()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -374,7 +377,11 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
               <div className="flex items-start justify-between mb-4">
                 <div className="size-12 overflow-hidden rounded-xl bg-hextech-purple/15">
                   {item.augment.iconUrl ? (
-                    <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                    <img
+                      src={item.augment.iconUrl}
+                      alt={localizedName(item.augment, locale).primary}
+                      className="size-full object-cover"
+                    />
                   ) : (
                     <HugeiconsIcon icon={SparklesIcon} className="m-3 size-6 text-hextech-purple" />
                   )}
@@ -385,7 +392,9 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
                 </span>
               </div>
 
-              <h3 className="text-lg font-semibold text-foreground mb-1">{item.augment.nameZh}</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-1">
+                {localizedName(item.augment, locale).primary}
+              </h3>
               <p className="mb-4 line-clamp-2 text-xs text-muted-foreground">{item.augment.description}</p>
 
               <div className="flex items-center gap-1">
@@ -394,7 +403,7 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
                     key={champ.id}
                     className="size-7 rounded-full bg-cover bg-center border-2 border-card ring-1 ring-[var(--border-subtle)]"
                     style={champ.splashUrl ? { backgroundImage: `url(${champ.splashUrl})` } : undefined}
-                    title={champ.nameZh}
+                    title={localizedName(champ, locale).primary}
                   />
                 ))}
                 <span className="text-[10px] text-muted-foreground ml-2">
@@ -599,6 +608,7 @@ function SearchDropdown({
   hasQuery: boolean
   t: (key: string, fallback?: string) => string
 }) {
+  const { locale } = useTranslation()
   if (!visible) return null
 
   if (hasQuery && results.length === 0) {
@@ -626,7 +636,7 @@ function SearchDropdown({
           />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground group-hover:text-hextech-blue transition-colors">
-              {item.champion.nameZh}
+              {localizedName(item.champion, locale).primary}
             </p>
             <p className="text-xs text-muted-foreground">{item.champion.name}</p>
           </div>

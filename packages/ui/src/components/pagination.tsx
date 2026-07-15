@@ -48,10 +48,7 @@ function PaginationLink({
   )
 }
 
-function PaginationPrevious({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink data-slot="pagination-previous" size="default" className={cn("gap-1", className)} {...props}>
       <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
@@ -59,10 +56,7 @@ function PaginationPrevious({
   )
 }
 
-function PaginationNext({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink data-slot="pagination-next" size="default" className={cn("gap-1", className)} {...props}>
       <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />

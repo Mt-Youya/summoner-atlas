@@ -8,6 +8,7 @@ import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, Command
 import { useCommandPalette } from "@/hooks/use-command-palette"
 import { useTranslation } from "@/hooks/use-translation"
 import { mockDataService } from "@/lib/mock-data"
+import { localizedName } from "@/lib/utils"
 import type { ChampionSearchResult, AugmentRank } from "@/lib/data-service"
 
 export function CommandPalette() {
@@ -44,9 +45,13 @@ export function CommandPalette() {
       ])
       setChampions(champResults)
       setAugments(
-        augResults.filter(
-          (a) => a.augment.name.toLowerCase().includes(query.toLowerCase()) || a.augment.nameZh.includes(query)
-        )
+        augResults.filter((a) => {
+          const names = localizedName(a.augment, locale)
+          return (
+            names.primary.toLowerCase().includes(query.toLowerCase()) ||
+            names.secondary.toLowerCase().includes(query.toLowerCase())
+          )
+        })
       )
     }, 150)
     return () => clearTimeout(t)
@@ -83,11 +88,13 @@ export function CommandPalette() {
                   <CommandItem key={c.champion.id} onSelect={() => navigate(`/champions/${c.champion.id}`)}>
                     <Avatar size="sm">
                       <AvatarImage src={c.champion.avatarUrl} alt={c.champion.name} />
-                      <AvatarFallback>{c.champion.nameZh.slice(0, 1)}</AvatarFallback>
+                      <AvatarFallback>{localizedName(c.champion, locale).primary.slice(0, 1)}</AvatarFallback>
                     </Avatar>
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="font-medium text-sm truncate">{c.champion.nameZh}</span>
-                      <span className="text-xs text-muted-foreground">{c.champion.name}</span>
+                      <span className="font-medium text-sm truncate">{localizedName(c.champion, locale).primary}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {localizedName(c.champion, locale).secondary}
+                      </span>
                     </div>
                     <Badge variant="secondary" className="text-[10px]">
                       {c.winRate.toFixed(1)}%
@@ -108,7 +115,7 @@ export function CommandPalette() {
                       )}
                     </div>
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="font-medium text-sm truncate">{a.augment.nameZh}</span>
+                      <span className="font-medium text-sm truncate">{localizedName(a.augment, locale).primary}</span>
                       <span className="truncate text-xs text-muted-foreground">{a.augment.description}</span>
                     </div>
                     <Badge variant="secondary" className="text-[10px]">

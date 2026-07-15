@@ -10,10 +10,10 @@ import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
 import type { AugmentDetail } from "@/lib/data-service"
-import { confidenceVariant } from "@/lib/utils"
+import { confidenceVariant, localizedName } from "@/lib/utils"
 
 export default function AugmentDetailPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const params = useParams<{ id: string }>()
   const id = params.id
   const [detail, setDetail] = useState<AugmentDetail | null>(null)
@@ -91,13 +91,17 @@ export default function AugmentDetailPage() {
           </Link>
           <div className="size-12 overflow-hidden rounded-xl bg-muted">
             {detail.augment.iconUrl ? (
-              <img src={detail.augment.iconUrl} alt={detail.augment.nameZh} className="size-full object-cover" />
+              <img
+                src={detail.augment.iconUrl}
+                alt={localizedName(detail.augment, locale).primary}
+                className="size-full object-cover"
+              />
             ) : (
               <HugeiconsIcon icon={SparklesIcon} className="m-3 size-6 text-hextech-blue" />
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold text-foreground">{detail.augment.nameZh}</h1>
+            <h1 className="text-xl font-bold text-foreground">{localizedName(detail.augment, locale).primary}</h1>
             <p className="truncate text-sm text-muted-foreground">{detail.augment.description}</p>
           </div>
           <div className="text-right">
@@ -119,7 +123,9 @@ export default function AugmentDetailPage() {
           <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("winRate")}</p>
         </div>
         <div className="text-center">
-          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">{detail.matches.toLocaleString()}</div>
+          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">
+            {detail.matches.toLocaleString()}
+          </div>
           <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("matches")}</p>
         </div>
         <div className="text-center">
@@ -152,11 +158,11 @@ export default function AugmentDetailPage() {
               <div className="flex items-center gap-3 mb-3">
                 <Avatar size="sm">
                   <AvatarImage src={sc.champion.avatarUrl} alt={sc.champion.name} />
-                  <AvatarFallback>{sc.champion.nameZh.slice(0, 2)}</AvatarFallback>
+                  <AvatarFallback>{localizedName(sc.champion, locale).primary.slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-semibold text-sm text-foreground">{sc.champion.nameZh}</p>
-                  <p className="text-xs text-muted-foreground">{sc.champion.name}</p>
+                  <p className="font-semibold text-sm text-foreground">{localizedName(sc.champion, locale).primary}</p>
+                  <p className="text-xs text-muted-foreground">{localizedName(sc.champion, locale).secondary}</p>
                 </div>
                 <Badge variant={i === 0 ? "default" : "secondary"} className="ml-auto text-[10px]">
                   #{i + 1}

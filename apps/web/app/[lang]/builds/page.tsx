@@ -18,13 +18,14 @@ import {
 } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { localizedName } from "@/lib/utils"
 import type { ChampionDetail, GameMode } from "@/lib/data-service"
 
 export default function BuildsPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
 
   const [champions, setChampions] = useState<{ id: string; nameZh: string; name: string }[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string>("")
   const [detail, setDetail] = useState<ChampionDetail | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -71,12 +72,12 @@ export default function BuildsPage() {
           className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none z-10"
         />
         <Select
-          items={[
-            { label: t("selectChampion"), value: null },
-            ...championList.map((champion) => ({ label: champion.name, value: champion.id })),
-          ]}
+          items={championList.map((champion) => ({
+            label: localizedName(champion, locale).primary,
+            value: champion.id,
+          }))}
           value={selectedId}
-          onValueChange={(value) => value && loadBuild(value)}
+          onValueChange={(value) => loadBuild(value)}
         >
           <SelectTrigger className="w-full max-w-md pl-9">
             <SelectValue />
@@ -85,7 +86,7 @@ export default function BuildsPage() {
             <SelectGroup>
               {championList.map((c) => (
                 <SelectItem key={c.id} value={c.id}>
-                  {c.nameZh} — {c.name}
+                  {localizedName(c, locale).primary}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -94,7 +95,7 @@ export default function BuildsPage() {
       </div>
 
       {/* Content */}
-      {!selectedId && !initialLoading && (
+      {!selectedId && !initialLoading && !detail && (
         <div className="text-center py-20">
           <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("searchBuildPrompt")}</p>
@@ -135,8 +136,8 @@ export default function BuildsPage() {
               style={detail.champion.splashUrl ? { backgroundImage: `url(${detail.champion.splashUrl})` } : undefined}
             />
             <div>
-              <h2 className="text-xl font-bold text-foreground">{detail.champion.nameZh}</h2>
-              <p className="text-sm text-muted-foreground">{detail.champion.name}</p>
+              <h2 className="text-xl font-bold text-foreground">{localizedName(detail.champion, locale).primary}</h2>
+              <p className="text-sm text-muted-foreground">{localizedName(detail.champion, locale).secondary}</p>
             </div>
             <Badge variant="default" className="ml-auto">
               {detail.winRate.toFixed(1)}% WR

@@ -11,7 +11,7 @@ import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectVa
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
-import { confidenceVariant } from "@/lib/utils"
+import { confidenceVariant, localizedName } from "@/lib/utils"
 import type { ChampionRank, GameMode, Region } from "@/lib/data-service"
 
 type SortField = "winRate" | "matches" | "name" | "rank"
@@ -36,7 +36,7 @@ const MIN_MATCHES = [
 ]
 
 export default function ChampionsPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
 
   const [data, setData] = useState<ChampionRank[]>([])
   const [loading, setLoading] = useState(true)
@@ -81,8 +81,8 @@ export default function ChampionsPage() {
       const q = debouncedSearch.toLowerCase()
       list = list.filter(
         (c) =>
-          c.champion.name.toLowerCase().includes(q) ||
-          c.champion.nameZh.includes(q) ||
+          localizedName(c.champion, locale).primary.toLowerCase().includes(q) ||
+          localizedName(c.champion, locale).secondary.toLowerCase().includes(q) ||
           c.champion.aliases.some((a) => a.toLowerCase().includes(q))
       )
     }
@@ -94,11 +94,9 @@ export default function ChampionsPage() {
     list.sort((a, b) => {
       let va: number, vb: number
       if (sortField === "name") {
-        va = 0
-        vb = 0
-        return sortOrder === "asc"
-          ? a.champion.nameZh.localeCompare(b.champion.nameZh)
-          : b.champion.nameZh.localeCompare(a.champion.nameZh)
+        const na = localizedName(a.champion, locale).primary
+        const nb = localizedName(b.champion, locale).primary
+        return sortOrder === "asc" ? na.localeCompare(nb) : nb.localeCompare(na)
       }
       if (sortField === "rank") {
         va = a.rank
@@ -175,203 +173,216 @@ export default function ChampionsPage() {
     <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
       {/* Page header */}
       <div>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowError")}</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{t("eyebrowChampions")}</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("championRanking")}</h1>
       </div>
 
-<Card className="overflow-hidden rounded-2xl card-glow bg-card">
-  <CardHeader>
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative w-full sm:w-64">
-          <HugeiconsIcon
-            icon={Search01Icon}
-            className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none"
-          />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
-          />
-        </div>
+      <Card className="overflow-hidden rounded-2xl card-glow bg-card">
+        <CardHeader>
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative w-full sm:w-64">
+              <HugeiconsIcon
+                icon={Search01Icon}
+                className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none"
+              />
+              <Input
+                placeholder={t("searchPlaceholder")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
 
-        <Select
-          items={MODES.map((option) => ({ label: t(option.i18nKey), value: option.value }))}
-          value={mode}
-          onValueChange={(v) => setMode(v as GameMode)}
-        >
-          <SelectTrigger size="sm" className="w-[130px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {MODES.map((m) => (
-                <SelectItem key={m.value} value={m.value}>
-                  {t(m.i18nKey)}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            <Select
+              items={MODES.map((option) => ({ label: t(option.i18nKey), value: option.value }))}
+              value={mode}
+              onValueChange={(v) => setMode(v as GameMode)}
+            >
+              <SelectTrigger size="sm" className="w-[130px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {MODES.map((m) => (
+                    <SelectItem key={m.value} value={m.value}>
+                      {t(m.i18nKey)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-        <Select
-          items={REGIONS.map((option) => ({ label: option.label, value: option.value }))}
-          value={region}
-          onValueChange={(v) => setRegion(v as Region)}
-        >
-          <SelectTrigger size="sm" className="w-[110px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {REGIONS.map((r) => (
-                <SelectItem key={r.value} value={r.value}>
-                  {r.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            <Select
+              items={REGIONS.map((option) => ({ label: option.label, value: option.value }))}
+              value={region}
+              onValueChange={(v) => setRegion(v as Region)}
+            >
+              <SelectTrigger size="sm" className="w-[110px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {REGIONS.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>
+                      {r.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-        <Select
-          items={MIN_MATCHES.map((option) => ({ label: t(option.i18nKey), value: String(option.value) }))}
-          value={String(minMatches)}
-          onValueChange={(v) => setMinMatches(Number(v))}
-        >
-          <SelectTrigger size="sm" className="w-[150px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {MIN_MATCHES.map((m) => (
-                <SelectItem key={m.value} value={String(m.value)}>
-                  {t(m.i18nKey)}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            <Select
+              items={MIN_MATCHES.map((option) => ({ label: t(option.i18nKey), value: String(option.value) }))}
+              value={String(minMatches)}
+              onValueChange={(v) => setMinMatches(Number(v))}
+            >
+              <SelectTrigger size="sm" className="w-[150px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {MIN_MATCHES.map((m) => (
+                    <SelectItem key={m.value} value={String(m.value)}>
+                      {t(m.i18nKey)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-        <span className="text-xs text-muted-foreground ml-auto">
-          {filtered.length} {t("champion").toLowerCase()}
-        </span>
-      </div>
-
-</CardHeader>
-<CardContent>
-      {/* Empty state */}
-      {filtered.length === 0 && !loading ? (
-        <div className="text-center py-20">
-          <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground text-lg">{t("rankingEmpty")}</p>
-          <Button
-            onClick={() => {
-              setSearch("")
-              setMinMatches(0)
-              setMode("aram")
-            }}
-            className="mt-3 text-sm text-primary hover:underline"
-          >
-            {t("clear")}
-          </Button>
-        </div>
-      ) : (
-        <>
-          {/* Desktop table */}
-          <div className="hidden md:block rounded-2xl card-glow bg-card overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16 cursor-pointer select-none" onClick={() => handleSort("rank")}>
-                    <span className="inline-flex items-center gap-1">
-                      # <SortIcon field="rank" />
-                    </span>
-                  </TableHead>
-                  <TableHead className="cursor-pointer select-none" onClick={() => handleSort("name")}>
-                    <span className="inline-flex items-center gap-1">
-                      {t("champion")} <SortIcon field="name" />
-                    </span>
-                  </TableHead>
-                  <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("winRate")}>
-                    <span className="inline-flex items-center gap-1">
-                      {t("winRate")} <SortIcon field="winRate" />
-                    </span>
-                  </TableHead>
-                  <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("matches")}>
-                    <span className="inline-flex items-center gap-1">
-                      {t("matches")} <SortIcon field="matches" />
-                    </span>
-                  </TableHead>
-                  <TableHead className="text-right">{t("confidence")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((item) => (
-                  <TableRow key={item.champion.id} className="hover:bg-muted/50 transition-colors">
-                    <TableCell className="font-mono text-muted-foreground text-sm">{item.rank}</TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/champions/${item.champion.id}`}
-                        className="flex items-center gap-3 hover:text-primary transition-colors"
+            <span className="text-xs text-muted-foreground ml-auto">
+              {filtered.length} {t("champion").toLowerCase()}
+            </span>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Empty state */}
+          {filtered.length === 0 && !loading ? (
+            <div className="text-center py-20">
+              <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg">{t("rankingEmpty")}</p>
+              <Button
+                onClick={() => {
+                  setSearch("")
+                  setMinMatches(0)
+                  setMode("aram")
+                }}
+                className="mt-3 text-sm text-primary hover:underline"
+              >
+                {t("clear")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Desktop table */}
+              <div className="hidden md:block rounded-2xl card-glow bg-card overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-16 cursor-pointer select-none" onClick={() => handleSort("rank")}>
+                        <span className="inline-flex items-center gap-1">
+                          # <SortIcon field="rank" />
+                        </span>
+                      </TableHead>
+                      <TableHead className="cursor-pointer select-none" onClick={() => handleSort("name")}>
+                        <span className="inline-flex items-center gap-1">
+                          {t("champion")} <SortIcon field="name" />
+                        </span>
+                      </TableHead>
+                      <TableHead
+                        className="cursor-pointer select-none text-right"
+                        onClick={() => handleSort("winRate")}
                       >
-                        <Avatar size="sm">
-                          <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
-                          <AvatarFallback>{item.champion.nameZh.slice(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-semibold text-foreground text-sm">{item.champion.nameZh}</p>
-                          <p className="text-xs text-muted-foreground">{item.champion.name}</p>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums font-semibold text-sm">
-                      {item.winRate.toFixed(1)}%
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums text-sm text-muted-foreground">
-                      {item.matches.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant={confidenceVariant(item.confidence)} className="text-[10px]">
+                        <span className="inline-flex items-center gap-1">
+                          {t("winRate")} <SortIcon field="winRate" />
+                        </span>
+                      </TableHead>
+                      <TableHead
+                        className="cursor-pointer select-none text-right"
+                        onClick={() => handleSort("matches")}
+                      >
+                        <span className="inline-flex items-center gap-1">
+                          {t("matches")} <SortIcon field="matches" />
+                        </span>
+                      </TableHead>
+                      <TableHead className="text-right">{t("confidence")}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filtered.map((item) => (
+                      <TableRow key={item.champion.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-mono text-muted-foreground text-sm">{item.rank}</TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/champions/${item.champion.id}`}
+                            className="flex items-center gap-3 hover:text-primary transition-colors"
+                          >
+                            <Avatar size="lg">
+                              <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
+                              <AvatarFallback>
+                                {localizedName(item.champion, locale).primary.slice(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-semibold text-foreground text-sm">
+                                {localizedName(item.champion, locale).primary}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {localizedName(item.champion, locale).secondary}
+                              </p>
+                            </div>
+                          </Link>
+                        </TableCell>
+                        <TableCell className="text-right tabular-nums font-semibold text-sm">
+                          {item.winRate.toFixed(1)}%
+                        </TableCell>
+                        <TableCell className="text-right tabular-nums text-sm text-muted-foreground">
+                          {item.matches.toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Badge variant={confidenceVariant(item.confidence)} className="text-[10px]">
+                            {t(item.confidence)}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile card list */}
+              <div className="md:hidden space-y-3">
+                {filtered.map((item) => (
+                  <Link
+                    key={item.champion.id}
+                    href={`/champions/${item.champion.id}`}
+                    className="flex items-center gap-4 rounded-2xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
+                  >
+                    <span className="font-mono text-sm text-muted-foreground w-6 text-right">{item.rank}</span>
+                    <Avatar size="lg">
+                      <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
+                      <AvatarFallback>{localizedName(item.champion, locale).primary.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-foreground">
+                        {localizedName(item.champion, locale).primary}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{localizedName(item.champion, locale).secondary}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-sm tabular-nums glow-mid">{item.winRate.toFixed(1)}%</p>
+                      <Badge variant={confidenceVariant(item.confidence)} className="text-[10px] mt-0.5">
                         {t(item.confidence)}
                       </Badge>
-                    </TableCell>
-                  </TableRow>
+                    </div>
+                  </Link>
                 ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Mobile card list */}
-          <div className="md:hidden space-y-3">
-            {filtered.map((item) => (
-              <Link
-                key={item.champion.id}
-                href={`/champions/${item.champion.id}`}
-                className="flex items-center gap-4 rounded-2xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
-              >
-                <span className="font-mono text-sm text-muted-foreground w-6 text-right">{item.rank}</span>
-                <Avatar size="lg">
-                  <AvatarImage src={item.champion.avatarUrl} alt={item.champion.name} />
-                  <AvatarFallback>{item.champion.nameZh.slice(0, 2)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground">{item.champion.nameZh}</p>
-                  <p className="text-xs text-muted-foreground">{item.champion.name}</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-sm tabular-nums glow-mid">{item.winRate.toFixed(1)}%</p>
-                  <Badge variant={confidenceVariant(item.confidence)} className="text-[10px] mt-0.5">
-                    {t(item.confidence)}
-                  </Badge>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-      </CardContent>
-  </Card>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

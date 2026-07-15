@@ -26,7 +26,7 @@ function Meter({
         data-slot="meter-track"
         className={cn(
           "h-full w-full flex-1 rounded-full transition-all",
-          value >= (max * 0.66) ? "bg-primary" : value >= (max * 0.33) ? "bg-amber-400" : "bg-destructive"
+          value >= max * 0.66 ? "bg-primary" : value >= max * 0.33 ? "bg-amber-400" : "bg-destructive"
         )}
         style={{ width: `${(value / max) * 100}%` }}
       />

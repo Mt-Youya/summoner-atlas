@@ -49,9 +49,11 @@ function SheetContent({
 }) {
   const sideClasses = {
     top: "top-0 left-1/2 -translate-x-1/2 w-full max-w-[100%] h-auto max-h-[85%] rounded-b-xl border-b data-open:slide-in-from-top data-closed:slide-out-to-top",
-    bottom: "bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[100%] h-auto max-h-[85%] rounded-t-xl border-t data-open:slide-in-from-bottom data-closed:slide-out-to-bottom",
+    bottom:
+      "bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[100%] h-auto max-h-[85%] rounded-t-xl border-t data-open:slide-in-from-bottom data-closed:slide-out-to-bottom",
     left: "top-1/2 left-0 -translate-y-1/2 h-full max-h-[100%] w-3/4 max-w-sm rounded-r-xl border-r data-open:slide-in-from-left data-closed:slide-out-to-left",
-    right: "top-1/2 right-0 -translate-y-1/2 h-full max-h-[100%] w-3/4 max-w-sm rounded-l-xl border-l data-open:slide-in-from-right data-closed:slide-out-to-right",
+    right:
+      "top-1/2 right-0 -translate-y-1/2 h-full max-h-[100%] w-3/4 max-w-sm rounded-l-xl border-l data-open:slide-in-from-right data-closed:slide-out-to-right",
   }
 
   return (
@@ -90,7 +92,10 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-footer"
-      className={cn("-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end", className)}
+      className={cn(
+        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end",
+        className
+      )}
       {...props}
     />
   )
