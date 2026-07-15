@@ -26,6 +26,12 @@ importers:
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.7)
+      '@hugeicons/core-free-icons':
+        specifier: ^4.2.2
+        version: 4.2.2
+      '@hugeicons/react':
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       '@summoner-atlas/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -50,9 +56,6 @@ importers:
       gsap:
         specifier: ^3.15.0
         version: 3.15.0
-      hugeicons-react:
-        specifier: ^0.4.0
-        version: 0.4.0(react@19.2.7)
       next:
         specifier: ^16.2.10
         version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -122,9 +125,6 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      hugeicons-react:
-        specifier: ^0.4.0
-        version: 0.4.0(react@19.2.7)
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -334,9 +334,6 @@ packages:
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
-
-  '@hugeicons/core-free-icons@3.3.0':
-    resolution: {integrity: sha512-qYyr4JQ2eQIHTSTbITvnJvs6ERNK64D9gpwZnf2IyuG0exzqfyABLO/oTB71FB3RZPfu1GbwycdiGSo46apjMQ==}
 
   '@hugeicons/core-free-icons@4.2.2':
     resolution: {integrity: sha512-fjQW3p6cwoJmwK3oCnV8Z3PC5sHihDvr2jkAHax8cxqp62GaV/D7B/Rnao+JwicW8fmLZUQ6QrzWfoyMFOEQlQ==}
@@ -1869,11 +1866,6 @@ packages:
     resolution: {integrity: sha512-4FbRdAX+bSdmo4AUFuS0WNiPz8NgFt+r8ThgNWmlrjQjt1Q7ZR9+zTlce2859x4KSXrwIsaeTqDoKQmtP8pLmQ==}
     engines: {node: '>= 0.8'}
 
-  hugeicons-react@0.4.0:
-    resolution: {integrity: sha512-HA2UI3VkDd1dNi9P4JGjaMODdGEs4QVMwQcc34W0aoGHptdsIex/756Jik4GFYN/023jGFKNVvQKhx2IpZtV+g==}
-    peerDependencies:
-      react: '>=16.0.0'
-
   human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
@@ -3111,8 +3103,6 @@ snapshots:
   '@hono/node-server@1.19.14(hono@4.12.30)':
     dependencies:
       hono: 4.12.30
-
-  '@hugeicons/core-free-icons@3.3.0': {}
 
   '@hugeicons/core-free-icons@4.2.2': {}
 
@@ -4418,12 +4408,6 @@ snapshots:
       setprototypeof: 1.2.0
       statuses: 2.0.2
       toidentifier: 1.0.1
-
-  hugeicons-react@0.4.0(react@19.2.7):
-    dependencies:
-      '@hugeicons/core-free-icons': 3.3.0
-      '@hugeicons/react': 1.1.9(react@19.2.7)
-      react: 19.2.7
 
   human-signals@2.1.0: {}
 

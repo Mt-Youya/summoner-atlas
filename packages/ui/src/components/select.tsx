@@ -1,10 +1,11 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import * as React from "react"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 
 import { cn } from "../lib/utils"
-import { ArrowDown01Icon, Checkmark01Icon, ArrowUp01Icon } from "hugeicons-react"
+import { ArrowDown01Icon, Tick01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons"
 
 const Select = SelectPrimitive.Root
 
@@ -37,7 +38,9 @@ function SelectTrigger({
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon render={<ArrowDown01Icon className="pointer-events-none size-4 text-muted-foreground" />} />
+      <SelectPrimitive.Icon
+        render={<HugeiconsIcon icon={ArrowDown01Icon} className="pointer-events-none size-4 text-muted-foreground" />}
+      />
     </SelectPrimitive.Trigger>
   )
 }
@@ -107,7 +110,7 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
       <SelectPrimitive.ItemIndicator
         render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />}
       >
-        <Checkmark01Icon className="pointer-events-none" />
+        <HugeiconsIcon icon={Tick01Icon} className="pointer-events-none" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   )
@@ -133,7 +136,7 @@ function SelectScrollUpButton({ className, ...props }: React.ComponentProps<type
       )}
       {...props}
     >
-      <ArrowUp01Icon />
+      <HugeiconsIcon icon={ArrowUp01Icon} />
     </SelectPrimitive.ScrollUpArrow>
   )
 }
@@ -148,7 +151,7 @@ function SelectScrollDownButton({ className, ...props }: React.ComponentProps<ty
       )}
       {...props}
     >
-      <ArrowDown01Icon />
+      <HugeiconsIcon icon={ArrowDown01Icon} />
     </SelectPrimitive.ScrollDownArrow>
   )
 }

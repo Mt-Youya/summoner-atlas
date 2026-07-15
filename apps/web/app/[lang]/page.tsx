@@ -1,5 +1,6 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { gsap } from "gsap"
@@ -15,7 +16,7 @@ import {
   HashtagIcon,
   ZapIcon,
   Cancel01Icon,
-} from "hugeicons-react"
+} from "@hugeicons/core-free-icons"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -112,7 +113,7 @@ function HeroSection({
         <div className="relative max-w-2xl mx-auto group">
           <div className="absolute inset-0 bg-hextech-blue/10 rounded-2xl blur-xl group-hover:bg-hextech-blue/20 transition-all duration-500" />
           <div className="relative flex items-center bg-[var(--bg-elevated)] border border-[var(--border-glow)] rounded-2xl px-6 py-5 shadow-[var(--glow-mid)] group-hover:shadow-[var(--glow-high)] transition-shadow duration-500">
-            <Search01Icon className="size-5 text-muted-foreground mr-3 shrink-0" />
+            <HugeiconsIcon icon={Search01Icon} className="size-5 text-muted-foreground mr-3 shrink-0" />
             <input
               type="text"
               value={query}
@@ -124,7 +125,7 @@ function HeroSection({
               className="flex-1 bg-transparent text-base text-foreground placeholder:text-muted-foreground outline-none"
             />
             <kbd className="hidden md:inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[10px] font-mono text-muted-foreground ml-3">
-              <ZapIcon className="size-3" /> Enter
+              <HugeiconsIcon icon={ZapIcon} className="size-3" /> Enter
             </kbd>
           </div>
 
@@ -135,12 +136,12 @@ function HeroSection({
         {/* Meta line */}
         <div className="flex items-center justify-center gap-8 mt-10 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <Clock01Icon className="size-3.5" />
+            <HugeiconsIcon icon={Clock01Icon} className="size-3.5" />
             {t("updatedAt")}{" "}
             {patch?.lastUpdated ? new Date(patch.lastUpdated).toLocaleDateString("zh-CN") : t("unknownTime")}
           </span>
           <span className="flex items-center gap-1.5">
-            <HashtagIcon className="size-3.5" />
+            <HugeiconsIcon icon={HashtagIcon} className="size-3.5" />
             {(patch?.totalSamples ?? 0).toLocaleString()} {t("globalSample")}
           </span>
         </div>
@@ -176,7 +177,10 @@ function StrongPicksSection({
             className="hidden md:flex items-center gap-2 text-sm font-medium text-hextech-blue hover:text-hextech-amber transition-colors duration-300 group"
           >
             {t("allChampions")}
-            <ArrowRight01Icon className="size-4 group-hover:translate-x-1 transition-transform duration-300" />
+            <HugeiconsIcon
+              icon={ArrowRight01Icon}
+              className="size-4 group-hover:translate-x-1 transition-transform duration-300"
+            />
           </Link>
         </div>
 
@@ -238,7 +242,7 @@ function StrongPicksSection({
           href="/champions"
           className="md:hidden flex items-center justify-center gap-2 mt-8 text-sm font-medium text-hextech-blue"
         >
-          {t("allChampions")} <ArrowRight01Icon className="size-4" />
+          {t("allChampions")} <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
         </Link>
       </div>
     </section>
@@ -301,7 +305,7 @@ function TrendingSection({
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-6">
               <div className="size-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                <AnalyticsUpIcon className="size-4 text-emerald-400" />
+                <HugeiconsIcon icon={AnalyticsUpIcon} className="size-4 text-emerald-400" />
               </div>
               <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">{t("trendingUp")}</span>
             </div>
@@ -315,7 +319,7 @@ function TrendingSection({
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-6">
               <div className="size-8 rounded-lg bg-red-500/10 flex items-center justify-center">
-                <AnalyticsDownIcon className="size-4 text-red-400" />
+                <HugeiconsIcon icon={AnalyticsDownIcon} className="size-4 text-red-400" />
               </div>
               <span className="text-sm font-semibold text-red-400 uppercase tracking-wider">{t("trendingDown")}</span>
             </div>
@@ -352,7 +356,10 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
             className="hidden md:flex items-center gap-2 text-sm font-medium text-hextech-purple hover:text-hextech-amber transition-colors duration-300 group shrink-0"
           >
             {t("openAugments")}
-            <ArrowRight01Icon className="size-4 group-hover:translate-x-1 transition-transform duration-300" />
+            <HugeiconsIcon
+              icon={ArrowRight01Icon}
+              className="size-4 group-hover:translate-x-1 transition-transform duration-300"
+            />
           </Link>
         </div>
 
@@ -370,7 +377,7 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="size-12 rounded-xl bg-hextech-purple/15 flex items-center justify-center">
-                  <SparklesIcon className="size-6 text-hextech-purple" />
+                  <HugeiconsIcon icon={SparklesIcon} className="size-6 text-hextech-purple" />
                 </div>
                 <span className="text-2xl font-bold tabular-nums glow-mid">
                   {item.winRate.toFixed(1)}
@@ -402,7 +409,7 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
           href="/augments"
           className="md:hidden flex items-center justify-center gap-2 mt-8 text-sm font-medium text-hextech-purple"
         >
-          {t("openAugments")} <ArrowRight01Icon className="size-4" />
+          {t("openAugments")} <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
         </Link>
       </div>
     </section>
@@ -511,7 +518,7 @@ function AtlasPreviewSection({
               className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-hextech-blue text-[var(--bg-page)] font-bold text-sm uppercase tracking-wider shadow-[var(--glow-high)] hover:shadow-[0_0_40px_rgba(0,212,255,0.6)] hover:scale-105 transition-all duration-500"
             >
               {t("openAtlas")}
-              <ArrowRight01Icon className="size-4" />
+              <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
             </Link>
           </div>
         </div>
@@ -568,7 +575,7 @@ function ModeEntriesSection({ t }: { t: (key: string, fallback?: string) => stri
                     href={mode.href}
                     className="inline-flex items-center gap-2 text-sm font-medium text-hextech-blue hover:text-hextech-amber transition-colors duration-300"
                   >
-                    {t("details")} <ArrowRight01Icon className="size-4" />
+                    {t("details")} <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
                   </Link>
                 ) : (
                   <Badge variant="outline">{t("pending")}</Badge>
@@ -600,7 +607,7 @@ function SearchDropdown({
   if (hasQuery && results.length === 0) {
     return (
       <div className="absolute top-full left-0 right-0 mt-3 bg-popover border rounded-2xl shadow-[var(--glow-mid)] p-8 text-center z-50">
-        <Cancel01Icon className="size-8 text-muted-foreground mx-auto mb-3" />
+        <HugeiconsIcon icon={Cancel01Icon} className="size-8 text-muted-foreground mx-auto mb-3" />
         <p className="text-sm text-muted-foreground">{t("searchEmpty")}</p>
       </div>
     )

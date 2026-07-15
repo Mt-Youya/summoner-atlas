@@ -1,9 +1,10 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft01Icon, SparklesIcon } from "hugeicons-react"
+import { ArrowLeft01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton, Separator, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -60,7 +61,7 @@ export default function AugmentDetailPage() {
     return (
       <div className="max-w-5xl mx-auto px-6 py-32 text-center">
         <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-6">
-          <SparklesIcon className="size-8 text-destructive" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-8 text-destructive" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("dataUnavailable")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
@@ -86,10 +87,10 @@ export default function AugmentDetailPage() {
             href="/augments"
             className="size-10 flex items-center justify-center rounded-xl bg-muted hover:bg-muted/80 transition-colors"
           >
-            <ArrowLeft01Icon className="size-5 text-muted-foreground" />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-5 text-muted-foreground" />
           </Link>
           <div className="size-12 rounded-xl bg-muted flex items-center justify-center">
-            <SparklesIcon className="size-6 text-hextech-blue" />
+            <HugeiconsIcon icon={SparklesIcon} className="size-6 text-hextech-blue" />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold text-foreground">{detail.augment.nameZh}</h1>

@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
-import { Loading02Icon, Home01Icon } from "hugeicons-react"
+import { Loading02Icon, Home01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 import { cn } from "@/lib/utils"
@@ -121,7 +122,11 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
         {/* Action buttons */}
         <div className="flex gap-4">
           <Button onClick={handleReboot} disabled={isRebooting} className="flex-1 shadow-[var(--glow-mid)]" size="lg">
-            <Loading02Icon data-icon="inline-start" className={cn(isRebooting && "animate-spin")} />
+            <HugeiconsIcon
+              icon={Loading02Icon}
+              data-icon="inline-start"
+              className={cn(isRebooting && "animate-spin")}
+            />
             {isRebooting ? t("rebooting") : t("rebootSystem")}
           </Button>
           <Button
@@ -131,7 +136,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
             className="flex-1"
             render={
               <Link href="/">
-                <Home01Icon data-icon="inline-start" />
+                <HugeiconsIcon icon={Home01Icon} data-icon="inline-start" />
                 {t("backToHome")}
               </Link>
             }

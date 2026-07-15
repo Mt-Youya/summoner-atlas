@@ -6,7 +6,7 @@ import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "../lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog"
 import { InputGroup, InputGroupAddon } from "./input-group"
-import { Search01Icon, Checkmark01Icon } from "@hugeicons/core-free-icons"
+import { Search01Icon, CheckmarkBadge01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
@@ -62,7 +62,7 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
           {...props}
         />
         <InputGroupAddon>
-          <Search01Icon className="size-4 shrink-0 opacity-50" />
+          <HugeiconsIcon icon={Search01Icon} className="size-4 shrink-0 opacity-50" />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -123,7 +123,10 @@ function CommandItem({ className, children, ...props }: React.ComponentProps<typ
       {...props}
     >
       {children}
-      <Checkmark01Icon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      <HugeiconsIcon
+        icon={CheckmarkBadge01Icon}
+        className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
+      />
     </CommandPrimitive.Item>
   )
 }

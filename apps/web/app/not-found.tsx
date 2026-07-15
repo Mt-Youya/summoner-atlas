@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
-import { Home01Icon, Alert01Icon } from "hugeicons-react"
+import { Home01Icon, Alert01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 
@@ -82,13 +83,13 @@ export default function NotFound() {
               className="shadow-[var(--glow-mid)]"
               render={
                 <Link href="/">
-                  <Home01Icon data-icon="inline-start" />
+                  <HugeiconsIcon icon={Home01Icon} data-icon="inline-start" />
                   {t("abortMission")}
                 </Link>
               }
             />
             <Button variant="outline" size="lg" className="gap-2">
-              <Alert01Icon data-icon="inline-start" />
+              <HugeiconsIcon icon={Alert01Icon} data-icon="inline-start" />
               {t("backToHome")}
             </Button>
           </div>

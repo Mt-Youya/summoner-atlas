@@ -1,7 +1,8 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import Link from "next/link"
-import { Home01Icon, Sword01Icon, Search01Icon, MagicWand01Icon, UserIcon } from "hugeicons-react"
+import { Home01Icon, Sword01Icon, Search01Icon, MagicWand01Icon, UserIcon } from "@hugeicons/core-free-icons"
 import { useTranslation } from "@/hooks/use-translation"
 
 const tabs = [
@@ -24,7 +25,7 @@ export function MobileTabBar() {
             href={href}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors duration-300"
           >
-            <Icon className="size-5" />
+            <HugeiconsIcon icon={Icon} className="size-5" />
             <span className="text-[10px] font-medium">{t(i18nKey)}</span>
           </Link>
         ))}

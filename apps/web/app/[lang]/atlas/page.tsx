@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useRef, useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { SparklesIcon } from "hugeicons-react"
+import { SparklesIcon } from "@hugeicons/core-free-icons"
 import { Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -176,7 +177,7 @@ export default function AtlasPage() {
     return (
       <div className="max-w-6xl mx-auto px-6 py-32 text-center">
         <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-6 shadow-[var(--glow-low)]">
-          <SparklesIcon className="size-8 text-destructive" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-8 text-destructive" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("error")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>

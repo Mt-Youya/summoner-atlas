@@ -1,9 +1,10 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "hugeicons-react"
+import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton, Separator } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -61,13 +62,16 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
           {build.coreItems.map((item, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
               <div className="size-12 rounded-xl bg-muted/50 flex items-center justify-center border border-border">
-                <FireIcon className="size-5 text-amber-400" />
+                <HugeiconsIcon icon={FireIcon} className="size-5 text-amber-400" />
               </div>
               <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[60px] truncate">
                 {item.name}
               </span>
               {i < build.coreItems.length - 1 && (
-                <ArrowLeft01Icon className="size-3 text-muted-foreground/50 rotate-180 hidden md:block" />
+                <HugeiconsIcon
+                  icon={ArrowLeft01Icon}
+                  className="size-3 text-muted-foreground/50 rotate-180 hidden md:block"
+                />
               )}
             </div>
           ))}
@@ -103,7 +107,7 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
   if (detail.topAugmentCombos.length === 0) {
     return (
       <div className="text-center py-16">
-        <SparklesIcon className="size-10 text-muted-foreground mx-auto mb-4" />
+        <HugeiconsIcon icon={SparklesIcon} className="size-10 text-muted-foreground mx-auto mb-4" />
         <p className="text-muted-foreground">{t("noComboAvailable")}</p>
       </div>
     )
@@ -199,7 +203,7 @@ export default function ChampionDetailPage() {
     return (
       <div className="max-w-5xl mx-auto px-6 py-32 text-center">
         <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-6">
-          <SparklesIcon className="size-8 text-destructive" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-8 text-destructive" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("dataUnavailable")}</h2>
         <p className="text-muted-foreground mb-8 max-w-md mx-auto">{t("cannotLoadPage")}</p>
@@ -226,7 +230,7 @@ export default function ChampionDetailPage() {
             href="/"
             className="size-10 flex items-center justify-center rounded-xl bg-muted hover:bg-muted/80 transition-colors"
           >
-            <ArrowLeft01Icon className="size-5 text-muted-foreground" />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className="size-5 text-muted-foreground" />
           </Link>
           <div
             className="size-12 rounded-xl bg-cover bg-center shrink-0"
@@ -273,7 +277,7 @@ export default function ChampionDetailPage() {
             href={`/augments?champion=${detail.champion.id}`}
             className="text-sm font-medium text-hextech-blue hover:text-hextech-amber transition-colors flex items-center gap-1"
           >
-            {t("viewFullCombos")} <ArrowLeft01Icon className="size-4 rotate-180" />
+            {t("viewFullCombos")} <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4 rotate-180" />
           </Link>
         </div>
         <AugmentCombos detail={detail} />

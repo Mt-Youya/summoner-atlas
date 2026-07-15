@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { SparklesIcon } from "@hugeicons/core-free-icons"
-import { } from "@"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -95,7 +95,7 @@ export default function ComparePage() {
 
       {error && (
         <div className="text-center py-12">
-          <SparklesIcon className="size-10 text-destructive mx-auto mb-4" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-10 text-destructive mx-auto mb-4" />
           <p className="text-destructive">{t("error")}</p>
         </div>
       )}
@@ -180,7 +180,7 @@ export default function ComparePage() {
 
       {!detailA && !detailB && !loading && !error && (
         <div className="text-center py-20">
-          <SparklesIcon className="size-12 text-muted-foreground mx-auto mb-4" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("noCompareData")}</p>
         </div>
       )}

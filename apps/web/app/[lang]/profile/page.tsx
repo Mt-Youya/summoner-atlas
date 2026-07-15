@@ -1,6 +1,7 @@
 "use client"
 
-import { UserIcon, Sword01Icon, MagicWand01Icon, Sun01Icon, Moon01Icon } from "hugeicons-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { UserIcon, Sword01Icon, MagicWand01Icon, Sun01Icon, Moon01Icon } from "@hugeicons/core-free-icons"
 import { Badge, Card, CardContent, CardHeader, CardTitle, CardDescription, Separator } from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 import { useTheme } from "@/hooks/use-theme"
@@ -21,7 +22,7 @@ export default function ProfilePage() {
       <Card>
         <CardContent className="flex items-center gap-5 p-6">
           <div className="size-16 rounded-full bg-muted flex items-center justify-center">
-            <UserIcon className="size-8 text-muted-foreground" />
+            <HugeiconsIcon icon={UserIcon} className="size-8 text-muted-foreground" />
           </div>
           <div className="flex-1">
             <h2 className="font-bold text-lg text-foreground">Summoner</h2>
@@ -40,7 +41,11 @@ export default function ProfilePage() {
         <CardContent className="space-y-4 px-6 pb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {theme === "dark" ? <Moon01Icon className="size-5" /> : <Sun01Icon className="size-5" />}
+              {theme === "dark" ? (
+                <HugeiconsIcon icon={Moon01Icon} className="size-5" />
+              ) : (
+                <HugeiconsIcon icon={Sun01Icon} className="size-5" />
+              )}
               <span className="text-sm font-medium">{theme === "dark" ? t("dark") : t("light")}</span>
             </div>
             <button
@@ -66,7 +71,7 @@ export default function ProfilePage() {
         <CardContent className="space-y-3 px-6 pb-6">
           <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50">
             <div className="flex items-center gap-3">
-              <Sword01Icon className="size-5 text-muted-foreground" />
+              <HugeiconsIcon icon={Sword01Icon} className="size-5 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">{t("qqLogin")}</p>
                 <p className="text-xs text-muted-foreground">{t("qqBindDesc")}</p>
@@ -76,7 +81,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50">
             <div className="flex items-center gap-3">
-              <MagicWand01Icon className="size-5 text-muted-foreground" />
+              <HugeiconsIcon icon={MagicWand01Icon} className="size-5 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">{t("riotLogin")}</p>
                 <p className="text-xs text-muted-foreground">{t("riotBindDesc")}</p>

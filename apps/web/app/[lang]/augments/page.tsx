@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDown01Icon, SparklesIcon } from "hugeicons-react"
+import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDownIcon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Skeleton, Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
@@ -90,8 +91,13 @@ export default function AugmentsPage() {
   }
 
   function SortIcon({ field }: { field: SortField }) {
-    if (sortField !== field) return <ArrowUpDown01Icon className="size-3.5 text-muted-foreground/50" />
-    return sortOrder === "asc" ? <ArrowUp01Icon className="size-3.5" /> : <ArrowDown01Icon className="size-3.5" />
+    if (sortField !== field)
+      return <HugeiconsIcon icon={ArrowUpDownIcon} className="size-3.5 text-muted-foreground/50" />
+    return sortOrder === "asc" ? (
+      <HugeiconsIcon icon={ArrowUp01Icon} className="size-3.5" />
+    ) : (
+      <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
+    )
   }
 
   if (loading) {
@@ -113,7 +119,7 @@ export default function AugmentsPage() {
     return (
       <div className="max-w-6xl mx-auto px-6 py-32 text-center">
         <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-6 shadow-[var(--glow-low)]">
-          <SparklesIcon className="size-8 text-destructive" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-8 text-destructive" />
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("rankingError")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
@@ -136,7 +142,10 @@ export default function AugmentsPage() {
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative w-full sm:w-64">
-          <Search01Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+          <HugeiconsIcon
+            icon={Search01Icon}
+            className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none"
+          />
           <Input
             placeholder={t("rankingSearchAugment")}
             value={search}
@@ -175,7 +184,7 @@ export default function AugmentsPage() {
 
       {filtered.length === 0 ? (
         <div className="text-center py-20">
-          <SparklesIcon className="size-12 text-muted-foreground mx-auto mb-4" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("rankingEmpty")}</p>
         </div>
       ) : (
@@ -212,7 +221,7 @@ export default function AugmentsPage() {
                       className="flex items-center gap-3 hover:text-primary transition-colors"
                     >
                       <div className="size-8 rounded-lg bg-muted flex items-center justify-center">
-                        <SparklesIcon className="size-4 text-hextech-blue" />
+                        <HugeiconsIcon icon={SparklesIcon} className="size-4 text-hextech-blue" />
                       </div>
                       <div>
                         <p className="font-semibold text-foreground text-sm">{item.augment.nameZh}</p>
@@ -253,7 +262,7 @@ export default function AugmentsPage() {
           >
             <span className="font-mono text-sm text-muted-foreground w-6 text-right">{i + 1}</span>
             <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
-              <SparklesIcon className="size-5 text-hextech-blue" />
+              <HugeiconsIcon icon={SparklesIcon} className="size-5 text-hextech-blue" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>

@@ -1,7 +1,8 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { Component, type ReactNode } from "react"
-import { Alert01Icon } from "hugeicons-react"
+import { Alert01Icon } from "@hugeicons/core-free-icons"
 
 interface Props {
   children: ReactNode
@@ -30,7 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-[60vh] flex items-center justify-center px-6">
           <div className="text-center max-w-md">
             <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-6">
-              <Alert01Icon className="size-8 text-destructive" />
+              <HugeiconsIcon icon={Alert01Icon} className="size-8 text-destructive" />
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
             <p className="text-muted-foreground mb-6">An unexpected error occurred. Please try refreshing the page.</p>

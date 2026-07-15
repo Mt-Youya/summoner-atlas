@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { Search01Icon, SparklesIcon, FireIcon } from "hugeicons-react"
+import { Search01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton, Separator } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -54,7 +55,10 @@ export default function BuildsPage() {
 
       {/* Champion selector */}
       <div className="relative">
-        <Search01Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none z-10" />
+        <HugeiconsIcon
+          icon={Search01Icon}
+          className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none z-10"
+        />
         <select
           className="w-full max-w-md h-10 pl-9 pr-4 rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           value={selectedId ?? ""}
@@ -76,7 +80,7 @@ export default function BuildsPage() {
       {/* Content */}
       {!selectedId && !initialLoading && (
         <div className="text-center py-20">
-          <SparklesIcon className="size-12 text-muted-foreground mx-auto mb-4" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("searchBuildPrompt")}</p>
         </div>
       )}
@@ -153,7 +157,7 @@ export default function BuildsPage() {
               {detail.build.coreItems.map((item, i) => (
                 <div key={i} className="flex flex-col items-center gap-1">
                   <div className="size-12 rounded-xl bg-muted/50 flex items-center justify-center border border-border">
-                    <FireIcon className="size-5 text-amber-400" />
+                    <HugeiconsIcon icon={FireIcon} className="size-5 text-amber-400" />
                   </div>
                   <span className="text-[10px] text-muted-foreground text-center max-w-[60px] truncate">
                     {item.name}

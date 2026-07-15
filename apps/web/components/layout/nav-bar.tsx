@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
-import { Search01Icon, Sun01Icon, Moon01Icon, ArrowDown01Icon } from "hugeicons-react"
+import { Search01Icon, Sun01Icon, Moon01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons"
 import { Button, Badge, Separator } from "@summoner-atlas/ui"
 import { useTheme } from "@/hooks/use-theme"
 import { useTranslation, useLanguage, type Locale } from "@/hooks/use-translation"
@@ -73,7 +74,7 @@ export function NavBar() {
             onClick={openCmdPalette}
             className="hidden md:inline-flex text-muted-foreground"
           >
-            <Search01Icon data-icon="inline-start" />
+            <HugeiconsIcon icon={Search01Icon} data-icon="inline-start" />
             <span className="text-xs">{t("search")}</span>
             <Badge variant="secondary" className="ml-2 text-[10px] px-1 py-0">
               Ctrl+K
@@ -81,7 +82,7 @@ export function NavBar() {
           </Button>
 
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground">
-            {theme === "dark" ? <Sun01Icon /> : <Moon01Icon />}
+            {theme === "dark" ? <HugeiconsIcon icon={Sun01Icon} /> : <HugeiconsIcon icon={Moon01Icon} />}
           </Button>
 
           <Separator orientation="vertical" className="h-5 mx-1" />
@@ -89,7 +90,7 @@ export function NavBar() {
           <div className="relative group">
             <Button variant="ghost" size="sm" className="text-muted-foreground gap-1">
               <span className="uppercase text-xs font-semibold tracking-wider">{locale}</span>
-              <ArrowDown01Icon className="size-3" />
+              <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
             </Button>
             <div className="absolute right-0 top-full mt-1 bg-popover border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[120px]">
               {(Object.entries(localeLabels) as [Locale, string][]).map(([key, label]) => (

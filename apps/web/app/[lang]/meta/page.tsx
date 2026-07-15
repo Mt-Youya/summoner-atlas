@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { SparklesIcon } from "hugeicons-react"
+import { SparklesIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -109,7 +110,7 @@ export default function MetaPage() {
                 className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors"
               >
                 <span className="font-mono text-sm text-muted-foreground w-6">#{i + 1}</span>
-                <SparklesIcon className="size-4 text-hextech-blue" />
+                <HugeiconsIcon icon={SparklesIcon} className="size-4 text-hextech-blue" />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
                 </div>

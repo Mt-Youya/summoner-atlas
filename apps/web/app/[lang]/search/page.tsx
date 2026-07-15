@@ -1,8 +1,9 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search01Icon, SparklesIcon } from "hugeicons-react"
+import { Search01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Badge, Skeleton, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
@@ -59,7 +60,10 @@ export default function SearchPage() {
       </div>
 
       <div className="relative">
-        <Search01Icon className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none" />
+        <HugeiconsIcon
+          icon={Search01Icon}
+          className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none"
+        />
         <Input
           placeholder={t("searchPlaceholder")}
           value={query}
@@ -96,12 +100,12 @@ export default function SearchPage() {
         </div>
       ) : !debouncedQuery.trim() ? (
         <div className="text-center py-16">
-          <Search01Icon className="size-12 text-muted-foreground mx-auto mb-4 opacity-40" />
+          <HugeiconsIcon icon={Search01Icon} className="size-12 text-muted-foreground mx-auto mb-4 opacity-40" />
           <p className="text-muted-foreground">{t("searchHelp")}</p>
         </div>
       ) : !hasResults ? (
         <div className="text-center py-16">
-          <SparklesIcon className="size-12 text-muted-foreground mx-auto mb-4" />
+          <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("searchEmpty")}</p>
         </div>
       ) : tab === "champions" ? (
@@ -138,7 +142,7 @@ export default function SearchPage() {
               className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
             >
               <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
-                <SparklesIcon className="size-5 text-hextech-blue" />
+                <HugeiconsIcon icon={SparklesIcon} className="size-5 text-hextech-blue" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
