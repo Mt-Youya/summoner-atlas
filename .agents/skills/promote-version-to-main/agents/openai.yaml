@@ -1,0 +1,4 @@
+interface:
+  display_name: "Promote version to main"
+  short_description: "Safely promote any version branch to main"
+  default_prompt: "Use $promote-version-to-main v3 to preview promoting local v3 to main while preserving prior versions."
