@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { Search01Icon, Sun01Icon, Moon01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons"
-import { Button, Badge, Separator } from "@summoner-atlas/ui"
+import { Button, Badge, Separator, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@summoner-atlas/ui"
 import { useTheme } from "@/hooks/use-theme"
 import { useTranslation, useLanguage, type Locale } from "@/hooks/use-translation"
 import { useCommandPalette } from "@/hooks/use-command-palette"
@@ -87,26 +87,29 @@ export function NavBar() {
 
           <Separator orientation="vertical" className="h-5 mx-1" />
 
-          <div className="relative group">
-            <Button variant="ghost" size="sm" className="text-muted-foreground gap-1">
-              <span className="uppercase text-xs font-semibold tracking-wider">{locale}</span>
-              <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
-            </Button>
-            <div className="absolute right-0 top-full mt-1 bg-popover border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[120px]">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" size="sm" className="text-muted-foreground gap-1">
+                  <span className="uppercase text-xs font-semibold tracking-wider">{locale}</span>
+                  <HugeiconsIcon icon={ArrowDown01Icon} className="size-3" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
               {(Object.entries(localeLabels) as [Locale, string][]).map(([key, label]) => (
-                <button
+                <DropdownMenuItem
                   key={key}
                   onClick={() => switchLocale(key)}
                   className={cn(
-                    "w-full text-left px-4 py-2 text-sm hover:bg-muted transition-colors first:rounded-t-lg last:rounded-b-lg",
-                    locale === key ? "text-primary font-semibold" : "text-muted-foreground"
+                    locale === key && "text-primary font-semibold"
                   )}
                 >
                   {label}
-                </button>
+                </DropdownMenuItem>
               ))}
-            </div>
-          </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </nav>

@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Search01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
+import { Badge, Skeleton, Tabs, TabsList, TabsTrigger, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -75,20 +75,22 @@ export default function SearchPage() {
 
       {/* Tabs */}
       {debouncedQuery.trim() && (
-        <div className="flex gap-2 border-b pb-2">
-          <button
-            onClick={() => setTab("champions")}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${tab === "champions" ? "text-primary border-b-2 border-primary -mb-[10px]" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            {t("champions")} ({champions.length})
-          </button>
-          <button
-            onClick={() => setTab("augments")}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${tab === "augments" ? "text-primary border-b-2 border-primary -mb-[10px]" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            {t("augments")} ({augments.length})
-          </button>
-        </div>
+        <Tabs value={tab} onValueChange={(v) => setTab(v as "champions" | "augments")}>
+          <TabsList className="w-full justify-start gap-0 rounded-none border-b bg-transparent p-0">
+            <TabsTrigger
+              value="champions"
+              className="rounded-none border-b-2 border-transparent px-4 py-2 data-[selected]:border-primary data-[selected]:text-primary data-[selected]:shadow-none data-[selected]:bg-transparent"
+            >
+              {t("champions")} ({champions.length})
+            </TabsTrigger>
+            <TabsTrigger
+              value="augments"
+              className="rounded-none border-b-2 border-transparent px-4 py-2 data-[selected]:border-primary data-[selected]:text-primary data-[selected]:shadow-none data-[selected]:bg-transparent"
+            >
+              {t("augments")} ({augments.length})
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       )}
 
       {/* Results */}

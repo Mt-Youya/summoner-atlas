@@ -2,7 +2,7 @@
 
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UserIcon, Sword01Icon, MagicWand01Icon, Sun01Icon, Moon01Icon } from "@hugeicons/core-free-icons"
-import { Badge, Card, CardContent, CardHeader, CardTitle, CardDescription, Separator } from "@summoner-atlas/ui"
+import { Badge, Card, CardContent, CardHeader, CardTitle, CardDescription, Separator, Switch, Label } from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 import { useTheme } from "@/hooks/use-theme"
 
@@ -40,24 +40,15 @@ export default function ProfilePage() {
         </CardHeader>
         <CardContent className="space-y-4 px-6 pb-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Label htmlFor="theme-switch" className="flex items-center gap-3 cursor-pointer">
               {theme === "dark" ? (
                 <HugeiconsIcon icon={Moon01Icon} className="size-5" />
               ) : (
                 <HugeiconsIcon icon={Sun01Icon} className="size-5" />
               )}
               <span className="text-sm font-medium">{theme === "dark" ? t("dark") : t("light")}</span>
-            </div>
-            <button
-              onClick={toggleTheme}
-              className="relative w-12 h-7 rounded-full transition-colors bg-muted hover:bg-muted/80"
-            >
-              <span
-                className={`absolute top-1 size-5 rounded-full bg-primary shadow-[var(--glow-low)] transition-all ${
-                  theme === "dark" ? "left-6" : "left-1"
-                }`}
-              />
-            </button>
+            </Label>
+            <Switch id="theme-switch" checked={theme === "dark"} onCheckedChange={toggleTheme} />
           </div>
         </CardContent>
       </Card>

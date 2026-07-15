@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Badge, Skeleton } from "@summoner-atlas/ui"
+import { Badge, Skeleton, ToggleGroup, ToggleGroupItem } from "@summoner-atlas/ui"
 import { useTranslation } from "@/hooks/use-translation"
 
 interface MockPatch {
@@ -74,21 +74,20 @@ export default function PatchesPage() {
       </div>
 
       {/* Version selector */}
-      <div className="flex flex-wrap gap-2">
+      <ToggleGroup
+        value={selectedVersion ? [selectedVersion] : []}
+        onValueChange={(value) => {
+          if (value.length > 0) setSelectedVersion(value[value.length - 1])
+        }}
+        spacing={0}
+        className="flex-wrap"
+      >
         {patches.map((p) => (
-          <button
-            key={p.version}
-            onClick={() => setSelectedVersion(p.version)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              p.version === selectedVersion
-                ? "bg-primary text-primary-foreground shadow-[var(--glow-mid)]"
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            }`}
-          >
+          <ToggleGroupItem key={p.version} value={p.version} variant="outline" className="text-sm">
             {p.version}
-          </button>
+          </ToggleGroupItem>
         ))}
-      </div>
+      </ToggleGroup>
 
       {/* Selected patch */}
       {selected && (

@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Separator } from "@summoner-atlas/ui"
+import { Badge, Skeleton, Separator, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import { MiniSparkline } from "@/components/charts/mini-sparkline"
@@ -132,12 +132,7 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
           <h4 className="font-semibold text-foreground mb-1">{combo.augment.nameZh}</h4>
           <p className="text-xs text-muted-foreground mb-3">{combo.augment.name}</p>
           <div className="flex items-center gap-2">
-            <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-hextech-blue rounded-full transition-all duration-700"
-                style={{ width: `${combo.synergyScore}%` }}
-              />
-            </div>
+            <Progress value={combo.synergyScore} className="flex-1 h-1.5 bg-hextech-blue/20" />
             <span className="text-xs font-bold tabular-nums text-hextech-blue glow-mid">
               {combo.synergyScore.toFixed(0)}
             </span>
