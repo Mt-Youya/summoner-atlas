@@ -3,7 +3,17 @@
 import { useState, useCallback } from "react"
 import { SparklesIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Badge, Skeleton } from "@summoner-atlas/ui"
+import {
+  Badge,
+  Button,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Skeleton,
+} from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import type { ChampionDetail } from "@/lib/data-service"
@@ -19,6 +29,13 @@ export default function ComparePage() {
   const [detailB, setDetailB] = useState<ChampionDetail | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+
+  const championItems = champions.map((champion) => ({
+    label: `${champion.nameZh} — ${champion.name}`,
+    value: champion.id,
+  }))
+  const championAItems = [{ label: t("championOne"), value: null }, ...championItems]
+  const championBItems = [{ label: t("championTwo"), value: null }, ...championItems]
 
   // Load champion list on mount
   if (!initialized) {
@@ -46,9 +63,6 @@ export default function ComparePage() {
     }
   }, [champAId, champBId])
 
-  const selectClasses =
-    "w-full h-10 px-3 rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
       <div>
@@ -58,30 +72,42 @@ export default function ComparePage() {
 
       {/* Selectors */}
       <div className="flex flex-col sm:flex-row items-center gap-4">
-        <select className={selectClasses} value={champAId} onChange={(e) => setChampAId(e.target.value)}>
-          <option value="">{t("championOne")}</option>
-          {champions.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nameZh} — {c.name}
-            </option>
-          ))}
-        </select>
+        <Select items={championAItems} value={champAId || null} onValueChange={(value) => setChampAId(value ?? "")}>
+          <SelectTrigger className="h-10 w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {championItems.map((champion) => (
+                <SelectItem key={champion.value} value={champion.value}>
+                  {champion.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <span className="text-muted-foreground font-bold text-sm">{t("vs")}</span>
-        <select className={selectClasses} value={champBId} onChange={(e) => setChampBId(e.target.value)}>
-          <option value="">{t("championTwo")}</option>
-          {champions.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nameZh} — {c.name}
-            </option>
-          ))}
-        </select>
-        <button
+        <Select items={championBItems} value={champBId || null} onValueChange={(value) => setChampBId(value ?? "")}>
+          <SelectTrigger className="h-10 w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {championItems.map((champion) => (
+                <SelectItem key={champion.value} value={champion.value}>
+                  {champion.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <Button
           onClick={compare}
           disabled={!champAId || !champBId || loading}
           className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-50 shadow-[var(--glow-mid)]"
         >
           {t("startCompare")}
-        </button>
+        </Button>
       </div>
 
       {/* Results */}

@@ -4,9 +4,9 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDownIcon, SparklesIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
+import { Button, Badge, Skeleton, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui/input"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
+import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -128,13 +128,10 @@ export default function ChampionsPage() {
   }
 
   function SortIcon({ field }: { field: SortField }) {
-    if (sortField !== field)
+    if (sortField !== field) {
       return <HugeiconsIcon icon={ArrowUpDownIcon} className="size-3.5 text-muted-foreground/50" />
-    return sortOrder === "asc" ? (
-      <HugeiconsIcon icon={ArrowUp01Icon} className="size-3.5" />
-    ) : (
-      <HugeiconsIcon icon={ArrowDown01Icon} className="size-3.5" />
-    )
+    }
+    return <HugeiconsIcon icon={sortOrder === "asc" ? ArrowUp01Icon : ArrowDown01Icon} className="size-3.5" />
   }
 
   /* ── Loading ── */
@@ -165,12 +162,12 @@ export default function ChampionsPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("rankingError")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button
+        <Button
           onClick={load}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]"
         >
           {t("reload")}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -199,42 +196,60 @@ export default function ChampionsPage() {
           />
         </div>
 
-        <Select value={mode} onValueChange={(v) => setMode(v as GameMode)}>
+        <Select
+          items={MODES.map((option) => ({ label: t(option.i18nKey), value: option.value }))}
+          value={mode}
+          onValueChange={(v) => setMode(v as GameMode)}
+        >
           <SelectTrigger size="sm" className="w-[130px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {MODES.map((m) => (
-              <SelectItem key={m.value} value={m.value}>
-                {t(m.i18nKey)}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {MODES.map((m) => (
+                <SelectItem key={m.value} value={m.value}>
+                  {t(m.i18nKey)}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
 
-        <Select value={region} onValueChange={(v) => setRegion(v as Region)}>
+        <Select
+          items={REGIONS.map((option) => ({ label: option.label, value: option.value }))}
+          value={region}
+          onValueChange={(v) => setRegion(v as Region)}
+        >
           <SelectTrigger size="sm" className="w-[110px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {REGIONS.map((r) => (
-              <SelectItem key={r.value} value={r.value}>
-                {r.label}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {REGIONS.map((r) => (
+                <SelectItem key={r.value} value={r.value}>
+                  {r.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
 
-        <Select value={String(minMatches)} onValueChange={(v) => setMinMatches(Number(v))}>
+        <Select
+          items={MIN_MATCHES.map((option) => ({ label: t(option.i18nKey), value: String(option.value) }))}
+          value={String(minMatches)}
+          onValueChange={(v) => setMinMatches(Number(v))}
+        >
           <SelectTrigger size="sm" className="w-[150px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {MIN_MATCHES.map((m) => (
-              <SelectItem key={m.value} value={String(m.value)}>
-                {t(m.i18nKey)}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {MIN_MATCHES.map((m) => (
+                <SelectItem key={m.value} value={String(m.value)}>
+                  {t(m.i18nKey)}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
 
@@ -248,7 +263,7 @@ export default function ChampionsPage() {
         <div className="text-center py-20">
           <HugeiconsIcon icon={SparklesIcon} className="size-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground text-lg">{t("rankingEmpty")}</p>
-          <button
+          <Button
             onClick={() => {
               setSearch("")
               setMinMatches(0)
@@ -257,7 +272,7 @@ export default function ChampionsPage() {
             className="mt-3 text-sm text-primary hover:underline"
           >
             {t("clear")}
-          </button>
+          </Button>
         </div>
       ) : (
         <>

@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDownIcon, SparklesIcon } from "@hugeicons/core-free-icons"
 import {
+  Button,
   Skeleton,
   Avatar,
   AvatarImage,
@@ -15,7 +16,7 @@ import {
   CardHeader,
 } from "@summoner-atlas/ui"
 import { Input } from "@summoner-atlas/ui/input"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
+import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -132,12 +133,12 @@ export default function AugmentsPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("rankingError")}</h2>
         <p className="text-muted-foreground mb-8">{t("cannotLoadPage")}</p>
-        <button
+        <Button
           onClick={load}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-[var(--glow-mid)]"
         >
           {t("reload")}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -164,28 +165,40 @@ export default function AugmentsPage() {
                 className="pl-9"
               />
             </div>
-            <Select value={mode} onValueChange={(v) => setMode(v as GameMode)}>
+            <Select
+              items={MODES.map((option) => ({ label: t(option.i18nKey), value: option.value }))}
+              value={mode}
+              onValueChange={(v) => setMode(v as GameMode)}
+            >
               <SelectTrigger size="sm" className="w-[130px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {MODES.map((m) => (
-                  <SelectItem key={m.value} value={m.value}>
-                    {t(m.i18nKey)}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  {MODES.map((m) => (
+                    <SelectItem key={m.value} value={m.value}>
+                      {t(m.i18nKey)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               </SelectContent>
             </Select>
-            <Select value={String(minMatches)} onValueChange={(v) => setMinMatches(Number(v))}>
+            <Select
+              items={MIN_MATCHES.map((option) => ({ label: t(option.i18nKey), value: String(option.value) }))}
+              value={String(minMatches)}
+              onValueChange={(v) => setMinMatches(Number(v))}
+            >
               <SelectTrigger size="sm" className="w-[150px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {MIN_MATCHES.map((m) => (
-                  <SelectItem key={m.value} value={String(m.value)}>
-                    {t(m.i18nKey)}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  {MIN_MATCHES.map((m) => (
+                    <SelectItem key={m.value} value={String(m.value)}>
+                      {t(m.i18nKey)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               </SelectContent>
             </Select>
             <span className="text-xs text-muted-foreground ml-auto">

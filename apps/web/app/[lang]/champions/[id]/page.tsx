@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Separator, Progress } from "@summoner-atlas/ui"
+import { Button, Badge, Skeleton, Separator, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import { MiniSparkline } from "@/components/charts/mini-sparkline"
@@ -202,12 +202,12 @@ export default function ChampionDetailPage() {
         </div>
         <h2 className="text-xl font-bold text-foreground mb-2">{t("dataUnavailable")}</h2>
         <p className="text-muted-foreground mb-8 max-w-md mx-auto">{t("cannotLoadPage")}</p>
-        <button
+        <Button
           onClick={load}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity"
         >
           {t("reload")}
-        </button>
+        </Button>
         <Link href="/" className="block mt-4 text-sm text-muted-foreground hover:text-primary transition-colors">
           {t("backToHome")}
         </Link>
