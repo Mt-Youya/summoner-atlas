@@ -2,7 +2,7 @@ import { headers } from "next/headers"
 
 export type Locale = "zh" | "en" | "ko"
 
-const supportedLocales: Locale[] = new Set(["zh", "en", "ko"])
+const supportedLocales = new Set<Locale>(["zh", "en", "ko"])
 
 function resolveRequestLocale(headerValue: string | null | undefined): Locale {
   if (headerValue && supportedLocales.has(headerValue as Locale)) {

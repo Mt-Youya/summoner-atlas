@@ -10,6 +10,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
+import { confidenceVariant } from "@/lib/utils"
 import type { ChampionRank, GameMode, Region } from "@/lib/data-service"
 
 type SortField = "winRate" | "pickRate" | "matches" | "name" | "rank"

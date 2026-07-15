@@ -1,6 +1,7 @@
 "use client"
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import type { TooltipValueType } from "recharts"
 import { hextechChartColors } from "./chart-theme"
 
 export function PatchTrendChart({ data }: { data: { patch: string; winRate: number }[] }) {
@@ -42,7 +43,10 @@ export function PatchTrendChart({ data }: { data: { patch: string; winRate: numb
             fontSize: "12px",
             fontFamily: "Outfit, sans-serif",
           }}
-          formatter={(value: number) => [`${value.toFixed(1)}%`, "Win Rate"]}
+          formatter={(value: TooltipValueType | undefined) => {
+            const winRate = Array.isArray(value) ? value[0] : value
+            return [`${Number(winRate ?? 0).toFixed(1)}%`, "Win Rate"] as [string, string]
+          }}
         />
         <Area
           type="monotone"
