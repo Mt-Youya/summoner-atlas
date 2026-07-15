@@ -77,7 +77,7 @@ export default function BuildsPage() {
             value: champion.id,
           }))}
           value={selectedId}
-          onValueChange={(value) => loadBuild(value)}
+          onValueChange={(value) => { if (value) loadBuild(value) }}
         >
           <SelectTrigger className="w-full max-w-md pl-9">
             <SelectValue />

@@ -689,7 +689,7 @@ function HomeSkeleton() {
             {Array.from({ length: 2 }).map((_, col) => (
               <div key={col} className="space-y-4">
                 <Skeleton className="h-6 w-32 rounded-xl" />
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: 5 }).map((_v, i) => (
                   <Skeleton key={i} className="h-16 rounded-xl" />
                 ))}
               </div>

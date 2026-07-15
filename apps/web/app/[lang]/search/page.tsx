@@ -22,8 +22,8 @@ export default function SearchPage() {
   const [mode] = useState<GameMode>("aram")
 
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(query), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setDebouncedQuery(query), 300)
+    return () => clearTimeout(timer)
   }, [query])
 
   useEffect(() => {

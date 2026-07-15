@@ -38,7 +38,7 @@ export function CommandPalette() {
       setAugments([])
       return
     }
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       const [champResults, augResults] = await Promise.all([
         mockDataService.searchChampions({ query, mode: "aram" }),
         mockDataService.getTopAugments({ mode: "aram", limit: 50 }),
@@ -54,7 +54,7 @@ export function CommandPalette() {
         })
       )
     }, 150)
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [query])
 
   const navigate = useCallback(

@@ -1,4 +1,4 @@
-import { headers, supabaseUrl, fetchCache, ok, notFound, serverError } from "../../supabase"
+import { headers, supabaseUrl, fetchCache, ok, notFound } from "../../supabase"
 
 function normalizePath(path: string) {
   if (!path) return ""
