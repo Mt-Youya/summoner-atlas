@@ -17,6 +17,10 @@ const serviceRoleKey =
   process.env.SUMMONER_ATLAS_SUPABASE_SERVICE_ROLE_KEY ??
   process.env.SUMMONER_ATLAS_SUPABASE_SECRET_KEY
 
+function normalizeImageUrl(imageUrl: string) {
+  return imageUrl.replace("/lol-game-data/assets/v1/", "/v1/")
+}
+
 export async function GET() {
   if (!supabaseUrl || !serviceRoleKey) {
     return NextResponse.json({ images: [] }, { status: 503 })
@@ -41,7 +45,9 @@ export async function GET() {
   const images = (await response.json()) as { alias: string; image_url: string | null }[]
   return NextResponse.json(
     {
-      images: images.flatMap(({ alias, image_url }) => (image_url ? [{ alias, imageUrl: image_url }] : [])),
+      images: images.flatMap(({ alias, image_url }) =>
+        image_url ? [{ alias, imageUrl: normalizeImageUrl(image_url) }] : []
+      ),
     },
     { headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600" } }
   )
