@@ -84,7 +84,7 @@ export default function MetaPage() {
                 <span className="font-mono text-sm text-muted-foreground w-6">#{item.rank}</span>
                 <div
                   className="size-8 rounded-lg bg-cover bg-center"
-                  style={{ backgroundImage: `url(${item.champion.avatarUrl})` }}
+                  style={item.champion.avatarUrl ? { backgroundImage: `url(${item.champion.avatarUrl})` } : undefined}
                 />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground">{item.champion.nameZh}</p>

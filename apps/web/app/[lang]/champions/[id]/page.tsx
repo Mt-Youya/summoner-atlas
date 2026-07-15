@@ -234,7 +234,7 @@ export default function ChampionDetailPage() {
           </Link>
           <div
             className="size-12 rounded-xl bg-cover bg-center shrink-0"
-            style={{ backgroundImage: `url(${detail.champion.splashUrl})` }}
+            style={detail.champion.splashUrl ? { backgroundImage: `url(${detail.champion.splashUrl})` } : undefined}
           />
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold text-foreground">{detail.champion.nameZh}</h1>

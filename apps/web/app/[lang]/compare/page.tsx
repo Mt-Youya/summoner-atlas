@@ -107,7 +107,9 @@ export default function ComparePage() {
             <div className="rounded-2xl card-glow bg-card p-6 text-center">
               <div
                 className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3"
-                style={{ backgroundImage: `url(${detailA.champion.splashUrl})` }}
+                style={
+                  detailA.champion.splashUrl ? { backgroundImage: `url(${detailA.champion.splashUrl})` } : undefined
+                }
               />
               <h3 className="font-bold text-foreground">{detailA.champion.nameZh}</h3>
               <p className="text-xs text-muted-foreground mb-4">{detailA.champion.name}</p>
@@ -125,7 +127,9 @@ export default function ComparePage() {
             <div className="rounded-2xl card-glow bg-card p-6 text-center">
               <div
                 className="size-12 rounded-xl bg-cover bg-center mx-auto mb-3"
-                style={{ backgroundImage: `url(${detailB.champion.splashUrl})` }}
+                style={
+                  detailB.champion.splashUrl ? { backgroundImage: `url(${detailB.champion.splashUrl})` } : undefined
+                }
               />
               <h3 className="font-bold text-foreground">{detailB.champion.nameZh}</h3>
               <p className="text-xs text-muted-foreground mb-4">{detailB.champion.name}</p>

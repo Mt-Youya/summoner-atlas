@@ -116,7 +116,7 @@ export default function BuildsPage() {
           <div className="flex items-center gap-4">
             <div
               className="size-12 rounded-xl bg-cover bg-center shrink-0"
-              style={{ backgroundImage: `url(${detail.champion.splashUrl})` }}
+              style={detail.champion.splashUrl ? { backgroundImage: `url(${detail.champion.splashUrl})` } : undefined}
             />
             <div>
               <h2 className="text-xl font-bold text-foreground">{detail.champion.nameZh}</h2>
