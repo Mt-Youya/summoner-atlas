@@ -36,10 +36,16 @@ function colorImageUrl(imageUrl: string) {
   const fileName = new URL(imageUrl).pathname.split("/").at(-1)?.toLowerCase()
   const slug = fileName?.replace(/_small\.png$/, "").replace(/\.png$/, "")
 
+  if (slug?.startsWith("genericabilityaugmenticon_")) {
+    return imageUrl
+  }
+
   return slug
     ? `https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/${slug}_large.png`
     : imageUrl
 }
+
+const unavailableRankingImages = new Set([1205, 2076])
 
 function descriptionText(description: string) {
   return description
@@ -62,50 +68,89 @@ export async function GET() {
   }
 
   const staticUrl = new URL("/rest/v1/static_augments", supabaseUrl)
-  staticUrl.searchParams.set("select", "id,name_en,icon_url")
+  staticUrl.searchParams.set("select", "id,name_en,name_zh,icon_url")
   staticUrl.searchParams.set("icon_url", "not.is.null")
 
   const descriptionsUrl = new URL("/rest/v1/resg_augments", supabaseUrl)
-  descriptionsUrl.searchParams.set("select", "augment_id,description,version")
+  descriptionsUrl.searchParams.set("select", "augment_id,display_name,description,version")
   descriptionsUrl.searchParams.set("description", "not.is.null")
+
+  const rankingUrl = new URL("/rest/v1/resg_cache", supabaseUrl)
+  rankingUrl.searchParams.set("select", "payload")
+  rankingUrl.searchParams.set("cache_key", "like.v2:augments:global:aram:%")
+  rankingUrl.searchParams.set("order", "updated_at.desc")
+  rankingUrl.searchParams.set("limit", "1")
 
   const headers = {
     apikey: serviceRoleKey,
     Authorization: `Bearer ${serviceRoleKey}`,
   }
-  const [staticResponse, descriptionsResponse] = await Promise.all([
+  const [staticResponse, descriptionsResponse, rankingResponse] = await Promise.all([
     fetch(staticUrl, { headers, next: { revalidate: 3600 } }),
     fetch(descriptionsUrl, { headers, next: { revalidate: 3600 } }),
+    fetch(rankingUrl, { headers, next: { revalidate: 300 } }),
   ])
 
   if (!staticResponse.ok) {
     return NextResponse.json({ images: [] }, { status: 502 })
   }
 
-  const augments = (await staticResponse.json()) as { id: number; name_en: string; icon_url: string | null }[]
+  const augments = (await staticResponse.json()) as {
+    id: number
+    name_en: string
+    name_zh: string
+    icon_url: string | null
+  }[]
   const descriptions = descriptionsResponse.ok
-    ? ((await descriptionsResponse.json()) as { augment_id: number; description: string; version: string }[])
+    ? ((await descriptionsResponse.json()) as {
+        augment_id: number
+        display_name: string
+        description: string
+        version: string
+      }[])
+    : []
+  const rankings = rankingResponse.ok
+    ? ((await rankingResponse.json()) as {
+        payload: { id: number; matches: number; winRate: number; description?: string; imageUrl?: string }[]
+      }[])[0]?.payload ?? []
     : []
   const latestDescriptions = new Map<number, { description: string; version: string }>()
+  const latestDescriptionsByName = new Map<string, { description: string; version: string }>()
+  const rankingById = new Map(rankings.map((ranking) => [ranking.id, ranking]))
 
   for (const description of descriptions) {
     const current = latestDescriptions.get(description.augment_id)
     if (!current || isNewerVersion(description.version, current.version)) {
       latestDescriptions.set(description.augment_id, description)
     }
+    const currentByName = latestDescriptionsByName.get(description.display_name)
+    if (!currentByName || isNewerVersion(description.version, currentByName.version)) {
+      latestDescriptionsByName.set(description.display_name, description)
+    }
   }
 
   return NextResponse.json(
     {
-      images: augments.flatMap(({ id, name_en, icon_url }) => {
+      images: augments.flatMap(({ id, name_en, name_zh, icon_url }) => {
         if (!icon_url) return []
 
-        const description = latestDescriptions.get(id)?.description
+        const ranking = rankingById.get(id)
+        const description =
+          ranking?.description ??
+          latestDescriptions.get(id)?.description ??
+          latestDescriptionsByName.get(name_zh)?.description
         return [
           {
             name: name_en,
-            imageUrl: colorImageUrl(normalizeImageUrl(icon_url)),
+            id,
+            nameZh: name_zh,
+            imageUrl:
+              ranking?.imageUrl && !unavailableRankingImages.has(id)
+                ? ranking.imageUrl
+                : colorImageUrl(normalizeImageUrl(icon_url)),
             description: description ? descriptionText(description) : undefined,
+            matches: ranking?.matches ?? null,
+            winRate: ranking?.winRate ?? null,
           },
         ]
       }),

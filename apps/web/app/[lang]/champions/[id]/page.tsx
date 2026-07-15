@@ -258,7 +258,10 @@ export default function ChampionDetailPage() {
       {/* Core Stats Row */}
       <div className="grid grid-cols-3 gap-6 items-center">
         <GlowStat value={detail.winRate} label={t("winRate")} />
-        <GlowStat value={detail.pickRate} label={t("pickRate")} />
+        <div className="text-center">
+          <p className="text-3xl font-extrabold tabular-nums text-foreground">{detail.matches.toLocaleString()}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t("matches")}</p>
+        </div>
         <div className="text-center">
           <Badge variant={confidenceVariant(detail.confidence)} className="text-sm px-4 py-1.5">
             {t(detail.confidence)}

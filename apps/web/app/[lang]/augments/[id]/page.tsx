@@ -119,11 +119,8 @@ export default function AugmentDetailPage() {
           <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("winRate")}</p>
         </div>
         <div className="text-center">
-          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">
-            {detail.pickRate.toFixed(1)}
-            <span className="text-lg md:text-xl ml-0.5 text-muted-foreground font-medium">%</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("pickRate")}</p>
+          <div className="text-4xl md:text-5xl font-extrabold tabular-nums glow-high">{detail.matches.toLocaleString()}</div>
+          <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{t("matches")}</p>
         </div>
         <div className="text-center">
           <Badge variant={confidenceVariant(detail.confidence)} className="text-sm px-4 py-1.5">

@@ -25,7 +25,7 @@ export interface PatchSummary {
 export interface ChampionRank {
   champion: Champion
   winRate: number
-  pickRate: number
+  pickRate?: number
   matches: number
   confidence: "high" | "medium" | "low"
   rank: number
@@ -66,7 +66,7 @@ export interface AugmentCombo {
 export interface ChampionDetail {
   champion: Champion
   winRate: number
-  pickRate: number
+  pickRate?: number
   matches: number
   confidence: "high" | "medium" | "low"
   build: BuildRecommendation
@@ -101,7 +101,7 @@ export type Region = "cn" | "kr" | "global"
 export interface AugmentDetail {
   augment: Augment
   winRate: number
-  pickRate: number
+  pickRate?: number
   matches: number
   confidence: "high" | "medium" | "low"
   suitableChampions: { champion: Champion; synergyScore: number }[]

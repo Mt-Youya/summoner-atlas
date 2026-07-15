@@ -33,7 +33,7 @@ export default function BuildsPage() {
 
   useEffect(() => {
     mockDataService
-      .getTopChampions({ mode, region: "cn", limit: 50 })
+      .getTopChampions({ mode, region: "cn", limit: 500 })
       .then((data) => {
         setChampions(data.map((d) => ({ id: d.champion.id, nameZh: d.champion.nameZh, name: d.champion.name })))
         setInitialLoading(false)
