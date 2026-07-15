@@ -40,8 +40,8 @@ export default function AugmentsPage() {
   const [minMatches, setMinMatches] = useState(0)
 
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setDebouncedSearch(search), 300)
+    return () => clearTimeout(timer)
   }, [search])
 
   const load = useCallback(async () => {

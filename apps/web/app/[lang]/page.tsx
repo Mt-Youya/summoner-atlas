@@ -563,10 +563,7 @@ function ModeEntriesSection({ t }: { t: (key: string, fallback?: string) => stri
               key={mode.seed}
               className="group relative overflow-hidden rounded-2xl card-glow bg-card p-8 cursor-pointer hover:shadow-[var(--glow-high)] transition-all duration-500"
             >
-              <div
-                className="absolute inset-0 bg-cover bg-center opacity-15 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700 ease-out"
-                style={{ backgroundImage: `url(https://picsum.photos/seed/${mode.seed}/800/450)` }}
-              />
+              <div className="absolute inset-0 bg-muted/40 opacity-15 group-hover:opacity-30 transition-opacity duration-700" />
               <div className="relative z-10">
                 <h3 className="text-xl font-bold text-foreground mb-2">{t(mode.titleKey)}</h3>
                 <p className="text-sm text-muted-foreground mb-6">{t(mode.descKey)}</p>

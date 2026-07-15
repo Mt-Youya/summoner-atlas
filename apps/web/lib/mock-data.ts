@@ -8,178 +8,209 @@ const champions: Champion[] = [
     name: "Aatrox",
     nameZh: "暗裔剑魔",
     aliases: ["剑魔", "aateluoke"],
-    avatarUrl: "/champions/aatrox.png",
-    splashUrl: "https://picsum.photos/seed/aatrox/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "ahri",
     name: "Ahri",
     nameZh: "九尾妖狐",
     aliases: ["狐狸", "阿里", "ahri"],
-    avatarUrl: "/champions/ahri.png",
-    splashUrl: "https://picsum.photos/seed/ahri/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "akali",
     name: "Akali",
     nameZh: "离群之刺",
     aliases: ["阿卡丽", "akali"],
-    avatarUrl: "/champions/akali.png",
-    splashUrl: "https://picsum.photos/seed/akali/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "akshan",
     name: "Akshan",
     nameZh: "影哨",
     aliases: ["阿克尚", "akeshang"],
-    avatarUrl: "/champions/akshan.png",
-    splashUrl: "https://picsum.photos/seed/akshan/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "brand",
     name: "Brand",
     nameZh: "复仇焰魂",
     aliases: ["火男", "布兰德", "bulande"],
-    avatarUrl: "/champions/brand.png",
-    splashUrl: "https://picsum.photos/seed/brand/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "caitlyn",
     name: "Caitlyn",
     nameZh: "皮城女警",
     aliases: ["女警", "凯特琳", "kaitelin"],
-    avatarUrl: "/champions/caitlyn.png",
-    splashUrl: "https://picsum.photos/seed/caitlyn/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "darius",
     name: "Darius",
     nameZh: "诺克萨斯之手",
     aliases: ["诺手", "德莱厄斯", "delaisi"],
-    avatarUrl: "/champions/darius.png",
-    splashUrl: "https://picsum.photos/seed/darius/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "ezreal",
     name: "Ezreal",
     nameZh: "探险家",
     aliases: ["ez", "伊泽瑞尔", "yizeruier"],
-    avatarUrl: "/champions/ezreal.png",
-    splashUrl: "https://picsum.photos/seed/ezreal/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "jinx",
     name: "Jinx",
     nameZh: "暴走萝莉",
     aliases: ["金克丝", "jinkesi"],
-    avatarUrl: "/champions/jinx.png",
-    splashUrl: "https://picsum.photos/seed/jinx/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "kaisa",
     name: "Kai'Sa",
     nameZh: "虚空之女",
     aliases: ["卡莎", "kasha"],
-    avatarUrl: "/champions/kaisa.png",
-    splashUrl: "https://picsum.photos/seed/kaisa/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "lux",
     name: "Lux",
     nameZh: "光辉女郎",
     aliases: ["光辉", "拉克丝", "laksi"],
-    avatarUrl: "/champions/lux.png",
-    splashUrl: "https://picsum.photos/seed/lux/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "masteryi",
     name: "Master Yi",
     nameZh: "无极剑圣",
     aliases: ["剑圣", "易", "yidashi", "js"],
-    avatarUrl: "/champions/masteryi.png",
-    splashUrl: "https://picsum.photos/seed/masteryi/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "missfortune",
     name: "Miss Fortune",
     nameZh: "赏金猎人",
     aliases: ["女枪", "好运姐", "mf", "shaer"],
-    avatarUrl: "/champions/missfortune.png",
-    splashUrl: "https://picsum.photos/seed/missfortune/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "pyke",
     name: "Pyke",
     nameZh: "血港鬼影",
     aliases: ["派克", "paike"],
-    avatarUrl: "/champions/pyke.png",
-    splashUrl: "https://picsum.photos/seed/pyke/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "sett",
     name: "Sett",
     nameZh: "腕豪",
     aliases: ["瑟提", "劲夫", "seti", "jinfu"],
-    avatarUrl: "/champions/sett.png",
-    splashUrl: "https://picsum.photos/seed/sett/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "teemo",
     name: "Teemo",
     nameZh: "迅捷斥候",
     aliases: ["提莫", "timo"],
-    avatarUrl: "/champions/teemo.png",
-    splashUrl: "https://picsum.photos/seed/teemo/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "thresh",
     name: "Thresh",
     nameZh: "魂锁典狱长",
     aliases: ["锤石", "chushi"],
-    avatarUrl: "/champions/thresh.png",
-    splashUrl: "https://picsum.photos/seed/thresh/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "varus",
     name: "Varus",
     nameZh: "惩戒之箭",
     aliases: ["韦鲁斯", "weilusi"],
-    avatarUrl: "/champions/varus.png",
-    splashUrl: "https://picsum.photos/seed/varus/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "yasuo",
     name: "Yasuo",
     nameZh: "疾风剑豪",
     aliases: ["亚索", "yasuo", "suozi", "hasaki"],
-    avatarUrl: "/champions/yasuo.png",
-    splashUrl: "https://picsum.photos/seed/yasuo/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "zed",
     name: "Zed",
     nameZh: "影流之主",
     aliases: ["劫", "zed", "jie"],
-    avatarUrl: "/champions/zed.png",
-    splashUrl: "https://picsum.photos/seed/zed/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "ziggs",
     name: "Ziggs",
     nameZh: "爆破鬼才",
     aliases: ["炸弹人", "吉格斯", "jigesi"],
-    avatarUrl: "/champions/ziggs.png",
-    splashUrl: "https://picsum.photos/seed/ziggs/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
   {
     id: "zyra",
     name: "Zyra",
     nameZh: "荆棘之兴",
     aliases: ["婕拉", "jiela"],
-    avatarUrl: "/champions/zyra.png",
-    splashUrl: "https://picsum.photos/seed/zyra/800/450",
+    avatarUrl: "",
+    splashUrl: "",
   },
 ]
+
+type ChampionImage = { alias: string; imageUrl: string }
+
+let championImagesPromise: Promise<void> | undefined
+
+function normalizeChampionName(value: string) {
+  return value.toLowerCase().replaceAll(/[^a-z0-9]/g, "")
+}
+
+async function hydrateChampionImages() {
+  championImagesPromise ??= fetch("/api/champion-images")
+    .then(async (response) => (response.ok ? ((await response.json()) as { images: ChampionImage[] }).images : []))
+    .then((images) => {
+      const imageByAlias = new Map(images.map((image) => [normalizeChampionName(image.alias), image.imageUrl]))
+
+      for (const champion of champions) {
+        const imageUrl = [champion.id, champion.name, ...champion.aliases]
+          .map(normalizeChampionName)
+          .map((name) => imageByAlias.get(name))
+          .find(Boolean)
+
+        if (imageUrl) {
+          champion.avatarUrl = imageUrl
+          champion.splashUrl = imageUrl
+        }
+      }
+    })
+    .catch(() => undefined)
+
+  await championImagesPromise
+}
 
 const augments: Augment[] = [
   {
@@ -358,6 +389,7 @@ export const mockDataService: DataService = {
   },
 
   async getTopChampions({ limit }) {
+    await hydrateChampionImages()
     return shuffle(champions)
       .slice(0, limit)
       .map((champion, i) => ({
@@ -371,6 +403,7 @@ export const mockDataService: DataService = {
   },
 
   async getTrendingChampions() {
+    await hydrateChampionImages()
     const pool = shuffle(champions).slice(0, 10)
     return {
       up: pool.slice(0, 5).map((champion) => ({
@@ -387,6 +420,7 @@ export const mockDataService: DataService = {
   },
 
   async getTopAugments({ limit }) {
+    await hydrateChampionImages()
     return shuffle(augments)
       .slice(0, limit)
       .map((augment) => ({
@@ -398,6 +432,7 @@ export const mockDataService: DataService = {
   },
 
   async searchChampions({ query }) {
+    await hydrateChampionImages()
     const q = query.toLowerCase()
     const results = champions
       .filter(
@@ -417,6 +452,7 @@ export const mockDataService: DataService = {
   },
 
   async getChampionDetail({ id }) {
+    await hydrateChampionImages()
     const champion = pickChamp(id)
     return {
       champion,
@@ -452,6 +488,7 @@ export const mockDataService: DataService = {
   },
 
   async getAugmentDetail({ id }) {
+    await hydrateChampionImages()
     const augment = augments.find((a) => a.id === id) ?? augments[0]
     return {
       augment,
@@ -476,6 +513,7 @@ export const mockDataService: DataService = {
   },
 
   async getAtlasPreview() {
+    await hydrateChampionImages()
     const nodes = [
       ...shuffle(champions)
         .slice(0, 12)
