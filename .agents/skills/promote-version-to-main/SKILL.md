@@ -19,9 +19,9 @@ The remote is not tied to GitHub or a fixed repository URL. The script uses the 
 
 ## Preservation rule
 
-Existing version branches are never repointed. Before applying, the script checks whether the current remote main commit is already represented by a `vN` branch locally or on origin.
+Existing version branches are never repointed. Before applying, the script checks whether the current remote main commit is already represented by a `vN` branch locally or on the selected version's ancestry.
 
-- If it is represented, all prior version histories are already preserved and no archive branch is changed.
+- If it is represented or is an ancestor of the selected version, all prior version histories are already preserved and no archive branch is changed.
 - If it is not represented, supply a new unused archive branch explicitly:
 
   ```bash

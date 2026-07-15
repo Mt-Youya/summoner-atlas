@@ -70,6 +70,9 @@ remote_source=$(git rev-parse --verify "refs/remotes/$remote/$source_branch" 2>/
 
 preserved_by=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/heads/v* "refs/remotes/$remote/v*" | awk -v commit="$remote_main" '$2 == commit { print $1; exit }')
 needs_archive=false
+if [[ -z $preserved_by && $remote_main != "$source_commit" ]] && git merge-base --is-ancestor "$remote_main" "$source_commit"; then
+  preserved_by="$source_branch (ancestor)"
+fi
 if [[ -z $preserved_by && $remote_main != "$source_commit" ]]; then
   needs_archive=true
 fi
