@@ -203,7 +203,7 @@ function StrongPicksSection({
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700 ease-out"
-                  style={{ backgroundImage: `url(${item.champion.splashUrl})` }}
+                  style={item.champion.splashUrl ? { backgroundImage: `url(${item.champion.splashUrl})` } : undefined}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/70 to-transparent" />
 
@@ -261,7 +261,7 @@ function TrendEntry({ item, positive }: { item: ChampionTrend; positive: boolean
     >
       <div
         className="size-10 rounded-lg bg-cover bg-center shrink-0"
-        style={{ backgroundImage: `url(${item.champion.splashUrl})` }}
+        style={item.champion.splashUrl ? { backgroundImage: `url(${item.champion.splashUrl})` } : undefined}
       />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-foreground">{item.champion.nameZh}</p>
@@ -393,7 +393,7 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
                   <div
                     key={champ.id}
                     className="size-7 rounded-full bg-cover bg-center border-2 border-card ring-1 ring-[var(--border-subtle)]"
-                    style={{ backgroundImage: `url(${champ.splashUrl})` }}
+                    style={champ.splashUrl ? { backgroundImage: `url(${champ.splashUrl})` } : undefined}
                     title={champ.nameZh}
                   />
                 ))}
@@ -622,7 +622,7 @@ function SearchDropdown({
         >
           <div
             className="size-10 rounded-lg bg-cover bg-center shrink-0"
-            style={{ backgroundImage: `url(${item.champion.splashUrl})` }}
+            style={item.champion.splashUrl ? { backgroundImage: `url(${item.champion.splashUrl})` } : undefined}
           />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground group-hover:text-hextech-blue transition-colors">
