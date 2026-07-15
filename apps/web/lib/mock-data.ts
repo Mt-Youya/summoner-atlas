@@ -1,8 +1,4 @@
-import type {
-  Champion,
-  Augment,
-  DataService,
-} from "./data-service"
+import type { Champion, Augment, DataService } from "./data-service"
 
 /* ── Mock data pool ── */
 
