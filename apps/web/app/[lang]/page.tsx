@@ -17,7 +17,7 @@ import {
   ZapIcon,
   Cancel01Icon,
 } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton } from "@summoner-atlas/ui"
+import { Badge, Skeleton, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import type {
@@ -272,14 +272,10 @@ function TrendEntry({ item, positive }: { item: ChampionTrend; positive: boolean
           {positive ? "+" : ""}
           {change.toFixed(1)}%
         </span>
-        <div
-          className={`h-1 w-16 rounded-full mt-1 ml-auto overflow-hidden ${positive ? "bg-emerald-500/20" : "bg-red-500/20"}`}
-        >
-          <div
-            className={`h-full rounded-full transition-all duration-700 ${positive ? "bg-emerald-400" : "bg-red-400"}`}
-            style={{ width: `${Math.min(Math.abs(change) * 20, 100)}%` }}
-          />
-        </div>
+        <Progress
+          value={Math.min(Math.abs(change) * 20, 100)}
+          className={`h-1 w-16 mt-1 ml-auto ${positive ? "bg-emerald-500/20 [&_[data-slot=progress-track]]:bg-emerald-400" : "bg-red-500/20 [&_[data-slot=progress-track]]:bg-red-400"}`}
+        />
       </div>
     </Link>
   )

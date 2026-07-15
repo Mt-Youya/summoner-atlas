@@ -20,6 +20,7 @@
   --glow-mid: 0 0 8px rgba(0, 212, 255, 0.15), 0 0 18px rgba(123, 47, 190, 0.06);
   --glow-low: 0 0 3px rgba(0, 212, 255, 0.08);
   --glow-amber: 0 0 10px rgba(240, 192, 96, 0.22);
+  --glow-card-hover: 0 0 6px rgba(0, 212, 255, 0.2), 0 0 14px rgba(0, 212, 255, 0.06);
 
   /* Shadcn semantic tokens — Light mode (Hextech-flavored) */
   --background: #f5f7fa;

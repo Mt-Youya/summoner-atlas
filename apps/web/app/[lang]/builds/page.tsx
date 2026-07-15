@@ -4,7 +4,17 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Search01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Separator } from "@summoner-atlas/ui"
+import {
+  Badge,
+  Skeleton,
+  Separator,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import type { ChampionDetail, GameMode } from "@/lib/data-service"
@@ -59,22 +69,20 @@ export default function BuildsPage() {
           icon={Search01Icon}
           className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none z-10"
         />
-        <select
-          className="w-full max-w-md h-10 pl-9 pr-4 rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          value={selectedId ?? ""}
-          onChange={(e) => {
-            if (e.target.value) loadBuild(e.target.value)
-          }}
-        >
-          <option value="" disabled>
-            {t("selectChampion")}
-          </option>
-          {championList.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nameZh} — {c.name}
-            </option>
-          ))}
-        </select>
+        <Select value={selectedId ?? ""} onValueChange={(value) => value && loadBuild(value)}>
+          <SelectTrigger className="w-full max-w-md pl-9">
+            <SelectValue placeholder={t("selectChampion")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {championList.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.nameZh} — {c.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Content */}

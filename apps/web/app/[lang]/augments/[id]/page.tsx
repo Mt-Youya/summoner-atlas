@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { ArrowLeft01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
-import { Badge, Skeleton, Separator, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
+import { Badge, Skeleton, Separator, Avatar, AvatarImage, AvatarFallback, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import { PatchTrendChart } from "@/components/charts/patch-trend-chart"
@@ -162,12 +162,7 @@ export default function AugmentDetailPage() {
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-hextech-blue rounded-full transition-all duration-700"
-                    style={{ width: `${sc.synergyScore}%` }}
-                  />
-                </div>
+                <Progress value={sc.synergyScore} className="flex-1 h-1.5 bg-hextech-blue/20" />
                 <span className="text-xs font-bold tabular-nums text-hextech-blue glow-mid">
                   {sc.synergyScore.toFixed(0)}
                 </span>
