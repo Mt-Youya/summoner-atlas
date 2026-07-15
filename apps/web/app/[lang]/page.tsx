@@ -372,8 +372,12 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
               data-card
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="size-12 rounded-xl bg-hextech-purple/15 flex items-center justify-center">
-                  <HugeiconsIcon icon={SparklesIcon} className="size-6 text-hextech-purple" />
+                <div className="size-12 overflow-hidden rounded-xl bg-hextech-purple/15">
+                  {item.augment.iconUrl ? (
+                    <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                  ) : (
+                    <HugeiconsIcon icon={SparklesIcon} className="m-3 size-6 text-hextech-purple" />
+                  )}
                 </div>
                 <span className="text-2xl font-bold tabular-nums glow-mid">
                   {item.winRate.toFixed(1)}
@@ -382,7 +386,7 @@ function AugmentsSection({ augments, t }: { augments: AugmentRank[]; t: (key: st
               </div>
 
               <h3 className="text-lg font-semibold text-foreground mb-1">{item.augment.nameZh}</h3>
-              <p className="text-xs text-muted-foreground mb-4">{item.augment.name}</p>
+              <p className="mb-4 line-clamp-2 text-xs text-muted-foreground">{item.augment.description}</p>
 
               <div className="flex items-center gap-1">
                 {item.suitableChampions.slice(0, 4).map((champ) => (

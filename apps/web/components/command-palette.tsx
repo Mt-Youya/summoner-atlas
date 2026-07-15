@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { Badge } from "@summoner-atlas/ui"
+import { Avatar, AvatarFallback, AvatarImage, Badge } from "@summoner-atlas/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@summoner-atlas/ui/dialog"
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@summoner-atlas/ui/command"
 import { useCommandPalette } from "@/hooks/use-command-palette"
@@ -81,6 +81,10 @@ export function CommandPalette() {
               <CommandGroup heading={t("champions")}>
                 {champions.slice(0, 6).map((c) => (
                   <CommandItem key={c.champion.id} onSelect={() => navigate(`/champions/${c.champion.id}`)}>
+                    <Avatar size="sm">
+                      <AvatarImage src={c.champion.avatarUrl} alt={c.champion.name} />
+                      <AvatarFallback>{c.champion.nameZh.slice(0, 1)}</AvatarFallback>
+                    </Avatar>
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <span className="font-medium text-sm truncate">{c.champion.nameZh}</span>
                       <span className="text-xs text-muted-foreground">{c.champion.name}</span>
@@ -96,9 +100,16 @@ export function CommandPalette() {
               <CommandGroup heading={t("augments")}>
                 {augments.slice(0, 6).map((a) => (
                   <CommandItem key={a.augment.id} onSelect={() => navigate(`/augments/${a.augment.id}`)}>
+                    <div className="size-6 shrink-0 overflow-hidden rounded-md bg-muted">
+                      {a.augment.iconUrl ? (
+                        <img src={a.augment.iconUrl} alt="" className="size-full object-cover" />
+                      ) : (
+                        <span className="block size-full bg-hextech-purple/30" />
+                      )}
+                    </div>
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <span className="font-medium text-sm truncate">{a.augment.nameZh}</span>
-                      <span className="text-xs text-muted-foreground">{a.augment.name}</span>
+                      <span className="truncate text-xs text-muted-foreground">{a.augment.description}</span>
                     </div>
                     <Badge variant="secondary" className="text-[10px]">
                       {a.winRate.toFixed(1)}%

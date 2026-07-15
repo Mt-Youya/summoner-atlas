@@ -253,7 +253,9 @@ export default function AugmentsPage() {
                         </div>
                         <div>
                           <p className="font-semibold text-foreground text-sm">{item.augment.nameZh}</p>
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">{item.augment.name}</p>
+                          <p className="max-w-[240px] truncate text-xs text-muted-foreground" title={item.augment.description}>
+                            {item.augment.description}
+                          </p>
                         </div>
                       </Link>
                     </TableCell>
@@ -299,7 +301,9 @@ export default function AugmentsPage() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
-              <p className="text-xs text-muted-foreground truncate">{item.augment.name}</p>
+              <p className="truncate text-xs text-muted-foreground" title={item.augment.description}>
+                {item.augment.description}
+              </p>
             </div>
             <div className="text-right">
               <p className="font-bold text-sm tabular-nums glow-mid">{item.winRate.toFixed(1)}%</p>

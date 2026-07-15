@@ -110,9 +110,16 @@ export default function MetaPage() {
                 className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors"
               >
                 <span className="font-mono text-sm text-muted-foreground w-6">#{i + 1}</span>
-                <HugeiconsIcon icon={SparklesIcon} className="size-4 text-hextech-blue" />
+                <div className="size-8 overflow-hidden rounded-lg bg-muted">
+                  {item.augment.iconUrl ? (
+                    <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                  ) : (
+                    <HugeiconsIcon icon={SparklesIcon} className="m-2 size-4 text-hextech-blue" />
+                  )}
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
+                  <p className="truncate text-xs text-muted-foreground">{item.augment.description}</p>
                 </div>
                 <Badge variant="secondary" className="text-xs">
                   {item.winRate.toFixed(1)}%

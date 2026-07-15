@@ -182,7 +182,7 @@ const champions: Champion[] = [
 ]
 
 type ChampionImage = { alias: string; imageUrl: string }
-type AugmentImage = { name: string; imageUrl: string }
+type AugmentImage = { name: string; imageUrl: string; description?: string }
 
 let championImagesPromise: Promise<void> | undefined
 let augmentImagesPromise: Promise<void> | undefined
@@ -366,13 +366,21 @@ async function hydrateAugmentImages() {
   augmentImagesPromise ??= fetch("/api/augment-images")
     .then(async (response) => (response.ok ? ((await response.json()) as { images: AugmentImage[] }).images : []))
     .then((images) => {
-      const imageByName = new Map(images.map((image) => [normalizeChampionName(image.name), image.imageUrl]))
+      const imageByName = new Map<string, AugmentImage>()
+      for (const image of images) {
+        const normalizedName = normalizeChampionName(image.name)
+        const current = imageByName.get(normalizedName)
+        if (!current || image.description) imageByName.set(normalizedName, image)
+      }
 
       for (const augment of augments) {
         const normalizedName = normalizeChampionName(augment.name)
-        const imageUrl = imageByName.get(normalizedName) ?? imageByName.get(augmentImageAliases[normalizedName])
+        const image = imageByName.get(normalizedName) ?? imageByName.get(augmentImageAliases[normalizedName])
 
-        if (imageUrl) augment.iconUrl = imageUrl
+        if (image) {
+          augment.iconUrl = image.imageUrl
+          if (image.description) augment.description = image.description
+        }
       }
     })
     .catch(() => undefined)
@@ -544,35 +552,47 @@ export const mockDataService: DataService = {
     await hydrateChampionImages()
     await hydrateAugmentImages()
     const nodes = [
-      ...shuffle(champions)
-        .slice(0, 12)
-        .map((c, i) => ({
-          id: c.id,
-          name: c.nameZh,
-          type: "champion" as const,
-          x: 10 + (i % 4) * 26,
-          y: 10 + Math.floor(i / 4) * 30,
-          size: 3 + pseudoRandom() * 4,
-        })),
-      ...shuffle(augments)
-        .slice(0, 8)
-        .map((a, i) => ({
-          id: a.id,
-          name: a.nameZh,
-          type: "augment" as const,
-          x: 20 + (i % 4) * 20,
-          y: 18 + Math.floor(i / 4) * 28,
-          size: 2 + pseudoRandom() * 3,
-        })),
+      ...champions.slice(0, 24).map((c, i) => ({
+        id: c.id,
+        name: c.nameZh,
+        type: "champion" as const,
+        imageUrl: c.avatarUrl,
+        x: 10 + (i % 6) * 16,
+        y: 10 + Math.floor(i / 6) * 24,
+        size: 4,
+      })),
+      ...augments.slice(0, 16).map((a, i) => ({
+        id: a.id,
+        name: a.nameZh,
+        type: "augment" as const,
+        imageUrl: a.iconUrl,
+        x: 14 + (i % 4) * 24,
+        y: 16 + Math.floor(i / 4) * 22,
+        size: 4,
+      })),
     ]
     const championNodes = nodes.filter((n) => n.type === "champion")
     const augmentNodes = nodes.filter((n) => n.type === "augment")
     const links = []
-    for (let i = 0; i < 20; i++) {
-      const source = championNodes[Math.floor(pseudoRandom() * championNodes.length)]
-      const target = augmentNodes[Math.floor(pseudoRandom() * augmentNodes.length)]
-      links.push({ source: source.id, target: target.id, strength: +(0.3 + pseudoRandom() * 0.7).toFixed(2) })
+
+    for (const [augmentIndex, augment] of augmentNodes.entries()) {
+      for (let offset = 0; offset < 3; offset++) {
+        const champion = championNodes[(augmentIndex * 5 + offset * 7) % championNodes.length]
+        links.push({
+          source: champion.id,
+          target: augment.id,
+          strength: +(0.56 + ((augmentIndex * 17 + offset * 11) % 35) / 100).toFixed(2),
+        })
+      }
     }
+
+    const linkCount = new Map(nodes.map((node) => [node.id, 0]))
+    for (const link of links) {
+      linkCount.set(link.source, (linkCount.get(link.source) ?? 0) + 1)
+      linkCount.set(link.target, (linkCount.get(link.target) ?? 0) + 1)
+    }
+    for (const node of nodes) node.size = 3.5 + (linkCount.get(node.id) ?? 0) * 0.45
+
     return { nodes, links }
   },
 }

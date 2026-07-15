@@ -32,33 +32,83 @@ function normalizeImageUrl(imageUrl: string) {
   return `${baseUrl}${assetPath}`
 }
 
+function colorImageUrl(imageUrl: string) {
+  const fileName = new URL(imageUrl).pathname.split("/").at(-1)?.toLowerCase()
+  const slug = fileName?.replace(/_small\.png$/, "").replace(/\.png$/, "")
+
+  return slug
+    ? `https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/${slug}_large.png`
+    : imageUrl
+}
+
+function descriptionText(description: string) {
+  return description
+    .replaceAll(/<br\s*\/?\s*>/gi, " ")
+    .replaceAll(/<[^>]+>/g, "")
+    .replaceAll(/\s+/g, " ")
+    .trim()
+}
+
+function isNewerVersion(candidate: string, current: string) {
+  const candidateParts = candidate.split(".").map(Number)
+  const currentParts = current.split(".").map(Number)
+
+  return candidateParts.some((part, index) => part !== currentParts[index] && part > (currentParts[index] ?? 0))
+}
+
 export async function GET() {
   if (!supabaseUrl || !serviceRoleKey) {
     return NextResponse.json({ images: [] }, { status: 503 })
   }
 
-  const url = new URL("/rest/v1/static_augments", supabaseUrl)
-  url.searchParams.set("select", "name_en,icon_url")
-  url.searchParams.set("icon_url", "not.is.null")
+  const staticUrl = new URL("/rest/v1/static_augments", supabaseUrl)
+  staticUrl.searchParams.set("select", "id,name_en,icon_url")
+  staticUrl.searchParams.set("icon_url", "not.is.null")
 
-  const response = await fetch(url, {
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-    },
-    next: { revalidate: 3600 },
-  })
+  const descriptionsUrl = new URL("/rest/v1/resg_augments", supabaseUrl)
+  descriptionsUrl.searchParams.set("select", "augment_id,description,version")
+  descriptionsUrl.searchParams.set("description", "not.is.null")
 
-  if (!response.ok) {
+  const headers = {
+    apikey: serviceRoleKey,
+    Authorization: `Bearer ${serviceRoleKey}`,
+  }
+  const [staticResponse, descriptionsResponse] = await Promise.all([
+    fetch(staticUrl, { headers, next: { revalidate: 3600 } }),
+    fetch(descriptionsUrl, { headers, next: { revalidate: 3600 } }),
+  ])
+
+  if (!staticResponse.ok) {
     return NextResponse.json({ images: [] }, { status: 502 })
   }
 
-  const images = (await response.json()) as { name_en: string; icon_url: string | null }[]
+  const augments = (await staticResponse.json()) as { id: number; name_en: string; icon_url: string | null }[]
+  const descriptions = descriptionsResponse.ok
+    ? ((await descriptionsResponse.json()) as { augment_id: number; description: string; version: string }[])
+    : []
+  const latestDescriptions = new Map<number, { description: string; version: string }>()
+
+  for (const description of descriptions) {
+    const current = latestDescriptions.get(description.augment_id)
+    if (!current || isNewerVersion(description.version, current.version)) {
+      latestDescriptions.set(description.augment_id, description)
+    }
+  }
+
   return NextResponse.json(
     {
-      images: images.flatMap(({ name_en, icon_url }) =>
-        icon_url ? [{ name: name_en, imageUrl: normalizeImageUrl(icon_url) }] : []
-      ),
+      images: augments.flatMap(({ id, name_en, icon_url }) => {
+        if (!icon_url) return []
+
+        const description = latestDescriptions.get(id)?.description
+        return [
+          {
+            name: name_en,
+            imageUrl: colorImageUrl(normalizeImageUrl(icon_url)),
+            description: description ? descriptionText(description) : undefined,
+          },
+        ]
+      }),
     },
     { headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600" } }
   )

@@ -89,12 +89,16 @@ export default function AugmentDetailPage() {
           >
             <HugeiconsIcon icon={ArrowLeft01Icon} className="size-5 text-muted-foreground" />
           </Link>
-          <div className="size-12 rounded-xl bg-muted flex items-center justify-center">
-            <HugeiconsIcon icon={SparklesIcon} className="size-6 text-hextech-blue" />
+          <div className="size-12 overflow-hidden rounded-xl bg-muted">
+            {detail.augment.iconUrl ? (
+              <img src={detail.augment.iconUrl} alt={detail.augment.nameZh} className="size-full object-cover" />
+            ) : (
+              <HugeiconsIcon icon={SparklesIcon} className="m-3 size-6 text-hextech-blue" />
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold text-foreground">{detail.augment.nameZh}</h1>
-            <p className="text-sm text-muted-foreground">{detail.augment.name}</p>
+            <p className="truncate text-sm text-muted-foreground">{detail.augment.description}</p>
           </div>
           <div className="text-right">
             <span className="text-2xl font-extrabold tabular-nums glow-mid">{detail.winRate.toFixed(1)}%</span>

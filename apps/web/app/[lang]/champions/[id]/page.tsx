@@ -129,8 +129,19 @@ function AugmentCombos({ detail }: { detail: ChampionDetail }) {
               {combo.matches.toLocaleString()} {t("games")}
             </span>
           </div>
-          <h4 className="font-semibold text-foreground mb-1">{combo.augment.nameZh}</h4>
-          <p className="text-xs text-muted-foreground mb-3">{combo.augment.name}</p>
+          <div className="mb-3 flex items-center gap-3">
+            <div className="size-10 shrink-0 overflow-hidden rounded-xl bg-muted">
+              {combo.augment.iconUrl ? (
+                <img src={combo.augment.iconUrl} alt={combo.augment.nameZh} className="size-full object-cover" />
+              ) : (
+                <HugeiconsIcon icon={SparklesIcon} className="m-2.5 size-5 text-hextech-blue" />
+              )}
+            </div>
+            <div className="min-w-0">
+              <h4 className="font-semibold text-foreground">{combo.augment.nameZh}</h4>
+              <p className="truncate text-xs text-muted-foreground">{combo.augment.description}</p>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <Progress value={combo.synergyScore} className="flex-1 h-1.5 bg-hextech-blue/20" />
             <span className="text-xs font-bold tabular-nums text-hextech-blue glow-mid">
