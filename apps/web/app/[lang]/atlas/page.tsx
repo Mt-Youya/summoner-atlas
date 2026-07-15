@@ -8,7 +8,9 @@ import { Button, Skeleton } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
 import * as d3 from "d3"
-import type { AtlasGraphData, AtlasGraphNode } from "@/lib/data-service"
+import type { AtlasGraphData, AtlasGraphLink, AtlasGraphNode } from "@/lib/data-service"
+
+type SimulationNode = AtlasGraphNode & d3.SimulationNodeDatum
 
 export default function AtlasPage() {
   const { t, locale } = useTranslation()
@@ -43,7 +45,7 @@ export default function AtlasPage() {
     svg.selectAll("*").remove()
 
     const width = svgRef.current.clientWidth
-    const height = Math.min(600, window.innerHeight * 0.7)
+    const height = Math.min(720, window.innerHeight * 0.78)
     svg.attr("viewBox", `0 0 ${width} ${height}`)
 
     const g = svg.append("g")
@@ -57,24 +59,41 @@ export default function AtlasPage() {
     svg.call(zoom)
 
     // Prepare data
-    const nodes: (AtlasGraphNode & { index?: number; x?: number; y?: number; vx?: number; vy?: number })[] =
-      data.nodes.map((n) => ({ ...n }))
-    const links = data.links.map((l) => ({ ...l }))
+    const nodes: SimulationNode[] = data.nodes.map((node) => ({ ...node }))
+    const links: AtlasGraphLink[] = data.links.map((link) => ({ ...link }))
+    const nodeRadius = (node: AtlasGraphNode) => node.size * 4 + 8
+
+    const defs = svg.append("defs")
+    ;[
+      { id: "nodeChampGrad", c1: "#00D4FF", c2: "#0066AA" },
+      { id: "nodeAugGrad", c1: "#7B2FBE", c2: "#3A1570" },
+    ].forEach(({ id, c1, c2 }) => {
+      const grad = defs.append("radialGradient").attr("id", id)
+      grad.append("stop").attr("offset", "0%").attr("stop-color", c1)
+      grad.append("stop").attr("offset", "100%").attr("stop-color", c2)
+    })
+    for (const node of nodes) {
+      defs
+        .append("clipPath")
+        .attr("id", `atlas-node-${node.type}-${node.id}`)
+        .append("circle")
+        .attr("r", nodeRadius(node))
+    }
 
     const simulation = d3
-      .forceSimulation(nodes)
+      .forceSimulation<SimulationNode>(nodes)
       .force(
         "link",
         d3
-          .forceLink(links)
-          .id((d: any) => d.id)
-          .distance(80)
+          .forceLink<SimulationNode, AtlasGraphLink>(links)
+          .id((node) => node.id)
+          .distance(110)
       )
-      .force("charge", d3.forceManyBody().strength(-200))
+      .force("charge", d3.forceManyBody().strength(-360))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collision",
-        d3.forceCollide().radius((d: any) => d.size * 5 + 8)
+        d3.forceCollide<SimulationNode>().radius((node) => nodeRadius(node) + 22)
       )
 
     if (prefersReduced) {
@@ -108,34 +127,41 @@ export default function AtlasPage() {
         router.push(`/${locale}${path}`)
       })
 
-    node
-      .append("circle")
-      .attr("r", (d) => d.size * 3 + 6)
-      .attr("fill", (d) => (d.type === "champion" ? "url(#nodeChampGrad)" : "url(#nodeAugGrad)"))
-      .attr("stroke", (d) => (d.type === "champion" ? "#00D4FF" : "#7B2FBE"))
-      .attr("stroke-width", 1.5)
-      .attr("opacity", 0.9)
+    node.each(function (d: AtlasGraphNode) {
+      const group = d3.select(this)
+      const radius = nodeRadius(d)
+      const nodeColor = d.type === "champion" ? "#00D4FF" : "#7B2FBE"
 
-    node
-      .append("text")
-      .text((d) => d.name)
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("fill", "#E5E7EB")
-      .attr("font-size", (d) => Math.max(9, d.size * 2.5))
-      .attr("font-family", "Outfit, sans-serif")
-      .attr("pointer-events", "none")
-      .style("text-shadow", "0 0 6px rgba(0,0,0,0.8)")
+      group.append("title").text(`${d.type === "champion" ? t("champion") : t("augment")}：${d.name}`)
 
-    // Glow filters
-    const defs = svg.append("defs")
-    ;[
-      { id: "nodeChampGrad", c1: "#00D4FF", c2: "#0066AA" },
-      { id: "nodeAugGrad", c1: "#7B2FBE", c2: "#3A1570" },
-    ].forEach(({ id, c1, c2 }) => {
-      const grad = defs.append("radialGradient").attr("id", id)
-      grad.append("stop").attr("offset", "0%").attr("stop-color", c1)
-      grad.append("stop").attr("offset", "100%").attr("stop-color", c2)
+      if (d.imageUrl) {
+        group
+          .append("image")
+          .attr("href", d.imageUrl)
+          .attr("x", -radius)
+          .attr("y", -radius)
+          .attr("width", radius * 2)
+          .attr("height", radius * 2)
+          .attr("preserveAspectRatio", "xMidYMid slice")
+          .attr("clip-path", `url(#atlas-node-${d.type}-${d.id})`)
+      } else {
+        group
+          .append("circle")
+          .attr("r", radius)
+          .attr("fill", d.type === "champion" ? "url(#nodeChampGrad)" : "url(#nodeAugGrad)")
+      }
+
+      group.append("circle").attr("r", radius).attr("fill", "none").attr("stroke", nodeColor).attr("stroke-width", 2)
+      group
+        .append("text")
+        .text(d.name)
+        .attr("text-anchor", "middle")
+        .attr("dy", radius + 13)
+        .attr("fill", "#E5E7EB")
+        .attr("font-size", 11)
+        .attr("font-family", "Outfit, sans-serif")
+        .attr("pointer-events", "none")
+        .style("text-shadow", "0 0 6px rgba(0,0,0,0.8)")
     })
 
     // Tick
@@ -162,13 +188,13 @@ export default function AtlasPage() {
     return () => {
       simulation.stop()
     }
-  }, [data, locale, router])
+  }, [data, locale, router, t])
 
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
         <Skeleton className="h-9 w-48" />
-        <Skeleton className="h-[500px] rounded-2xl" />
+        <Skeleton className="h-[620px] rounded-2xl" />
       </div>
     )
   }
@@ -196,7 +222,7 @@ export default function AtlasPage() {
       <div>
         <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Atlas</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("openAtlas")}</h1>
-        <p className="text-sm text-muted-foreground mt-1">{t("augmentCrosstableHint")}</p>
+        <p className="text-sm text-muted-foreground mt-1">{t("atlasGraphDescription")}</p>
       </div>
 
       {/* Legend */}
@@ -209,12 +235,18 @@ export default function AtlasPage() {
           <span className="size-3 rounded-full bg-[#7B2FBE] shadow-[0_0_6px_#7B2FBE]" />
           <span className="text-muted-foreground">{t("augments")}</span>
         </div>
-        <span className="text-xs text-muted-foreground ml-auto hidden sm:inline">{t("augmentSynergyRef")}</span>
+        <span className="text-xs text-muted-foreground ml-auto hidden sm:inline">{t("atlasGraphEdgeMeaning")}</span>
+      </div>
+
+      <div className="grid gap-3 text-sm text-muted-foreground md:grid-cols-3">
+        <p>{t("atlasGraphNodeMeaning")}</p>
+        <p>{t("atlasGraphEdgeMeaning")}</p>
+        <p>{t("atlasGraphDisclosure")}</p>
       </div>
 
       {/* Graph */}
       <div className="rounded-2xl card-glow bg-card overflow-hidden">
-        <svg ref={svgRef} className="w-full" style={{ minHeight: "500px" }} />
+        <svg ref={svgRef} className="w-full" style={{ minHeight: "620px" }} />
       </div>
 
       <p className="text-xs text-muted-foreground text-center">{t("contextHelp")}</p>

@@ -78,6 +78,7 @@ export interface AtlasGraphNode {
   id: string
   name: string
   type: "champion" | "augment"
+  imageUrl: string
   x: number
   y: number
   size: number

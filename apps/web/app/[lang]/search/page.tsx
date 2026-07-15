@@ -143,12 +143,16 @@ export default function SearchPage() {
               href={`/augments/${item.augment.id}`}
               className="flex items-center gap-4 rounded-xl card-glow bg-card p-4 hover:shadow-[var(--glow-mid)] transition-all"
             >
-              <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
-                <HugeiconsIcon icon={SparklesIcon} className="size-5 text-hextech-blue" />
+              <div className="size-10 overflow-hidden rounded-xl bg-muted">
+                {item.augment.iconUrl ? (
+                  <img src={item.augment.iconUrl} alt={item.augment.nameZh} className="size-full object-cover" />
+                ) : (
+                  <HugeiconsIcon icon={SparklesIcon} className="m-2.5 size-5 text-hextech-blue" />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm text-foreground">{item.augment.nameZh}</p>
-                <p className="text-xs text-muted-foreground truncate">{item.augment.name}</p>
+                <p className="truncate text-xs text-muted-foreground">{item.augment.description}</p>
               </div>
               <div className="text-right">
                 <p className="font-bold text-sm tabular-nums">{item.winRate.toFixed(1)}%</p>
