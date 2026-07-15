@@ -52,8 +52,8 @@ export default function ChampionsPage() {
 
   // Debounce search
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setDebouncedSearch(search), 300)
+    return () => clearTimeout(timer)
   }, [search])
 
   const load = useCallback(async () => {
