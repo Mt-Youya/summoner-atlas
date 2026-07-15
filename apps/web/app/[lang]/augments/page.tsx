@@ -58,7 +58,7 @@ export default function AugmentsPage() {
     setLoading(true)
     setError(false)
     try {
-      const result = await mockDataService.getTopAugments({ mode, limit: 50 })
+      const result = await mockDataService.getTopAugments({ mode, limit: 500 })
       setData(result)
     } catch {
       setError(true)

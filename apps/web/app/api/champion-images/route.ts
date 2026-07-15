@@ -38,27 +38,65 @@ export async function GET() {
   }
 
   const url = new URL("/rest/v1/static_champions", supabaseUrl)
-  url.searchParams.set("select", "alias,image_url")
+  url.searchParams.set("select", "id,alias,name_zh,name_en,image_url")
   url.searchParams.set("image_url", "not.is.null")
 
-  const response = await fetch(url, {
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-    },
-    next: { revalidate: 3600 },
-  })
+  const statsUrl = new URL("/rest/v1/resg_champion_stats", supabaseUrl)
+  statsUrl.searchParams.set("select", "champion_id,total_matches,avg_win_rate,version")
+
+  const headers = {
+    apikey: serviceRoleKey,
+    Authorization: `Bearer ${serviceRoleKey}`,
+  }
+  const [response, statsResponse] = await Promise.all([
+    fetch(url, { headers, next: { revalidate: 3600 } }),
+    fetch(statsUrl, { headers, next: { revalidate: 3600 } }),
+  ])
 
   if (!response.ok) {
     return NextResponse.json({ images: [] }, { status: 502 })
   }
 
-  const images = (await response.json()) as { alias: string; image_url: string | null }[]
+  const champions = (await response.json()) as {
+    id: number
+    alias: string
+    name_zh: string
+    name_en: string
+    image_url: string | null
+  }[]
+  const stats = statsResponse.ok
+    ? ((await statsResponse.json()) as {
+        champion_id: number
+        total_matches: number
+        avg_win_rate: number
+        version: string
+      }[])
+    : []
+  const latestStats = new Map<number, { total_matches: number; avg_win_rate: number; version: string }>()
+  for (const stat of stats) {
+    const current = latestStats.get(stat.champion_id)
+    if (!current || stat.version.localeCompare(current.version, undefined, { numeric: true }) > 0) {
+      latestStats.set(stat.champion_id, stat)
+    }
+  }
+
   return NextResponse.json(
     {
-      images: images.flatMap(({ alias, image_url }) =>
-        image_url ? [{ alias, imageUrl: normalizeImageUrl(image_url) }] : []
-      ),
+      champions: champions.flatMap(({ id, alias, name_zh, name_en, image_url }) => {
+        if (!image_url || alias === "None") return []
+        const stat = latestStats.get(id)
+        return [
+          {
+            id,
+            alias,
+            nameZh: name_zh,
+            name: name_en,
+            imageUrl: normalizeImageUrl(image_url),
+            matches: stat?.total_matches ?? null,
+            winRate: stat?.avg_win_rate ?? null,
+          },
+        ]
+      }),
     },
     { headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600" } }
   )

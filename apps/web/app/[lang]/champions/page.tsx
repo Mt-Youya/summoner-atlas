@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { Search01Icon, ArrowUp01Icon, ArrowDown01Icon, ArrowUpDownIcon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Button, Badge, Skeleton, Avatar, AvatarImage, AvatarFallback } from "@summoner-atlas/ui"
+import { Card, CardHeader, CardContent } from "@summoner-atlas/ui/card"
 import { Input } from "@summoner-atlas/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@summoner-atlas/ui/select"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@summoner-atlas/ui/table"
@@ -13,7 +14,7 @@ import { useTranslation } from "@/hooks/use-translation"
 import { confidenceVariant } from "@/lib/utils"
 import type { ChampionRank, GameMode, Region } from "@/lib/data-service"
 
-type SortField = "winRate" | "pickRate" | "matches" | "name" | "rank"
+type SortField = "winRate" | "matches" | "name" | "rank"
 type SortOrder = "asc" | "desc"
 
 const MODES: { value: GameMode; i18nKey: string }[] = [
@@ -59,7 +60,7 @@ export default function ChampionsPage() {
     setLoading(true)
     setError(false)
     try {
-      const result = await mockDataService.getTopChampions({ mode, region, limit: 50 })
+      const result = await mockDataService.getTopChampions({ mode, region, limit: 500 })
       setData(result)
     } catch {
       setError(true)
@@ -105,9 +106,6 @@ export default function ChampionsPage() {
       } else if (sortField === "winRate") {
         va = a.winRate
         vb = b.winRate
-      } else if (sortField === "pickRate") {
-        va = a.pickRate
-        vb = b.pickRate
       } else {
         va = a.matches
         vb = b.matches
@@ -181,6 +179,8 @@ export default function ChampionsPage() {
         <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">{t("championRanking")}</h1>
       </div>
 
+<Card className="overflow-hidden rounded-2xl card-glow bg-card">
+  <CardHeader>
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative w-full sm:w-64">
@@ -258,6 +258,8 @@ export default function ChampionsPage() {
         </span>
       </div>
 
+</CardHeader>
+<CardContent>
       {/* Empty state */}
       {filtered.length === 0 && !loading ? (
         <div className="text-center py-20">
@@ -296,11 +298,6 @@ export default function ChampionsPage() {
                       {t("winRate")} <SortIcon field="winRate" />
                     </span>
                   </TableHead>
-                  <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("pickRate")}>
-                    <span className="inline-flex items-center gap-1">
-                      {t("pickRate")} <SortIcon field="pickRate" />
-                    </span>
-                  </TableHead>
                   <TableHead className="cursor-pointer select-none text-right" onClick={() => handleSort("matches")}>
                     <span className="inline-flex items-center gap-1">
                       {t("matches")} <SortIcon field="matches" />
@@ -330,9 +327,6 @@ export default function ChampionsPage() {
                     </TableCell>
                     <TableCell className="text-right tabular-nums font-semibold text-sm">
                       {item.winRate.toFixed(1)}%
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums text-sm text-muted-foreground">
-                      {item.pickRate.toFixed(1)}%
                     </TableCell>
                     <TableCell className="text-right tabular-nums text-sm text-muted-foreground">
                       {item.matches.toLocaleString()}
@@ -376,6 +370,8 @@ export default function ChampionsPage() {
           </div>
         </>
       )}
+      </CardContent>
+  </Card>
     </div>
   )
 }

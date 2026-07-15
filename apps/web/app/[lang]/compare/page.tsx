@@ -40,7 +40,7 @@ export default function ComparePage() {
   // Load champion list on mount
   if (!initialized) {
     setInitialized(true)
-    mockDataService.getTopChampions({ mode: "aram", region: "cn", limit: 50 }).then((data) => {
+    mockDataService.getTopChampions({ mode: "aram", region: "cn", limit: 500 }).then((data) => {
       setChampions(data.map((d) => ({ id: d.champion.id, nameZh: d.champion.nameZh, name: d.champion.name })))
     })
   }
@@ -145,8 +145,8 @@ export default function ComparePage() {
                   <p className="text-[10px] text-muted-foreground">{t("winRate")}</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-extrabold glow-mid">{detailA.pickRate.toFixed(1)}%</p>
-                  <p className="text-[10px] text-muted-foreground">{t("pickRate")}</p>
+                  <p className="text-2xl font-extrabold glow-mid">{detailA.matches.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted-foreground">{t("matches")}</p>
                 </div>
               </div>
             </div>
@@ -165,8 +165,8 @@ export default function ComparePage() {
                   <p className="text-[10px] text-muted-foreground">{t("winRate")}</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-extrabold glow-mid">{detailB.pickRate.toFixed(1)}%</p>
-                  <p className="text-[10px] text-muted-foreground">{t("pickRate")}</p>
+                  <p className="text-2xl font-extrabold glow-mid">{detailB.matches.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted-foreground">{t("matches")}</p>
                 </div>
               </div>
             </div>
