@@ -53,7 +53,7 @@ export interface ChampionSearchResult {
 
 export interface BuildRecommendation {
   skillOrder: string[]
-  coreItems: { name: string; iconUrl: string }[]
+  boots: { name: string; nameZh: string; iconUrl: string } | null
   runes: { primaryPath: string; secondaryPath: string; keystone: string }
 }
 

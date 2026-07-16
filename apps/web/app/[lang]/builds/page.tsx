@@ -3,7 +3,7 @@
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { Search01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
+import { Search01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import {
   Button,
   Badge,
@@ -77,7 +77,7 @@ export default function BuildsPage() {
             value: champion.id,
           }))}
           value={selectedId}
-          onValueChange={(value) => { if (value) loadBuild(value) }}
+          onValueChange={(value) => value && loadBuild(value)}
         >
           <SelectTrigger className="w-full max-w-md pl-9">
             <SelectValue />
@@ -165,24 +165,25 @@ export default function BuildsPage() {
             <p className="text-[10px] text-muted-foreground mt-3">{detail.build.skillOrder.slice(0, 10).join(" → ")}</p>
           </div>
 
-          {/* Core Items */}
-          <div className="rounded-2xl card-glow bg-card p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-              {t("coreItems")}
-            </h3>
-            <div className="flex items-center gap-4">
-              {detail.build.coreItems.map((item, i) => (
-                <div key={i} className="flex flex-col items-center gap-1">
-                  <div className="size-12 rounded-xl bg-muted/50 flex items-center justify-center border border-border">
-                    <HugeiconsIcon icon={FireIcon} className="size-5 text-amber-400" />
-                  </div>
-                  <span className="text-[10px] text-muted-foreground text-center max-w-[60px] truncate">
-                    {item.name}
+          {detail.build.boots && (
+            <div className="rounded-2xl card-glow bg-card p-6">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+                {t("recommendedBoots")}
+              </h3>
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-center gap-1">
+                  <img
+                    src={detail.build.boots.iconUrl}
+                    alt={localizedName(detail.build.boots, locale).primary}
+                    className="size-12 rounded-xl border border-border"
+                  />
+                  <span className="text-[10px] text-muted-foreground text-center max-w-[80px] truncate">
+                    {localizedName(detail.build.boots, locale).primary}
                   </span>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Runes */}
           <div className="rounded-2xl card-glow bg-card p-6">

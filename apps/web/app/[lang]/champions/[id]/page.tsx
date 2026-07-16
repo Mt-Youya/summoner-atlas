@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft01Icon, SparklesIcon, FireIcon } from "@hugeicons/core-free-icons"
+import { ArrowLeft01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Button, Badge, Skeleton, Separator, Progress } from "@summoner-atlas/ui"
 import { mockDataService } from "@/lib/mock-data"
 import { useTranslation } from "@/hooks/use-translation"
@@ -30,7 +30,7 @@ function GlowStat({ value, label, unit = "%" }: { value: number; label: string; 
 /* ── Build Flow ── */
 
 function BuildFlow({ detail }: { detail: ChampionDetail }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const { build } = detail
 
   return (
@@ -55,28 +55,25 @@ function BuildFlow({ detail }: { detail: ChampionDetail }) {
         </p>
       </div>
 
-      {/* Core items */}
-      <div className="rounded-2xl card-glow bg-card p-6">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">{t("coreItems")}</h3>
-        <div className="flex items-center gap-3">
-          {build.coreItems.map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <div className="size-12 rounded-xl bg-muted/50 flex items-center justify-center border border-border">
-                <HugeiconsIcon icon={FireIcon} className="size-5 text-amber-400" />
-              </div>
-              <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[60px] truncate">
-                {item.name}
+      {build.boots && (
+        <div className="rounded-2xl card-glow bg-card p-6">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+            {t("recommendedBoots")}
+          </h3>
+          <div className="flex items-center gap-3">
+            <div className="flex flex-col items-center gap-1">
+              <img
+                src={build.boots.iconUrl}
+                alt={localizedName(build.boots, locale).primary}
+                className="size-12 rounded-xl border border-border"
+              />
+              <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[80px] truncate">
+                {localizedName(build.boots, locale).primary}
               </span>
-              {i < build.coreItems.length - 1 && (
-                <HugeiconsIcon
-                  icon={ArrowLeft01Icon}
-                  className="size-3 text-muted-foreground/50 rotate-180 hidden md:block"
-                />
-              )}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Runes */}
       <div className="rounded-2xl card-glow bg-card p-6">

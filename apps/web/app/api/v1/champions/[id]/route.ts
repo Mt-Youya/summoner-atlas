@@ -1,27 +1,24 @@
 import { fetchCache, ok, notFound, serverError } from "../../supabase"
 
-const CDRAGON = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default"
+const DATA_DRAGON_VERSION = "16.13.1"
 
-function summonerIcon(id: number) {
-  const icons: Record<number, string> = {
-    1: "Summoner_boost.png",
-    3: "Summoner_exhaust.png",
-    4: "Summoner_flash.png",
-    6: "Summoner_haste.png",
-    7: "Summoner_heal.png",
-    11: "Summoner_smite.png",
-    12: "Summoner_Teleport_New.png",
-    13: "SummonerMana.png",
-    14: "SummonerIgnite.png",
-    21: "SummonerBarrier.png",
-    32: "Summoner_Mark.png",
-  }
-  const file = icons[id] ?? `Summoner_${id}.png`
-  return `${CDRAGON}/v1/summoner-spells/${file}`
+const boots = {
+  1001: { name: "Boots", nameZh: "鞋子" },
+  3006: { name: "Berserker's Greaves", nameZh: "狂战士胫甲" },
+  3008: { name: "Gluttonous Greaves", nameZh: "暴食胫甲" },
+  3009: { name: "Boots of Swiftness", nameZh: "轻灵之靴" },
+  3020: { name: "Sorcerer's Shoes", nameZh: "法师之靴" },
+  3047: { name: "Plated Steelcaps", nameZh: "铁板靴" },
+  3111: { name: "Mercury's Treads", nameZh: "水银之靴" },
+  3158: { name: "Ionian Boots of Lucidity", nameZh: "明朗之靴" },
+} as const
+
+function bootDetails(id: number) {
+  return boots[id as keyof typeof boots] ?? { name: `Item ${id}`, nameZh: `装备 ${id}` }
 }
 
 function itemIcon(id: number) {
-  return `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/${id}_class_t2.png`
+  return `https://ddragon.leagueoflegends.com/cdn/${DATA_DRAGON_VERSION}/img/item/${id}.png`
 }
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -42,14 +39,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const comboData = (await fetchCache(comboKey)) as Record<string, unknown>[] | null
 
   const builds = (comboData ?? []).map((combo: Record<string, unknown>) => {
-    const spells = (combo.spells as number[]).map((sId) => ({
-      id: sId,
-      icon: summonerIcon(sId),
-    }))
     const bootsId = combo.boots_id as number
     return {
-      spells,
-      boots: { id: bootsId, icon: itemIcon(bootsId) },
+      boots: { id: bootsId, ...bootDetails(bootsId), icon: itemIcon(bootsId) },
       skillOrder: (combo.max_order as string) ?? "",
       winRate: (combo.win_rate as number) * 100,
       matches: combo.total_matches as number,

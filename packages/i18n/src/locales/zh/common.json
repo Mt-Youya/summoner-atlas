@@ -217,6 +217,7 @@
   "verifyWithStrong": "从强势英雄开始验证",
   "augmentCrosstableHint": "当前公开接口尚未提供该海克斯的逐英雄交叉表；以下是同版本高样本英雄入口，进入详情后可查看其组合数据。",
   "coreItems": "核心装备",
+  "recommendedBoots": "推荐鞋子",
   "recommendedRunes": "推荐符文",
   "skillOrder": "技能加点",
   "displayPreferences": "显示偏好",

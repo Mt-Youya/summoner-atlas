@@ -12,8 +12,7 @@ type ApiChampion = {
 
 type ApiChampionDetail = ApiChampion & {
   builds: {
-    spells: { id: number; icon: string }[]
-    boots: { id: number; icon: string }
+    boots: { id: number; name: string; nameZh: string; icon: string }
     skillOrder: string
     winRate: number
     matches: number
@@ -220,12 +219,9 @@ export const mockDataService: DataService = {
       confidence: stats && stats.matches >= 30_000 ? ("high" as const) : ("low" as const),
       build: {
         skillOrder,
-        coreItems: topBuild
-          ? [
-              { name: `Boots ${topBuild.boots.id}`, iconUrl: topBuild.boots.icon },
-              ...topBuild.spells.map((s) => ({ name: `Spell ${s.id}`, iconUrl: s.icon })),
-            ]
-          : [],
+        boots: topBuild
+          ? { name: topBuild.boots.name, nameZh: topBuild.boots.nameZh, iconUrl: topBuild.boots.icon }
+          : null,
         runes: {
           primaryPath: topBuild?.skillOrder?.split("-")[0] ?? "",
           secondaryPath: topBuild?.skillOrder?.split("-")[1] ?? "",

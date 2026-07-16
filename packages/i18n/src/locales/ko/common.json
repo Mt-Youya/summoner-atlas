@@ -217,6 +217,7 @@
   "verifyWithStrong": "강한 챔피언부터 검증하기",
   "augmentCrosstableHint": "챔피언별 교차표는 아직 제공되지 않습니다. 아래는 동일 패치의 대규모 표본 챔피언 항목입니다.",
   "coreItems": "핵심 아이템",
+  "recommendedBoots": "추천 신발",
   "recommendedRunes": "추천 룬",
   "skillOrder": "스킬 순서",
   "displayPreferences": "화면 설정",

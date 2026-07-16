@@ -217,6 +217,7 @@
   "verifyWithStrong": "Start verifying with strong champions",
   "augmentCrosstableHint": "Per-champion crosstables are not yet available. Below are high-sample champion entries from the same patch — view details for their combo data.",
   "coreItems": "Core items",
+  "recommendedBoots": "Recommended boots",
   "recommendedRunes": "Recommended runes",
   "skillOrder": "Skill order",
   "displayPreferences": "Display preferences",
